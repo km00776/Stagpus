@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:stagpus/pages/create_account.dart';
 import 'package:timeago/timeago.dart';
 import 'package:stagpus/pages/dashboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stagpus/models/user.dart';
 
+
+final usersRef = Firestore.instance.collection('users');
+final DateTime timestamp = DateTime.now();
+User currentUser;
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState(); // creates an immutable state. 
@@ -20,11 +26,40 @@ class _HomeState extends State<Home> {
       return Text('Authenticated');
 }
 
+createUserInFirestore() async {
+  final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+   DocumentSnapshot doc = await usersRef.document(user.uid).get();
+
+  if(!doc.exists) {
+      final username = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccount(),));
+
+     usersRef.document(user.uid).setData({
+        "uid" : user.uid,
+        "username" : username,
+        "photoUrl" : user.photoUrl,
+        "email" : user.email,
+        "displayName" : user.displayName,
+        "bio" : "",
+        "timestamp" : timestamp
+
+      });
+      
+      doc = await usersRef.document(user.uid).get();
+    }
+
+    currentUser = User.fromDocument(doc);
+
+}
+
+
 @override
 void initState() {
   super.initState();
   Login();
+
+ 
 }
+
 
 Future<void> Login() async {
     final formState = _formKey.currentState;
@@ -32,6 +67,7 @@ Future<void> Login() async {
       formState.save();
       try {
       FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
+      createUserInFirestore();
       Navigator.push(context, MaterialPageRoute(builder:(context) =>dashboard()));
       }catch(e) {
         print(e.message);
