@@ -4,7 +4,6 @@ import 'package:stagpus/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-final usersRef = Firestore.instance.collection('users');
 
 class Timeline extends StatefulWidget {
   @override

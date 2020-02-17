@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/pages/create_account.dart';
@@ -8,9 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stagpus/models/user.dart';
 
 
-final usersRef = Firestore.instance.collection('users');
+final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();
-User currentUser;
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState(); // creates an immutable state. 
@@ -19,6 +19,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String _email = null;
   String _password = null;
+  PageController pageController;
   bool userAuth = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -26,54 +27,24 @@ class _HomeState extends State<Home> {
       return Text('Authenticated');
 }
 
-createUserInFirestore() async {
-  final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-   DocumentSnapshot doc = await usersRef.document(user.uid).get();
-
-  if(!doc.exists) {
-      final username = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccount(),));
-
-     usersRef.document(user.uid).setData({
-        "uid" : user.uid,
-        "username" : username,
-        "photoUrl" : user.photoUrl,
-        "email" : user.email,
-        "displayName" : user.displayName,
-        "bio" : "",
-        "timestamp" : timestamp
-
-      });
-      
-      doc = await usersRef.document(user.uid).get();
-    }
-
-    currentUser = User.fromDocument(doc);
-
-}
-
 
 @override
 void initState() {
   super.initState();
-  Login();
-
- 
 }
-
-
 Future<void> Login() async {
     final formState = _formKey.currentState;
     if(formState.validate()) {
       formState.save();
       try {
-      FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
-      createUserInFirestore();
+      FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);      
       Navigator.push(context, MaterialPageRoute(builder:(context) =>dashboard()));
       }catch(e) {
         print(e.message);
       }
     }
   }
+
 
 Scaffold buildUnAuthScreen() {
   return Scaffold(
@@ -138,7 +109,7 @@ Scaffold buildUnAuthScreen() {
                       RaisedButton(
                         color: Color.alphaBlend(Colors.blue, Colors.blueGrey),
                         onPressed: () {
-                        Login();
+                        Login();                          
                     },
                     child: Text('Sign in'),
                   ),
@@ -146,7 +117,7 @@ Scaffold buildUnAuthScreen() {
                   RaisedButton(
                     color: Color.alphaBlend(Colors.blue, Colors.blueGrey),
                     onPressed: () {
-                      //  Login();
+                       this.Login();
                     },
                     child: Text('Register'),
                   )

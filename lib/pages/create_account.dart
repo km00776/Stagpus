@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:stagpus/pages/dashboard.dart';
 import 'package:stagpus/widgets/header.dart';
 
 
@@ -15,7 +16,7 @@ class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
   String username;
 
-  submit() {
+  submit()  {
    final form =  _formKey.currentState;
    
    if(form.validate()) {
@@ -25,7 +26,7 @@ class _CreateAccountState extends State<CreateAccount> {
    Timer(Duration(seconds: 2), () {
          Navigator.pop(context, username);
    });
-   }
+     }
   }
 
   @override
