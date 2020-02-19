@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/progress.dart';
-import 'package:stagpus/pages/dashboard.dart';
 
 class Search extends StatefulWidget {
   @override

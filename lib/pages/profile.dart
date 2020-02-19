@@ -3,7 +3,6 @@ import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/header.dart';
 import 'package:stagpus/widgets/progress.dart';
-import 'package:stagpus/pages/dashboard.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;

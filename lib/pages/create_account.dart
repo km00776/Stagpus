@@ -1,24 +1,27 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:stagpus/pages/dashboard.dart';
 import 'package:stagpus/widgets/header.dart';
 
 
 class CreateAccount extends StatefulWidget {
+
+  
   @override
   _CreateAccountState createState() => _CreateAccountState();
-
 }
 
 class _CreateAccountState extends State<CreateAccount> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  String username;
+     String username;
+     
+
+  
 
   submit()  {
    final form =  _formKey.currentState;
-   
+
    if(form.validate()) {
    form.save();
    SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
@@ -26,7 +29,7 @@ class _CreateAccountState extends State<CreateAccount> {
    Timer(Duration(seconds: 2), () {
          Navigator.pop(context, username);
    });
-     }
+   }
   }
 
   @override
