@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/activity_feed.dart';
 import 'package:stagpus/pages/create_account.dart';
 import 'package:stagpus/pages/profile.dart';
@@ -9,18 +10,17 @@ import 'package:stagpus/pages/search.dart';
 import 'package:stagpus/pages/upload.dart';
 import 'package:timeago/timeago.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:stagpus/models/user.dart';
-
-import 'timeline.dart';
+import 'package:stagpus/pages/timeline.dart';
 
 
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();
 final usersRef = Firestore.instance.collection('users');
 final postsRef = Firestore.instance.collection('posts');
-User currentUser; 
+User currentUser;
 
 class Home extends StatefulWidget {
+  
 
   @override
   _HomeState createState() => _HomeState(); // creates an immutable state. 
@@ -30,11 +30,13 @@ class _HomeState extends State<Home> {
   String _email = null;
   String _password = null;
   PageController pageController;
-    int pageIndex = 0;
-
+  int pageIndex = 0;
   bool userAuth = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String username;
+
+
+
 
   void onPageChanged(int pageIndex) {
       setState(() {
@@ -46,13 +48,12 @@ class _HomeState extends State<Home> {
           curve: Curves.easeInOut
           );
     }
-
-    doesUserExist() async {
+  
+  doesUserExist() async {
   final FirebaseUser user = await FirebaseAuth.instance.currentUser();
   DocumentSnapshot doc = await usersRef.document(user.uid).get();
-
   if(!doc.exists){
-     username = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccount()));
+    final username = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccount()));
      usersRef.document(user.uid).setData({
        "id" :user.uid,
        "username" : username,
@@ -63,22 +64,18 @@ class _HomeState extends State<Home> {
        "timestamp" : timestamp
      });
   }
-
-  currentUser = User.fromDocument(doc);
-  print("Fair");
-  print(currentUser);
-  
+    currentUser = User.fromDocument(doc);
 }
 
     Scaffold dashBoard() {
-      return Scaffold(
+      return  Scaffold(
         body: PageView(
           children: <Widget>[
             Timeline(),
             ActivityFeed(),
-            Upload(),
+            Upload(currentUser: currentUser),
             Search(),
-            Profile(),
+            Profile(profileId: currentUser?.uid),
           ],
           controller: pageController,
           onPageChanged: onPageChanged,
@@ -98,6 +95,7 @@ class _HomeState extends State<Home> {
           ),
       );
     }
+
 
 
 @override
@@ -122,8 +120,6 @@ Future<void> Login() async {
       }
     }
   }
-
-
 Scaffold buildUnAuthScreen() {
   return Scaffold(
     body: Container(
@@ -178,8 +174,6 @@ Scaffold buildUnAuthScreen() {
                     ),
                     obscureText: true,
                   ),
-                  
-              
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,

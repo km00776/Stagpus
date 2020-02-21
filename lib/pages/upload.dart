@@ -1,6 +1,8 @@
 
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,10 +15,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:stagpus/pages/home.dart';
 import 'package:uuid/uuid.dart';
 
+ 
+
 class Upload extends StatefulWidget {
   final User currentUser;
-
+  
   Upload({this.currentUser});
+
 
   @override
   _UploadState createState() => _UploadState();
@@ -126,21 +131,25 @@ class _UploadState extends State<Upload>
   }
 
   createPostInFirestore(
-      {String mediaUrl, String location, String description}) {
+      {String mediaUrl, String location, String description}) async{
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    DocumentSnapshot doc = await usersRef.document(user.uid).get();
+    currentUser = User.fromDocument(doc);
     postsRef
-        .document(widget.currentUser.uid)
+        .document(currentUser.uid)
         .collection("userPosts")
         .document(postId)
         .setData({
       "postId": postId,
-      "ownerId": widget.currentUser.uid,
-      "username": widget.currentUser.username,
+      "ownerId": currentUser.uid,
+      "username": currentUser.username,
       "mediaUrl": mediaUrl,
       "description": description,
       "location": location,
       "timestamp": timestamp,
       "likes": {},
     });
+
   }
 
   handleSubmit() async {

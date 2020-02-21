@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/header.dart';
 import 'package:stagpus/widgets/progress.dart';
+
+import 'create_account.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
@@ -13,6 +17,8 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 class _ProfileState extends State<Profile> {
+
+  
   Column buildCountColumn(String label, int count) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -30,9 +36,9 @@ class _ProfileState extends State<Profile> {
               color: Colors.grey,
               fontSize: 15.0,
               fontWeight: FontWeight.w400,
-            )
-          )
-        )
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -40,15 +46,29 @@ class _ProfileState extends State<Profile> {
   buildProfileButton() {
     return Text("profile button");
   }
+doesUserExist() async {
+  final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  DocumentSnapshot doc = await usersRef.document(user.uid).get();
+  if(!doc.exists){
+     final username = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccount()));
+     usersRef.document(user.uid).setData({
+       "id" :user.uid,
+       "username" : username,
+       "photoUrl" : user.photoUrl,
+       "email" : user.email,
+       "displayName" : username,
+       "bio" : "",
+       "timestamp" : timestamp
+     });
+  }
+    currentUser = User.fromDocument(doc);
+}
 
-  buildProfileHeader() {
+  buildProfileHeader()   {
     return FutureBuilder(
-      future: usersRef.document(widget.profileId).get(),
-      builder: (context, snapshot) {
-        if(!snapshot.hasData) {
-          return circularProgress();
-        }
-        return Padding(
+    future: doesUserExist(),
+     builder: (context, snapshot) {
+       return Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
@@ -60,7 +80,8 @@ class _ProfileState extends State<Profile> {
                    ),
                    Expanded(
                      flex: 1,
-                     child: Column(children: <Widget>[
+                     child: Column(
+                       children: <Widget>[
                        Row(
                          mainAxisSize: MainAxisSize.max,
                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -75,7 +96,7 @@ class _ProfileState extends State<Profile> {
                          children: <Widget>[
                            buildProfileButton(),
                          ],
-                       )
+                       ),
                      ],
                      )
                    )
@@ -85,7 +106,7 @@ class _ProfileState extends State<Profile> {
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(top: 12.0),
                 child: Text(
-                  "username", // currentUser.username, 
+                   currentUser.email, 
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
@@ -96,7 +117,7 @@ class _ProfileState extends State<Profile> {
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(top: 4.0),
                 child: Text(
-                 "displayName",// currentUser.displayName, 
+                 currentUser.displayName,// currentUser.displayName, 
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -106,9 +127,9 @@ class _ProfileState extends State<Profile> {
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(top: 2.0),
                 child: Text(
-                  "name" // should be currentName.username
-                )
-              )
+                  "Text" // should be currentName.username
+                ),
+              ),
           ],
           ),
         );
