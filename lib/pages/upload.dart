@@ -18,7 +18,7 @@ import 'package:uuid/uuid.dart';
  
 
 class Upload extends StatefulWidget {
-  final User currentUser;
+   User currentUser;
   
   Upload({this.currentUser});
 
@@ -134,15 +134,15 @@ class _UploadState extends State<Upload>
       {String mediaUrl, String location, String description}) async{
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
     DocumentSnapshot doc = await usersRef.document(user.uid).get();
-    currentUser = User.fromDocument(doc);
+    widget.currentUser = User.fromDocument(doc);
     postsRef
-        .document(currentUser.uid)
+        .document(widget.currentUser.uid)
         .collection("userPosts")
         .document(postId)
         .setData({
       "postId": postId,
-      "ownerId": currentUser.uid,
-      "username": currentUser.username,
+      "ownerId": widget.currentUser.uid,
+      "username": widget.currentUser.username,
       "mediaUrl": mediaUrl,
       "description": description,
       "location": location,

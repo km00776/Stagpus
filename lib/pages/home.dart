@@ -17,12 +17,11 @@ final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();
 final usersRef = Firestore.instance.collection('users');
 final postsRef = Firestore.instance.collection('posts');
-User currentUser;
+
 
 class Home extends StatefulWidget {
-  
-
-  @override
+  User currentUser = null;
+  @override 
   _HomeState createState() => _HomeState(); // creates an immutable state. 
 }
 
@@ -34,9 +33,6 @@ class _HomeState extends State<Home> {
   bool userAuth = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String username;
-
-
-
 
   void onPageChanged(int pageIndex) {
       setState(() {
@@ -52,6 +48,7 @@ class _HomeState extends State<Home> {
   doesUserExist() async {
   final FirebaseUser user = await FirebaseAuth.instance.currentUser();
   DocumentSnapshot doc = await usersRef.document(user.uid).get();
+
   if(!doc.exists){
     final username = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccount()));
      usersRef.document(user.uid).setData({
@@ -64,7 +61,10 @@ class _HomeState extends State<Home> {
        "timestamp" : timestamp
      });
   }
-    currentUser = User.fromDocument(doc);
+  setState(() {
+    widget.currentUser = User.fromDocument(doc);
+  });
+
 }
 
     Scaffold dashBoard() {
@@ -73,9 +73,9 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Timeline(),
             ActivityFeed(),
-            Upload(currentUser: currentUser),
+            Upload(currentUser: widget.currentUser),
             Search(),
-            Profile(profileId: currentUser?.uid),
+            Profile(profileId: widget.currentUser?.uid),
           ],
           controller: pageController,
           onPageChanged: onPageChanged,
