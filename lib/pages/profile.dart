@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/models/user.dart';
-import 'package:stagpus/pages/home.dart';
+import 'home.dart';
 import 'package:stagpus/widgets/header.dart';
+import 'package:stagpus/widgets/post_tile.dart';
 import 'package:stagpus/widgets/progress.dart';
 import 'package:stagpus/widgets/post.dart';
 import 'create_account.dart';
@@ -11,38 +12,45 @@ import 'edit_profile.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
-  User currentUser;
-
-  Profile({Key key, @required this.profileId}) : super(key: key);
+  final User currentUser;
+  List<Post> posts = [];
+  Profile({Key key, @required this.profileId, @required this.currentUser}): super(key: key);
 
   @override
-  _ProfileState createState() => _ProfileState();
+  _ProfileState createState() => new  _ProfileState(profileId, currentUser);
 }
 class _ProfileState extends State<Profile> {
+  String postOrientation = "grid";
   bool isLoading = false;
   int postCount = 0;
-  List<Post> posts = [];
+  List<Post> posts =[];
+  String profileId; 
+  User currentUser;
 
-  @override
+
+
+  _ProfileState(this.profileId, this.currentUser);
+
+ 
+
+getProfilePosts() async {
+    setState(() {
+      isLoading = true;
+    });
+    QuerySnapshot snapshot = await postsRef.document(profileId).collection('userPosts').orderBy('timestamp', descending: true).getDocuments(); //issue retrieving data osmetimes?
+    setState(() {
+     isLoading = false;
+     posts = snapshot.documents.map((doc) => Post.fromDocument(doc)).toList();
+     postCount = snapshot.documents.length;
+     
+    });
+
+  }
+ @override
   void initState() {
     super.initState();
     getProfilePosts();
   }
-
-getProfilePosts() async {
-   FirebaseUser user = await FirebaseAuth.instance.currentUser();
- DocumentSnapshot do2c = await postsRef.document(widget.currentUser.uid).get();
-    setState(() {
-      isLoading = true;
-    });
-    QuerySnapshot snapshot = await postsRef.document(widget.currentUser.uid).collection('userPosts').orderBy('timestamp', descending: true).getDocuments();
-    setState(() {
-     isLoading = false;
-     postCount = snapshot.documents.length;
-     posts = snapshot.documents.map((do2c) => Post.fromDocument(do2c)).toList(); // displaying images fom firebase to screen but i get data =
-    });
-  }
-
 
   Column buildCountColumn(String label, int count) {
     return Column(
@@ -105,7 +113,7 @@ getProfilePosts() async {
            usersRef.document(user.uid).setData({
              "id" :user.uid,
              "username" : username,
-             "photoUrl" : user.photoUrl,
+             "photoUrl" : currentUser.photoUrl,
              "email" : user.email,
              "displayName" : username,
              "bio" : "",
@@ -113,8 +121,8 @@ getProfilePosts() async {
            });
         }
         setState(() {
-          widget.currentUser = User.fromDocument(doc);
-        });
+              currentUser = User.fromDocument(doc);
+        });        
       }
       
 buildProfileButton() {
@@ -164,7 +172,7 @@ buildProfileButton() {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 12.0),
                       child: Text(
-                         widget.currentUser.email, 
+                         currentUser?.email, 
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,
@@ -175,7 +183,7 @@ buildProfileButton() {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 4.0),
                       child: Text(
-                       widget.currentUser.displayName,// currentUser.displayName, 
+                       currentUser.displayName,// currentUser.displayName, 
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -185,7 +193,7 @@ buildProfileButton() {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 2.0),
                       child: Text(
-                        "Text" // should be currentName.username
+                        currentUser.bio, // should be currentName.username
                       ),
                     ),
                 ],
@@ -199,31 +207,77 @@ buildProfileButton() {
           if(isLoading) {
             return circularProgress();
           }
-          return Column(
-            children: posts,
+          else if(postOrientation == "grid") {
+          List<GridTile> gridTiles = [];
+          posts.forEach((post) { 
+            gridTiles.add(GridTile(child:  PostTile(post)));
+          });
+          return GridView.count(
+            crossAxisCount: 3,
+            childAspectRatio: 1.0,
+            mainAxisSpacing: 1.5,
+            crossAxisSpacing: 1.5,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            children: gridTiles,
             );
        }
+       else if(postOrientation == "list") {
+         return Column(
+           children: posts
+         );
+         
+         
+       }
+       }
 
-        @override
+         
+      
+   editProfile() {
+       Navigator.push(context, MaterialPageRoute(
+          builder: (context) => EditProfile(currentUserId : currentUser?.uid),
+          )
+        );
+  }
+
+  setPostOrientation(String postOrientation) {
+    setState(() {
+      this.postOrientation = postOrientation;
+    });
+  }
+
+  buildTogglePostOrientation() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        IconButton(
+          onPressed: () => setPostOrientation("grid"),
+          icon: Icon(Icons.grid_on),
+          color: postOrientation == 'grid' ? Theme.of(context).primaryColor : Colors.grey),
+        IconButton(
+          onPressed: () => setPostOrientation("list"),
+          icon: Icon(Icons.list),
+          color: postOrientation == 'list' ? Theme.of(context).primaryColor : Colors.grey),
+      ],
+    );
+
+  }
+
+    @override
         Widget build(BuildContext context) {
           return Scaffold(
             appBar: header(context, titleText: "Profile"),
             body: ListView(
               children: <Widget>[
               buildProfileHeader(),
+              Divider(),
+              buildTogglePostOrientation(),
               Divider(
                 height: 0.0,
               ),
               buildProfilePosts(),
-              
               ],
-
             )
           );
-        }    
-      
-        editProfile() {
-       Navigator.push(context, MaterialPageRoute(
-          builder: (context) => EditProfile(currentUserId : widget.currentUser.uid),));
-  }
+        } 
 }

@@ -7,20 +7,22 @@ import 'package:stagpus/widgets/progress.dart';
 
 class EditProfile extends StatefulWidget {
   final String currentUserId;
-
-  EditProfile({this.currentUserId});
+  EditProfile({Key key, @required this.currentUserId});
 
   @override
-  _EditProfileState createState() => _EditProfileState();
+  _EditProfileState createState() => _EditProfileState(currentUserId);
 }
 
 class _EditProfileState extends State<EditProfile> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  String currentUserId;
   TextEditingController displayNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
   bool isLoading = false;
   User user;
   bool _validBio = true;
+
+  _EditProfileState(this.currentUserId);
 
 
   @override
@@ -33,7 +35,7 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       isLoading = true;
     });
-    DocumentSnapshot doc = await usersRef.document(widget.currentUserId).get();
+    DocumentSnapshot doc = await usersRef.document(currentUserId).get();
     user = User.fromDocument(doc);
     bioController.text = user.bio;
     setState(() {
@@ -69,7 +71,7 @@ updateProfile() {
     ? _validBio = false : _validBio = true;
   });
   if(_validBio) {
-    usersRef.document(widget.currentUserId).updateData(
+    usersRef.document(currentUserId).updateData(
       {
         "bio" : bioController.text,
       }
@@ -119,7 +121,8 @@ updateProfile() {
                     buildBioField(),
                   ],)
                   ),
-                  RaisedButton(onPressed: () => print('pudate profile data'),
+                  RaisedButton(
+                    onPressed: updateProfile,
                   child: Text(
                     "Update Profile",
                   style: TextStyle(

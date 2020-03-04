@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/widgets/post.dart';
 import 'package:stagpus/widgets/progress.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image/image.dart' as Im;
@@ -18,13 +19,13 @@ import 'package:uuid/uuid.dart';
  
 
 class Upload extends StatefulWidget {
-   User currentUser;
+   final User currentUser;
   
-  Upload({this.currentUser});
+  Upload({Key key, @required this.currentUser});
 
 
   @override
-  _UploadState createState() => _UploadState();
+  _UploadState createState() => new _UploadState(currentUser);
 }
 
 class _UploadState extends State<Upload>
@@ -33,7 +34,11 @@ class _UploadState extends State<Upload>
   TextEditingController locationController = TextEditingController();
   File file;
   bool isUploading = false;
+  User currentUser;
   String postId = Uuid().v4();
+  Post post;
+
+  _UploadState(this.currentUser);
 
   handleTakePhoto() async {
     Navigator.pop(context);
@@ -134,22 +139,21 @@ class _UploadState extends State<Upload>
       {String mediaUrl, String location, String description}) async{
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
     DocumentSnapshot doc = await usersRef.document(user.uid).get();
-    widget.currentUser = User.fromDocument(doc);
+    currentUser = User.fromDocument(doc);
     postsRef
-        .document(widget.currentUser.uid)
+        .document(currentUser.uid)
         .collection("userPosts")
         .document(postId)
         .setData({
       "postId": postId,
-      "ownerId": widget.currentUser.uid,
-      "username": widget.currentUser.username,
+      "ownerId": currentUser.uid,
+      "username": currentUser.displayName,
       "mediaUrl": mediaUrl,
       "description": description,
       "location": location,
       "timestamp": timestamp,
       "likes": {},
     });
-
   }
 
   handleSubmit() async {

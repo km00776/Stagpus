@@ -17,12 +17,14 @@ final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();
 final usersRef = Firestore.instance.collection('users');
 final postsRef = Firestore.instance.collection('posts');
+final commentsRef = Firestore.instance.collection('comments');
 
-
+User currentUser;
 class Home extends StatefulWidget {
-  User currentUser = null;
+   
+  
   @override 
-  _HomeState createState() => _HomeState(); // creates an immutable state. 
+  _HomeState createState() => new _HomeState(); // creates an immutable state. 
 }
 
 class _HomeState extends State<Home> {
@@ -33,6 +35,7 @@ class _HomeState extends State<Home> {
   bool userAuth = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String username;
+
 
   void onPageChanged(int pageIndex) {
       setState(() {
@@ -61,9 +64,9 @@ class _HomeState extends State<Home> {
        "timestamp" : timestamp
      });
   }
-  setState(() {
-    widget.currentUser = User.fromDocument(doc);
-  });
+  
+    currentUser = User.fromDocument(doc);
+  
 
 }
 
@@ -73,9 +76,9 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Timeline(),
             ActivityFeed(),
-            Upload(currentUser: widget.currentUser),
+            Upload(currentUser: currentUser),
             Search(),
-            Profile(profileId: widget.currentUser?.uid),
+            Profile(profileId: currentUser?.uid, currentUser: currentUser),
           ],
           controller: pageController,
           onPageChanged: onPageChanged,
@@ -96,16 +99,12 @@ class _HomeState extends State<Home> {
       );
     }
 
-
-
 @override
 void initState() {
   super.initState();
   pageController = PageController();
   Login();
 }
-
-
 
 Future<void> Login() async {
     final formState = _formKey.currentState;
