@@ -18,6 +18,9 @@ final DateTime timestamp = DateTime.now();
 final usersRef = Firestore.instance.collection('users');
 final postsRef = Firestore.instance.collection('posts');
 final commentsRef = Firestore.instance.collection('comments');
+final activityFeedRef = Firestore.instance.collection('feed');
+final followersRef = Firestore.instance.collection('followers');
+final followingRef = Firestore.instance.collection('following');
 
 User currentUser;
 class Home extends StatefulWidget {
@@ -78,7 +81,7 @@ class _HomeState extends State<Home> {
             ActivityFeed(),
             Upload(currentUser: currentUser),
             Search(),
-            Profile(profileId: currentUser?.uid, currentUser: currentUser),
+            Profile(profileId: currentUser?.uid),
           ],
           controller: pageController,
           onPageChanged: onPageChanged,

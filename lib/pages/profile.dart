@@ -2,34 +2,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/models/user.dart';
-import 'home.dart';
+import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/header.dart';
 import 'package:stagpus/widgets/post_tile.dart';
 import 'package:stagpus/widgets/progress.dart';
 import 'package:stagpus/widgets/post.dart';
-import 'create_account.dart';
-import 'edit_profile.dart';
+import 'package:stagpus/pages/edit_profile.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
-  final User currentUser;
-  List<Post> posts = [];
-  Profile({Key key, @required this.profileId, @required this.currentUser}): super(key: key);
+
+  Profile({this.profileId});
+
+
 
   @override
-  _ProfileState createState() => new  _ProfileState(profileId, currentUser);
+  _ProfileState createState() => new  _ProfileState(profileId);
 }
 class _ProfileState extends State<Profile> {
+  bool isFollowing = false;
   String postOrientation = "grid";
   bool isLoading = false;
   int postCount = 0;
+  int followerCount = 0;
+  int followingCount = 0;
   List<Post> posts =[];
   String profileId; 
-  User currentUser;
 
 
 
-  _ProfileState(this.profileId, this.currentUser);
+  _ProfileState(this.profileId);
 
  
 
@@ -46,10 +48,35 @@ getProfilePosts() async {
     });
 
   }
- @override
+ 
+
   void initState() {
     super.initState();
     getProfilePosts();
+    getFollowers();
+    getFollowing();
+    checkIfFollowing();
+  }
+
+  checkIfFollowing() async {
+    DocumentSnapshot doc = await followersRef.document(widget.profileId).collection('userFollowers').document(currentUser.uid).get();
+    setState(() {
+      isFollowing = doc.exists;
+    });
+  }
+
+  getFollowers() async {
+   QuerySnapshot snapshot =  await followersRef.document(widget.profileId).collection('userFollowers').getDocuments();
+   setState(() {
+     followerCount = snapshot.documents.length;
+   });
+  }
+
+  getFollowing() async{
+   QuerySnapshot snapshot =  await followingRef.document(widget.profileId).collection('userFollowing').getDocuments();
+   setState(() {
+     followingCount = snapshot.documents.length; 
+   });
   }
 
   Column buildCountColumn(String label, int count) {
@@ -87,13 +114,13 @@ getProfilePosts() async {
             child: Text(
               text,
               style: TextStyle(
-                color: Colors.white,
+                color: isFollowing ? Colors.black : Colors.white,
                 fontWeight: FontWeight.bold,
               )
             ),
           alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: isFollowing ? Colors.white: Colors.blue,
               border: Border.all(
                 color: Colors.blue,
                 ),
@@ -105,35 +132,76 @@ getProfilePosts() async {
   }
 
   
-      doesUserExist() async {
-        final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-        DocumentSnapshot doc = await usersRef.document(user.uid).get();
-        if(!doc.exists){
-           final username = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccount()));
-           usersRef.document(user.uid).setData({
-             "id" :user.uid,
-             "username" : username,
-             "photoUrl" : currentUser.photoUrl,
-             "email" : user.email,
-             "displayName" : username,
-             "bio" : "",
-             "timestamp" : timestamp
-           });
-        }
-        setState(() {
-              currentUser = User.fromDocument(doc);
-        });        
-      }
+     
       
+
+     handleUnfollowUsers() {
+        setState(() {
+          isFollowing = false;
+        });
+        followersRef.document(widget.profileId).collection('userFollowers').document(currentUser.uid).get().then((doc) {
+            if(doc.exists) {
+              doc.reference.delete();
+            }
+        });
+        followingRef.document(currentUser.uid).collection('userFollowing').document(widget.profileId).get().then((doc) {
+        if(doc.exists) {
+          doc.reference.delete();
+        }
+        });
+        activityFeedRef.document(widget.profileId).collection('feedItems').document(currentUser.uid).get().then((doc) {
+          if(doc.exists) {
+          doc.reference.delete();
+        }
+        });
+     } 
+
+     handleFollowUser() {
+        setState(() {
+          isFollowing = true;
+        });
+        followersRef.document(widget.profileId).collection('userFollowers').document(currentUser.uid).setData({});
+        followingRef.document(currentUser.uid).collection('userFollowing').document(widget.profileId).setData({});
+        activityFeedRef.document(widget.profileId).collection('feedItems').document(currentUser.uid).setData({
+          "type" : "follow",
+          "ownerId" : widget.profileId,
+          "username" : currentUser.displayName,
+          "userId" : currentUser.uid,
+          "userProfileImg" : currentUser.photoUrl,
+          "timestamp" : timestamp, 
+          });
+     }
+
 buildProfileButton() {
-       return buildButton(text: "Edit Profile", function: editProfile);
+       bool isProfileOwner = currentUser?.uid == widget.profileId;
+       if(isProfileOwner) {
+         return buildButton(text: "Edit Profile", function: editProfile);
+       }
+       else if(isFollowing) {
+         return buildButton(
+           text: "Unfollow", 
+           function: handleUnfollowUsers);
+       }
+       else if(!isFollowing) {
+         return buildButton(
+           text: "Follow",
+           function: handleFollowUser
+         );
+       }
+       else {
+         return Text('button');
+       }
     
   }
       
   buildProfileHeader()   {
           return FutureBuilder(
-          future: doesUserExist(),
+          future: usersRef.document(widget.profileId).get(),
            builder: (context, snapshot) {
+             if(!snapshot.hasData) {
+               return circularProgress();
+             }
+             User user = User.fromDocument(snapshot.data);
              return Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
@@ -143,6 +211,7 @@ buildProfileButton() {
                         CircleAvatar(
                          radius: 40.0,
                          backgroundColor: Colors.grey, 
+                      
                          ),
                          Expanded(
                            flex: 1,
@@ -153,8 +222,8 @@ buildProfileButton() {
                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                children: <Widget>[
                                  buildCountColumn("posts", postCount),
-                                 buildCountColumn("followers", 0),
-                                 buildCountColumn("following", 0),
+                                 buildCountColumn("followers", followerCount),
+                                 buildCountColumn("following", followingCount),
                                ],
                              ),
                              Row(
@@ -172,7 +241,7 @@ buildProfileButton() {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 12.0),
                       child: Text(
-                         currentUser?.email, 
+                         user.email, 
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,
@@ -183,7 +252,7 @@ buildProfileButton() {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 4.0),
                       child: Text(
-                       currentUser.displayName,// currentUser.displayName, 
+                       user.displayName,// currentUser.displayName, 
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -193,7 +262,7 @@ buildProfileButton() {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 2.0),
                       child: Text(
-                        currentUser.bio, // should be currentName.username
+                        user.bio, // should be currentName.username
                       ),
                     ),
                 ],
