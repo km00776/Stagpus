@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import 'package:stagpus/pages/upload.dart';
 import 'package:timeago/timeago.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stagpus/pages/timeline.dart';
-
+import 'dart:io';
 
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();
@@ -21,6 +22,7 @@ final commentsRef = Firestore.instance.collection('comments');
 final activityFeedRef = Firestore.instance.collection('feed');
 final followersRef = Firestore.instance.collection('followers');
 final followingRef = Firestore.instance.collection('following');
+final timelineRef = Firestore.instance.collection('timeline');
 
 User currentUser;
 class Home extends StatefulWidget {
@@ -31,6 +33,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  FirebaseMessaging _Messaging = FirebaseMessaging();
   String _email = null;
   String _password = null;
   PageController pageController;
@@ -38,6 +42,7 @@ class _HomeState extends State<Home> {
   bool userAuth = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String username;
+
 
 
   void onPageChanged(int pageIndex) {
@@ -66,6 +71,8 @@ class _HomeState extends State<Home> {
        "bio" : "",
        "timestamp" : timestamp
      });
+
+     await followersRef.document(user.uid).collection('userFollowers').document(user.uid).setData({});
   }
   
     currentUser = User.fromDocument(doc);
@@ -73,11 +80,52 @@ class _HomeState extends State<Home> {
 
 }
 
+    PushNotifications() async {
+        final FirebaseUser user =  await FirebaseAuth.instance.currentUser();
+        if(Platform.isIOS) getiOSPermission();
+
+        _Messaging.getToken().then((token) {
+          print("Firebase Messaging Token: $token\n");
+          usersRef.document(user.uid).updateData({"androidNotificationToken" : token});
+        });
+
+        _Messaging.configure(
+          onLaunch: (Map<String, dynamic> message) async {
+
+
+
+          },
+          onResume: (Map<String, dynamic> message) async {},
+          onMessage: (Map<String, dynamic> message) async {
+            print("on message: $message\n");
+            final String recipientId = message['data']['recipient'];
+            final String body = message['notification']['body'];
+            if(recipientId == user.uid) {
+              print("Notification!");
+              SnackBar snackbar = SnackBar(content: Text (
+                body,
+                overflow: TextOverflow.ellipsis,
+              ));
+              _scaffoldKey.currentState.showSnackBar(snackbar);
+            }
+              print("Notification NOT shown");
+          },
+        );
+    }
+    
+    getiOSPermission() {
+      _Messaging.requestNotificationPermissions(IosNotificationSettings(alert: true, badge: true, sound: true));
+      _Messaging.onIosSettingsRegistered.listen((settings) {
+        print("Settings registered: $settings");
+      });
+    }
+
     Scaffold dashBoard() {
       return  Scaffold(
+        key: _scaffoldKey,
         body: PageView(
           children: <Widget>[
-            Timeline(),
+            Timeline(currentUser: currentUser,),
             ActivityFeed(),
             Upload(currentUser: currentUser),
             Search(),
