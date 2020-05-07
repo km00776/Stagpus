@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'StagPus',
       debugShowCheckedModeBanner: false,
-      home: SignUpScreen(),
+      home: Home(),
     );
   }
 }
