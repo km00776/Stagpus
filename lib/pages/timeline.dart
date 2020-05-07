@@ -6,6 +6,7 @@ import 'package:stagpus/widgets/header.dart';
 import 'package:stagpus/widgets/post.dart';
 import 'package:stagpus/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 

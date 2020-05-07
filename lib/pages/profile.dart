@@ -10,15 +10,14 @@ import 'package:stagpus/widgets/post.dart';
 import 'package:stagpus/pages/edit_profile.dart';
 
 class Profile extends StatefulWidget {
-  final String profileId;
+  final String profileId; // currentUser.uid;
 
   Profile({this.profileId});
-
-
-
+    
   @override
   _ProfileState createState() => new  _ProfileState(profileId);
 }
+
 class _ProfileState extends State<Profile> {
   bool isFollowing = false;
   String postOrientation = "grid";
@@ -335,7 +334,7 @@ buildProfileButton() {
     @override
         Widget build(BuildContext context) {
           return Scaffold(
-            appBar: header(context, titleText: "Profile"),
+            appBar: header(context,  titleText: "Profile", icon: Icon(Icons.message)),
             body: ListView(
               children: <Widget>[
               buildProfileHeader(),

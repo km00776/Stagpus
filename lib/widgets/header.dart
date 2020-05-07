@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-
-AppBar header(context, {bool isAppTitle = false, String titleText, bool removeBackButton = false}) {
+  AppBar header(context,{bool isAppTitle = false, String titleText, bool removeBackButton = false, Icon icon}) {
   return AppBar(
   automaticallyImplyLeading: removeBackButton ? false : true,
   title: Text(
@@ -15,6 +14,7 @@ AppBar header(context, {bool isAppTitle = false, String titleText, bool removeBa
     overflow: TextOverflow.ellipsis,
   ),
   centerTitle: true,
-  backgroundColor: Theme.of(context).accentColor,
-  );
+  backgroundColor: Theme.of(context).accentColor, 
+   );
 }
+

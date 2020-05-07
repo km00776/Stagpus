@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:stagpus/pages/Register.dart';
+import 'package:stagpus/pages/activity_feed.dart';
 import 'package:stagpus/pages/home.dart';
+import 'package:stagpus/pages/profile.dart';
+import 'package:stagpus/pages/timeline.dart';
 
 void main() {
  /**  Firestore.instance.settings(timestampsInSnapshotsEnabled: true).then((_) {
@@ -17,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'StagPus',
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: SignUpScreen(),
     );
   }
 }

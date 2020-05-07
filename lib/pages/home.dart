@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/pages/Register.dart';
 import 'package:stagpus/pages/activity_feed.dart';
 import 'package:stagpus/pages/create_account.dart';
 import 'package:stagpus/pages/profile.dart';
@@ -45,12 +46,12 @@ class _HomeState extends State<Home> {
 
 
 
-  void onPageChanged(int pageIndex) {
+   onPageChanged(int pageIndex) {
       setState(() {
         this.pageIndex = pageIndex;
       });
     }
-     void onTap(int pageIndex) {
+      onTap(int pageIndex) {
           pageController.animateToPage(pageIndex, duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut
           );
@@ -74,13 +75,16 @@ class _HomeState extends State<Home> {
 
      await followersRef.document(user.uid).collection('userFollowers').document(user.uid).setData({});
   }
-  
     currentUser = User.fromDocument(doc);
-  
-
 }
 
-    PushNotifications() async {
+    @override
+    void dispose() {
+      pageController.dispose();
+      super.dispose();
+    }
+
+    Notifications() async {
         final FirebaseUser user =  await FirebaseAuth.instance.currentUser();
         if(Platform.isIOS) getiOSPermission();
 
@@ -90,19 +94,16 @@ class _HomeState extends State<Home> {
         });
 
         _Messaging.configure(
-          onLaunch: (Map<String, dynamic> message) async {
-
-
-
-          },
-          onResume: (Map<String, dynamic> message) async {},
+      //    onLaunch: (Map<String, dynamic> message) async {
+        //  },
+        //  onResume: (Map<String, dynamic> message) async {},
           onMessage: (Map<String, dynamic> message) async {
             print("on message: $message\n");
             final String recipientId = message['data']['recipient'];
             final String body = message['notification']['body'];
             if(recipientId == user.uid) {
               print("Notification!");
-              SnackBar snackbar = SnackBar(content: Text (
+              SnackBar snackbar = SnackBar(content: Text(
                 body,
                 overflow: TextOverflow.ellipsis,
               ));
@@ -119,9 +120,17 @@ class _HomeState extends State<Home> {
         print("Settings registered: $settings");
       });
     }
+    
+    Widget Drawer(Text text) {
+      return Scaffold(
+      drawer: Drawer(
+          Text('Hello World'),
+        ),
+      );
+    }
 
     Scaffold dashBoard() {
-      return  Scaffold(
+      return Scaffold(
         key: _scaffoldKey,
         body: PageView(
           children: <Widget>[
@@ -140,6 +149,7 @@ class _HomeState extends State<Home> {
           onTap: onTap,
           activeColor: Theme.of(context).primaryColor,
           items: [
+            BottomNavigationBarItem(icon: Icon(Icons.menu),),
             BottomNavigationBarItem(icon: Icon(Icons.whatshot),),
             BottomNavigationBarItem(icon: Icon(Icons.notifications_active),),
             BottomNavigationBarItem(icon: Icon(Icons.photo_camera, size: 35.0,),),
@@ -158,19 +168,24 @@ void initState() {
 }
 
 Future<void> Login() async {
-    final formState = _formKey.currentState;
-    if(formState.validate()) {
-      formState.save();
+    if(_formKey.currentState.validate()) {
+      _formKey.currentState.save();
       try {
-      FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);  
-      doesUserExist();
+      AuthResult user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);  
+      await doesUserExist();
       Navigator.push(context, MaterialPageRoute(builder: (context) => dashBoard()));
       }catch(e) {
         print(e.message);
       }
     }
   }
-Scaffold buildUnAuthScreen() {
+
+  Future<void> Register() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()),
+    );
+  }
+  
+ Scaffold buildUnAuthScreen() {
   return Scaffold(
     body: Container(
       decoration: BoxDecoration(
@@ -239,8 +254,9 @@ Scaffold buildUnAuthScreen() {
                   RaisedButton(
                     color: Color.alphaBlend(Colors.blue, Colors.blueGrey),
                     onPressed: () {
-                       this.Login();
+                       this.Register();
                     },
+
                     child: Text('Register'),
                   )
                      ],
