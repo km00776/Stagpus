@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\url_launcher\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-et\\values-et.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\dd7db31a910498418b663c2d37ae7650\\res\\values-et\\values-et.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\url_launcher\\intermediates\\res\\merged\\debug\\values-et\\values-et.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\dd7db31a910498418b663c2d37ae7650\\res\\values-et\\values-et.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        }
+    ]
+}

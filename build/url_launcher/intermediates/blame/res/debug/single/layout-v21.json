@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\url_launcher\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\dd7db31a910498418b663c2d37ae7650\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\url_launcher\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\dd7db31a910498418b663c2d37ae7650\\res\\layout-v21\\notification_action.xml"
+    },
+    {
+        "merged": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\url_launcher\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\dd7db31a910498418b663c2d37ae7650\\res\\layout-v21\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\url_launcher\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0.aar\\dd7db31a910498418b663c2d37ae7650\\res\\layout-v21\\notification_template_custom_big.xml"
+    }
+]
