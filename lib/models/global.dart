@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 Color lightGreen = Color(0xFF0400E0);
 Color lightBlueIsh = Color(0xFF33BBB5);
 Color darkGreen = Color(0xFF00AA12);
-Color backgroundColor = Color(0xFFC1F0F6);
+Color backgroundColor = Color(0xFFDC143C);
 
 
 

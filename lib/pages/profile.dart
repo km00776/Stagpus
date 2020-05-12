@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:stagpus/models/global.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/header.dart';
@@ -330,7 +331,9 @@ buildProfileButton() {
         Widget build(BuildContext context) {
           return Scaffold(
             appBar: header(context,  titleText: "Profile", icon: Icon(Icons.message)),
-            body: ListView(
+            body: Container(
+              color: backgroundColor,
+              child: ListView( 
               children: <Widget>[
               buildProfileHeader(),
               Divider(),
@@ -340,6 +343,7 @@ buildProfileButton() {
               ),
               buildProfilePosts(),
               ],
+            )
             )
           );
         } 

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 class User {
     final String uid;
@@ -7,6 +8,7 @@ class User {
     final String photoUrl;
     final String displayName;
     final String bio;
+    GeoFirePoint myLocation;
 
 
 User({
@@ -16,6 +18,7 @@ User({
   this.photoUrl,
   this.displayName,
   this.bio,
+  this.myLocation,
 });
 
   factory User.fromDocument(DocumentSnapshot doc) {
@@ -25,6 +28,7 @@ User({
       photoUrl: doc['photoUrl'],
       displayName: doc['displayName'],
       bio: doc['bio'],
+      myLocation: doc['location']
     );
   }
 }

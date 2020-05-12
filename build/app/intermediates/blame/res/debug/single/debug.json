@@ -16,16 +16,16 @@
         "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-17.2.1.aar\\afc527fd2bcb954f9507a7e9554d9be1\\res\\drawable-mdpi-v4\\common_google_signin_btn_icon_dark_normal_background.9.png"
     },
     {
-        "merged": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\app\\intermediates\\res\\merged\\debug\\layout_notification_action_tombstone.xml.flat",
-        "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.2.0.aar\\af2349d31b0806e893ecb7044a5645bc\\res\\layout\\notification_action_tombstone.xml"
+        "merged": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\app\\intermediates\\res\\merged\\debug\\drawable_common_google_signin_btn_text_dark_focused.xml.flat",
+        "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-17.2.1.aar\\afc527fd2bcb954f9507a7e9554d9be1\\res\\drawable\\common_google_signin_btn_text_dark_focused.xml"
     },
     {
         "merged": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_common_full_open_on_phone.png.flat",
         "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-17.2.1.aar\\afc527fd2bcb954f9507a7e9554d9be1\\res\\drawable-xhdpi-v4\\common_full_open_on_phone.png"
     },
     {
-        "merged": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\app\\intermediates\\res\\merged\\debug\\drawable_common_google_signin_btn_text_dark_focused.xml.flat",
-        "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-17.2.1.aar\\afc527fd2bcb954f9507a7e9554d9be1\\res\\drawable\\common_google_signin_btn_text_dark_focused.xml"
+        "merged": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\app\\intermediates\\res\\merged\\debug\\layout_notification_action_tombstone.xml.flat",
+        "source": "C:\\Users\\km007\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.2.0.aar\\af2349d31b0806e893ecb7044a5645bc\\res\\layout\\notification_action_tombstone.xml"
     },
     {
         "merged": "C:\\Users\\km007\\Desktop\\Project\\StagPus\\build\\app\\intermediates\\res\\merged\\debug\\layout_notification_media_cancel_action.xml.flat",

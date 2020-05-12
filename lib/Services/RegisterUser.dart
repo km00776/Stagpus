@@ -1,20 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RegisterUserService {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-   String _email = null;
-   String _password = null;
-   String _confirmpassword = null;
-
-  
-    // state of user logged in or not logged in
+String _email;
+String _password;
 
 
-  Future<String> createUser(String email, String password) async {
-      final authResult = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-  }
+class Register {
 
+ verifyUser() async {
+  AuthResult result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
+  FirebaseUser user = result.user;
+  user.sendEmailVerification();
 
-
-  
+}
 }

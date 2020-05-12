@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/activity_feed.dart'; 
 import 'package:stagpus/pages/create_account.dart';
@@ -10,12 +11,12 @@ import 'package:stagpus/pages/profile.dart';
 import 'package:stagpus/pages/search.dart';
 import 'package:stagpus/pages/upload.dart';
 import 'package:timeago/timeago.dart';
-import 'package:stagpus/pages/Register.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stagpus/pages/timeline.dart';
 import 'dart:io';
 
 import 'Clubs.dart';
+import 'Map.dart';
 
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();
@@ -26,34 +27,35 @@ final activityFeedRef = Firestore.instance.collection('feed');
 final followersRef = Firestore.instance.collection('followers');
 final followingRef = Firestore.instance.collection('following');
 final timelineRef = Firestore.instance.collection('timeline');
-
+Color primaryColor = new Color(0xFF300093);
 User currentUser;
 class Home extends StatefulWidget {
-   
-  
   @override 
   _HomeState createState() => new _HomeState(); // creates an immutable state. 
 }
 
 class _HomeState extends State<Home> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState> ();
   FirebaseMessaging _Messaging = FirebaseMessaging();
   String _email;
   String _password;
+  String _confirmPassword; 
   PageController pageController;
   int pageIndex = 0;
   bool userAuth = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String username;
+  GeoFirePoint location;
 
 
   
-  onPageChanged(int pageIndex) {
+onPageChanged(int pageIndex) {
       setState(() {
         this.pageIndex = pageIndex;
       });
     }
-      onTap(int pageIndex) {
+ onTap(int pageIndex) {
           pageController.animateToPage(pageIndex, duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut
           );
@@ -72,7 +74,8 @@ class _HomeState extends State<Home> {
        "email" : user.email,
        "displayName" : username,
        "bio" : "",
-       "timestamp" : timestamp
+       "timestamp" : timestamp,
+       "location" : location,
      });  
      await followersRef
           .document(user.uid)
@@ -132,9 +135,10 @@ class _HomeState extends State<Home> {
         key: _scaffoldKey,
         body: PageView(
           children: <Widget>[
-            Timeline(currentUser: currentUser,),
+            Timeline(currentUser: currentUser),
             ActivityFeed(),
             Upload(currentUser: currentUser),
+            UserMap(),
             Search(),
             Club(),
             Profile(profileId: currentUser?.uid),
@@ -151,12 +155,14 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(icon: Icon(Icons.whatshot),),
             BottomNavigationBarItem(icon: Icon(Icons.notifications_active),),
             BottomNavigationBarItem(icon: Icon(Icons.photo_camera, size: 35.0,),),
+            BottomNavigationBarItem(icon: Icon(Icons.map, size: 35.0,),),
             BottomNavigationBarItem(icon: Icon(Icons.search),),
             BottomNavigationBarItem(icon: Icon(Icons.extension),),
             BottomNavigationBarItem(icon: Icon(Icons.account_circle),),
           ],
           ),
       );
+     
     }
 
 @override
@@ -166,9 +172,139 @@ void initState() {
   Login();
 }
 
+void submit() async {
+    final form = formKey.currentState;
+    form.save();
+    try{
+      verifyUser();
+       
+      }
+    catch(e) {
+      print(e);
+    }
+  }
+
+
+List<Widget> buildButtons() {
+    String _submitButtonText = "Submit";
+    return [Container(
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0)),
+          color: Colors.white,
+          textColor: primaryColor,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              _submitButtonText,
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),
+            ),
+          ),
+          onPressed: submit,
+      ),
+    )];
+  }
+      
+
+
+  
+  Widget registerScreen(BuildContext context) {
+    final _width = MediaQuery.of(context).size.width;
+    final _height = MediaQuery.of(context).size.height;
+    return Scaffold(
+    body: Container(
+      color: primaryColor,
+      height: _height,
+      width: _width,
+      child: SafeArea(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: _height * 0.05),
+            BackButtonWidget(),
+            SizedBox(height: _height * 0.05),
+            Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: buildInput() + buildButtons(),
+              )
+            )
+          )
+          ],
+        ),
+
+      )
+
+    ),
+    );
+  }
+
+  
+  
+
+  List<Widget> buildInput() {
+    List<Widget> textFields = [];
+
+   textFields.add(
+      TextFormField(
+        style: TextStyle(fontSize: 22.0),
+        decoration: buildSignUpInputDecoration("Email"),
+        onSaved: (value) => _email = value,
+      ),
+    );
+    textFields.add(SizedBox(height: 20,));
+    textFields.add(
+      TextFormField(
+        style: TextStyle(fontSize: 22.0),
+        decoration: buildSignUpInputDecoration("Password"),
+        onSaved: (value) => _password = value,
+      )
+    );
+     textFields.add(SizedBox(height: 20,));
+     textFields.add(
+      TextFormField(
+        style: TextStyle(fontSize: 22.0),
+        decoration: buildSignUpInputDecoration("Confirm Password"),
+        onSaved: (value) => _confirmPassword = value,
+      )
+      );
+    
+    return textFields;
+  }
+
+  InputDecoration buildSignUpInputDecoration(String hint) {
+  return InputDecoration(
+          hintText: hint,
+          filled: true,
+          fillColor: Colors.white,
+          focusColor: Colors.white,
+          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 0.0)),
+          contentPadding: const EdgeInsets.only(left: 14.0, bottom: 10.0, top: 10.0),
+          );
+        }
+
+
+
+
 void Register() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => registerScreen(context)));
 }
+
+ verifyUser() async {
+  AuthResult result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
+  FirebaseUser user = result.user;
+  user.sendEmailVerification();
+    if(!user.isEmailVerified) {
+        return buildUnAuthScreen;
+    }
+    else if (user.isEmailVerified) {
+        return dashBoard;
+    }
+      
+  
+  }
 
 
 Future<void> Login() async {
@@ -183,6 +319,7 @@ Future<void> Login() async {
       }
     }
   }
+
 
 
   
@@ -270,6 +407,8 @@ Future<void> Login() async {
     ),
   );  
 }
+
+
   @override
   Widget build(BuildContext context) {
       return userAuth ? dashBoard() : buildUnAuthScreen();
@@ -277,4 +416,41 @@ Future<void> Login() async {
 
   
   
+}
+class BackButtonWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+         padding: EdgeInsets.only(top: 64.0),
+         child:  Column (
+           mainAxisAlignment: MainAxisAlignment.center,
+           children: <Widget> [
+          Container(
+               decoration: BoxDecoration(
+                 gradient: LinearGradient(
+                   colors: [
+                   Colors.blueAccent,
+                   Colors.blueGrey,
+                   ],
+                 ),
+        ),
+       ), 
+        Container(
+         width: 150.0,
+         height: 150.0,
+         decoration: BoxDecoration(
+           shape: BoxShape.circle,
+           border: Border.all(color: Colors.white60, width: 2.0),
+         ),
+         padding: EdgeInsets.all(8.0),
+         child: CircleAvatar(
+           backgroundImage: NetworkImage("https://pbs.twimg.com/media/BslJsptIAAEvxtu?format=jpg&name=small"),
+         ),
+        ),
+        SizedBox(height:20),
+           ],
+         ), 
+       );
+       
+  }
 }
