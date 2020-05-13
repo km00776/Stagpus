@@ -11,6 +11,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="stagpus"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAz7RwLXSIxzfpWrtteUgCaRG6WY1bKTb4"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -29,6 +31,7 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            
         </activity>
     </application>
 </manifest>
