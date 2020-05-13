@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -138,7 +139,7 @@ onPageChanged(int pageIndex) {
             Timeline(currentUser: currentUser),
             ActivityFeed(),
             Upload(currentUser: currentUser),
-            UserMap(),
+            SurreyMap(),
             Search(),
             Club(),
             Profile(profileId: currentUser?.uid),
@@ -147,18 +148,17 @@ onPageChanged(int pageIndex) {
           onPageChanged: onPageChanged,
           physics: NeverScrollableScrollPhysics(),
         ),
-        bottomNavigationBar: CupertinoTabBar(
-          currentIndex: pageIndex,
+        bottomNavigationBar: CurvedNavigationBar(
           onTap: onTap,
-          activeColor: Theme.of(context).primaryColor,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.whatshot),),
-            BottomNavigationBarItem(icon: Icon(Icons.notifications_active),),
-            BottomNavigationBarItem(icon: Icon(Icons.photo_camera, size: 35.0,),),
-            BottomNavigationBarItem(icon: Icon(Icons.map, size: 35.0,),),
-            BottomNavigationBarItem(icon: Icon(Icons.search),),
-            BottomNavigationBarItem(icon: Icon(Icons.extension),),
-            BottomNavigationBarItem(icon: Icon(Icons.account_circle),),
+          backgroundColor: Colors.blueAccent,
+          items: <Widget> [
+           Icon(Icons.whatshot, size: 35.0,),
+           Icon(Icons.notifications_active, size: 35.0),
+           Icon(Icons.photo_camera, size: 35.0,),
+           Icon(Icons.map, size: 35.0,),
+           Icon(Icons.search, size: 35.0),
+           Icon(Icons.extension, size: 35.0),
+          Icon(Icons.account_circle, size: 35.0),
           ],
           ),
       );
@@ -241,8 +241,6 @@ List<Widget> buildButtons() {
     );
   }
 
-  
-  
 
   List<Widget> buildInput() {
     List<Widget> textFields = [];
