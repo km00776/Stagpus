@@ -115,7 +115,7 @@ class _UploadState extends State<Upload>
       file = null;
     });
   }
-
+  //resize image and store it a .jpg
   compressImage() async {
     final tempDir = await getTemporaryDirectory();
     final path = tempDir.path;
@@ -128,15 +128,13 @@ class _UploadState extends State<Upload>
   }
 
   Future<String> uploadImage(imageFile) async {
-    StorageUploadTask uploadTask =
-        storageRef.child("post_$postId.jpg").putFile(imageFile);
+    StorageUploadTask uploadTask = storageRef.child("post_$postId.jpg").putFile(imageFile);
     StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
     String downloadUrl = await storageSnap.ref.getDownloadURL();
     return downloadUrl;
   }
 
-  createPostInFirestore(
-      {String mediaUrl, String location, String description}) async{
+  createPostInFirestore({String mediaUrl, String location, String description}) async{
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
     DocumentSnapshot doc = await usersRef.document(user.uid).get();
     currentUser = User.fromDocument(doc);

@@ -169,6 +169,7 @@ buildProfileButton() {
        if(isProfileOwner) {
          return buildButton(text: "Edit Profile", function: editProfile);
        }
+       
        else if(isFollowing) {
          return buildButton(
            text: "Unfollow", 
@@ -222,6 +223,7 @@ buildProfileButton() {
                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                children: <Widget>[
                                  buildProfileButton(),
+                                 ChatButton(text: 'Message', icon: Icon(Icons.ac_unit)),
                                ],
                              ),
                            ],
@@ -324,9 +326,8 @@ buildProfileButton() {
           color: postOrientation == 'list' ? Theme.of(context).primaryColor : Colors.grey),
       ],
     );
-
   }
-
+ 
     @override
         Widget build(BuildContext context) {
           return Scaffold(
@@ -347,4 +348,28 @@ buildProfileButton() {
             )
           );
         } 
+}
+
+class ChatButton extends StatelessWidget {
+  final String text;
+  final Icon icon;
+
+  const ChatButton({Key key, this.text, this.icon}) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      color: Colors.blue,
+      child: Row(
+        children: <Widget> [
+          Icon(Icons.filter_drama, size: 25.0,),
+          Text(text),
+          
+      ]
+      ),
+      onPressed: () => {}
+    );
+       
+  }
+  
 }

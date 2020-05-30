@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -21,23 +21,29 @@ class SurreyMapState extends State<SurreyMap> {
       bearing: 192.8334901395799,
       target: LatLng(37.43296265331129, -122.08832357078792),
       tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+      zoom: 19.151926040649414
+  );
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: GoogleMap(
-        mapType: MapType.hybrid,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+      appBar: AppBar(
+        title: Text('Map'),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: Text('To the lake!'),
-        icon: Icon(Icons.directions_boat),
+      body: Stack(children: <Widget>[
+        GoogleMap(
+        initialCameraPosition: CameraPosition(
+        target: LatLng(51.215485, -0.631027),
+        zoom: 12,
+        ),
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
       ),
+      Container(alignment: Alignment.bottomCenter,
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 32),
+      child: Text("StagPus Maps")
+      )
+      ],),
     );
   }
 
@@ -45,4 +51,20 @@ class SurreyMapState extends State<SurreyMap> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
+
+_getLocationPermission() {
+  Location location = new Location();
+  try {
+    location.requestPermission();
+  } on Exception catch(_) {
+    print('This was problem allowing location');
+  }
+}
+
+
+@override
+void initState() {
+  super.initState();;
+   _getLocationPermission();
+}
 }

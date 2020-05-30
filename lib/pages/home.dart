@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/pages/Messager.dart';
 import 'package:stagpus/pages/activity_feed.dart'; 
 import 'package:stagpus/pages/create_account.dart';
 import 'package:stagpus/pages/profile.dart';
@@ -15,9 +16,9 @@ import 'package:timeago/timeago.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stagpus/pages/timeline.dart';
 import 'dart:io';
-
 import 'Clubs.dart';
 import 'Map.dart';
+import 'package:location/location.dart';
 
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final DateTime timestamp = DateTime.now();
@@ -141,6 +142,7 @@ onPageChanged(int pageIndex) {
             Upload(currentUser: currentUser),
             SurreyMap(),
             Search(),
+            Messenger(currentUser: currentUser),
             Club(),
             Profile(profileId: currentUser?.uid),
           ],
@@ -157,8 +159,9 @@ onPageChanged(int pageIndex) {
            Icon(Icons.photo_camera, size: 35.0,),
            Icon(Icons.map, size: 35.0,),
            Icon(Icons.search, size: 35.0),
+           Icon(Icons.message, size: 35.0),
            Icon(Icons.extension, size: 35.0),
-          Icon(Icons.account_circle, size: 35.0),
+           Icon(Icons.account_circle, size: 35.0),
           ],
           ),
       );
@@ -291,9 +294,11 @@ void Register() {
 }
 
  verifyUser() async {
+  bool isUserVerified;
   AuthResult result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
   FirebaseUser user = result.user;
   user.sendEmailVerification();
+
     if(!user.isEmailVerified) {
         return buildUnAuthScreen;
     }
@@ -406,13 +411,27 @@ Future<void> Login() async {
   );  
 }
 
+void _getLocationPermission() async {
+    var location = new Location();
+    try {
+      location.requestPermission();
+    } on Exception catch (_) {
+      print('There was a problem allowing location access');
+    }
+  }
+
+
+
+
+ 
+
+
+
 
   @override
   Widget build(BuildContext context) {
       return userAuth ? dashBoard() : buildUnAuthScreen();
   }
-
-  
   
 }
 class BackButtonWidget extends StatelessWidget {
