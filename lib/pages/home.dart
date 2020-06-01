@@ -1,12 +1,18 @@
+import 'dart:async';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:stagpus/Chat/ChatController/Messager.dart';
 import 'package:stagpus/Clubs/ViewClubs/ClubBackground.dart';
 import 'package:stagpus/Map/Map.dart';
+import 'package:stagpus/Marketplace/ViewMarket/MarketBackground.dart';
+import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
+import 'package:stagpus/Screens/Reminder.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/activity_feed.dart'; 
 import 'package:stagpus/pages/create_account.dart';
@@ -16,8 +22,7 @@ import 'package:stagpus/pages/upload.dart';
 import 'package:timeago/timeago.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stagpus/pages/timeline.dart';
-import 'dart:io';
-
+import 'package:email_validator/email_validator.dart';
 import 'package:location/location.dart';
 
 final StorageReference storageRef = FirebaseStorage.instance.ref();
@@ -29,7 +34,16 @@ final activityFeedRef = Firestore.instance.collection('feed');
 final followersRef = Firestore.instance.collection('followers');
 final followingRef = Firestore.instance.collection('following');
 final timelineRef = Firestore.instance.collection('timeline');
-Color primaryColor = new Color(0xFF300093);
+
+
+
+const blueg = LinearGradient(
+  colors: <Color>[Colors.cyan, Colors.cyanAccent],
+  stops: [0.0, 1.0],
+  begin: Alignment.centerLeft,
+  end: Alignment.centerRight,
+);
+
 User currentUser;
 class Home extends StatefulWidget {
   @override 
@@ -38,24 +52,27 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState> ();
+  final GlobalKey<FormState> registerKey = GlobalKey<FormState>();
   String _email;
   String _password;
   String _confirmPassword; 
+  bool _agreePrivacy = false;
   PageController pageController;
   int pageIndex = 0;
   bool userAuth = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String username;
   GeoFirePoint location;
-
+  var email = "@surrey.ac.uk";
 
   
+
 onPageChanged(int pageIndex) {
       setState(() {
         this.pageIndex = pageIndex;
       });
     }
+
  onTap(int pageIndex) {
           pageController.animateToPage(pageIndex, duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut
@@ -93,13 +110,14 @@ onPageChanged(int pageIndex) {
     void dispose() {
       pageController.dispose();
       super.dispose();
+     
     }
 
-   
-    
-    
+
+
     Scaffold dashBoard() {
       return Scaffold(
+        resizeToAvoidBottomPadding: false,
         key: _scaffoldKey,
         body: PageView(
           children: <Widget>[
@@ -110,6 +128,7 @@ onPageChanged(int pageIndex) {
             Search(),
             Messenger(currentUser: currentUser),
             Club(),
+            MarketPlace(),
             Profile(profileId: currentUser?.uid),
           ],
           controller: pageController,
@@ -127,6 +146,7 @@ onPageChanged(int pageIndex) {
            Icon(Icons.search, size: 35.0),
            Icon(Icons.message, size: 35.0),
            Icon(Icons.extension, size: 35.0),
+           Icon(Icons.shopping_basket , size:35.0),
            Icon(Icons.account_circle, size: 35.0),
           ],
           ),
@@ -139,77 +159,189 @@ void initState() {
   super.initState();
   pageController = PageController();
   Login();
+
 }
 
-void submit() async {
-    final form = formKey.currentState;
-    form.save();
-    try{
-      verifyUser();
-       
-      }
-    catch(e) {
-      print(e);
-    }
-  }
-
-
-List<Widget> buildButtons() {
-    String _submitButtonText = "Submit";
-    return [Container(
-      width: MediaQuery.of(context).size.width * 0.7,
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0)),
-          color: Colors.white,
-          textColor: primaryColor,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              _submitButtonText,
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),
-            ),
-          ),
-          onPressed: submit,
-      ),
-    )];
-  }
-      
-
-
   
-  Widget registerScreen(BuildContext context) {
-    final _width = MediaQuery.of(context).size.width;
-    final _height = MediaQuery.of(context).size.height;
-    return Scaffold(
-    body: Container(
-      color: primaryColor,
-      height: _height,
-      width: _width,
-      child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: _height * 0.05),
-            BackButtonWidget(),
-            SizedBox(height: _height * 0.05),
-            Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: buildInput() + buildButtons(),
-              )
+
+void _setAgreed(bool newValue) {
+  setState(() {
+    _agreePrivacy = newValue;
+  });
+}
+
+verifyUserDetails() async {
+  FirebaseUser user;
+  registerKey.currentState.save();
+if(registerKey.currentState.validate()) {
+  AuthResult result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
+  user = result.user;
+  user.sendEmailVerification();
+  Navigator.push(context, MaterialPageRoute(builder: (context) => remind(context)));
+}
+}
+
+
+
+
+
+ Widget registerScreen(BuildContext context) {
+   String results;
+  return Scaffold(
+       resizeToAvoidBottomPadding: false,
+       body: Container(
+         decoration: BoxDecoration(
+           gradient: LinearGradient(
+             begin: Alignment.topRight,
+             end: Alignment.bottomLeft,
+             colors: [Colors.blueAccent, Colors.cyan])
+         ),
+         alignment:Alignment.topCenter,
+         child: Column(
+           mainAxisAlignment: MainAxisAlignment.center,
+           crossAxisAlignment: CrossAxisAlignment.center,
+           children: <Widget>[
+               Text('SurreyConnect', 
+                 style: TextStyle(
+                   fontFamily: "Signatra",
+                   fontSize: 55.0,
+                   color: Colors.black
+                 ),
+               ),
+               Form(
+                 key: registerKey,
+                   child: Column(
+                   children: <Widget>[
+                     TextFormField(
+                       onSaved: (input) => _email = input,
+                       decoration: InputDecoration(
+                         contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 15.0, 25.0),
+                         labelText: 'Email:',
+                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)
+                         ),
+                       ),
+                       validator: (input) {
+                         if(!(input.contains(email))) {
+                           return "Please enter a valid surrey email address";
+                         }
+                       },
+                     ),
+                     SizedBox(height: 20),
+                     TextFormField(
+                       validator: (passwordInput){
+                         if(passwordInput.isEmpty) {
+                           return "Cannot leave Password Empty";
+                         }
+                         else if (passwordInput.length < 5) {
+                           return "Please enter a password which has more than 5 characters";
+                         }
+                          results = passwordInput.toString();
+                       },
+                       onSaved: (passwordInput) => _password = passwordInput,
+                       decoration: InputDecoration(
+                         contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 15.0, 25.0),
+                         labelText: 'Password:',
+                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0))
+                       ),
+                       obscureText: true,
+                     ),
+                     SizedBox(height: 20),
+                      TextFormField(
+                       validator: (confirmPasswordInput){
+                         if(confirmPasswordInput != results) {
+                             return "Passwords do not match";
+                         }
+                       },
+                       onSaved: (confirmPasswordInput) => _confirmPassword = confirmPasswordInput,
+                       decoration: InputDecoration(
+                         contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 15.0, 25.0),
+                         labelText: 'Confirm Password:',
+                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0))
+                       ),
+                       obscureText: true,
+                     ),
+                    SizedBox(width: 300, height: 35),
+                     Row(
+                       mainAxisAlignment: MainAxisAlignment.start,
+                       crossAxisAlignment: CrossAxisAlignment.end,
+                       children: <Widget>[
+                       SizedBox(width: 20, height: 35),
+                     Expanded(
+                       child: RaisedButton(
+                           color: Color.alphaBlend(Colors.cyan, Colors.cyanAccent),
+                           onPressed: () {
+                           Navigator.pop(context);                       
+                       },
+                       child: Text('Login'),
+                     ),
+                     ),
+                    SizedBox(width: 80, height: 35),
+                     Expanded(
+                     child: RaisedButton(
+                           color: Color.alphaBlend(Colors.cyan, Colors.cyanAccent),
+                           onPressed: () {  
+                           verifyUserDetails();
+                       },
+                       child: Text('Register'),
+                     ),
+                   ),
+                     SizedBox(height: 10, width:20),
+                     ],
+                    ),
+                ]
+              ),
+            ),
+            Row(
+              mainAxisAlignment:  MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget> [
+                Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0)
+                ),
+                SizedBox(height: 10, width:10),
+                Checkbox(
+                          value: _agreePrivacy,
+                          onChanged: _setAgreed,
+                        ),
+                        GestureDetector(
+                          onTap: () =>
+                          _setAgreed(!_agreePrivacy),
+                            child:  RichText(
+                             text: TextSpan(
+                               children: <TextSpan>[
+                                 TextSpan(text: "By clicking register, you agree to our "),
+                                 TextSpan(
+                                    
+                                    text: 'Terms of Services \n',
+                                    style: TextStyle(color: Colors.yellowAccent),
+                                    recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      print('Terms of Services');
+                                    }         
+                                 ),
+                                 TextSpan(text: 'and you have read our '),
+                                 TextSpan(
+                                   text: 'Privacy Policy',
+                                   style: TextStyle(color: Colors.yellowAccent),
+
+                                   recognizer: TapGestureRecognizer()
+                                   ..onTap = () {
+                                     print('Privacy Policy');
+                                   }
+                                 )
+                               ]
+
+                              )
+                          ),
+                
+                        ),],
             )
-          )
-          ],
-        ),
-
-      )
-
+        ],
     ),
-    );
+    
+    ),
+  ); 
   }
-
 
   List<Widget> buildInput() {
     List<Widget> textFields = [];
@@ -235,11 +367,12 @@ List<Widget> buildButtons() {
         style: TextStyle(fontSize: 22.0),
         decoration: buildSignUpInputDecoration("Confirm Password"),
         onSaved: (value) => _confirmPassword = value,
-      )
+         )
       );
-    
     return textFields;
   }
+
+  
 
   InputDecoration buildSignUpInputDecoration(String hint) {
   return InputDecoration(
@@ -253,64 +386,59 @@ List<Widget> buildButtons() {
         }
 
 
-
-
 void Register() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => registerScreen(context)));
+  Navigator.push(context, MaterialPageRoute(builder: (context) => registerScreen(context)));
 }
 
- verifyUser() async {
-  bool isUserVerified;
-  AuthResult result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
-  FirebaseUser user = result.user;
-  user.sendEmailVerification();
 
-    if(!user.isEmailVerified) {
-        return buildUnAuthScreen;
-    }
-    else if (user.isEmailVerified) {
-        return dashBoard;
-    }
-      
+    
+   
+    
   
-  }
 
 
-Future<void> Login() async {
-    if(_formKey.currentState.validate()) {
+
+  Future<void> Login() async {
+
+    FirebaseUser user;
+     if(_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      try {
-      AuthResult user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);  
-      await doesUserExist();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => dashBoard()));
-      }catch(e) {
-        print(e.message);
-      }
+     AuthResult result = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
+    user = result.user;
     }
+    
+    if(user.isEmailVerified) {
+      await doesUserExist();
+       Navigator.push(context, MaterialPageRoute(builder: (context) => dashBoard()));
+    }
+    else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => remind(context)));
+    }
+
   }
 
 
-
+Scaffold buildUnAuthScreen() {
   
- Scaffold buildUnAuthScreen() {
   return Scaffold(
+    resizeToAvoidBottomPadding: false,
     body: Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.teal, Colors.purple])
+          colors: [Colors.blueAccent, Colors.cyan])
       ),
-      alignment: Alignment.center,
+      alignment:Alignment.topCenter,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-            Text('StagPus', 
+            Text('SurreyConnect', 
               style: TextStyle(
                 fontFamily: "Signatra",
-                fontSize: 90.0,
-                color: Colors.white
+                fontSize: 55.0,
+                color: Colors.black
               ),
             ),
             Form(
@@ -319,15 +447,16 @@ Future<void> Login() async {
                 children: <Widget>[
                   TextFormField(
                     validator: (input) {
-                      if(input.isEmpty) {
-                        return "Field can't be left empty";
+                      if(!(input.contains(email))) {
+                        return "Please enter a valid surrey email address";
                       }
+      
                     },
-                    onSaved: (input) => _email = input,
+                    onSaved: (input) => _email = input.trim(),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                      labelText: 'Email',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)
+                      contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 15.0, 25.0),
+                      labelText: 'Email:',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)
                       ),
                     ),
                   ),
@@ -340,9 +469,9 @@ Future<void> Login() async {
                     },
                     onSaved: (input) => _password = input,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                      labelText: 'Password',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+                      contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 15.0, 25.0),
+                      labelText: 'Password:',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0))
                     ),
                     obscureText: true,
                   ),
@@ -351,19 +480,18 @@ Future<void> Login() async {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       RaisedButton(
-                        color: Color.alphaBlend(Colors.blue, Colors.blueGrey),
+                        color: Color.alphaBlend(Colors.cyan, Colors.cyanAccent),
                         onPressed: () {
                         Login();                          
                     },
-                    child: Text('Sign in'),
+                    child: Text('Login'),
                   ),
-                  SizedBox(width: 290, height: 90),
-                  RaisedButton(
-                    color: Color.alphaBlend(Colors.blue, Colors.blueGrey),
+                  SizedBox(width: 150, height: 90),
+                   RaisedButton(
+                    color: Color.alphaBlend(Colors.cyan, Colors.cyanAccent),
                     onPressed: () {
-                      this.Register();
+                      Register();
                     },
-
                     child: Text('Register'),
                   )
                      ],
@@ -386,18 +514,10 @@ void _getLocationPermission() async {
     }
   }
 
-
-
-
- 
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
+@override
+Widget build(BuildContext context) {
       return userAuth ? dashBoard() : buildUnAuthScreen();
-  }
+}
   
 }
 class BackButtonWidget extends StatelessWidget {

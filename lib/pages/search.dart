@@ -52,6 +52,12 @@ class _SearchState extends State<Search> {
   Container buildNoContent() {
    final Orientation orientation =  MediaQuery.of(context).orientation;
     return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Colors.blueAccent, Colors.cyan])
+      ),
       child: Center(child: ListView(
         shrinkWrap: true,
         children: <Widget>[
@@ -118,7 +124,12 @@ class UserResult extends StatelessWidget {
   @override 
   Widget build(BuildContext context) {
       return Container(
-        color: Theme.of(context).primaryColor.withOpacity(0.7),
+        decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Colors.blueAccent, Colors.cyan])
+      ),
         child: Column(
           children: <Widget>[
           GestureDetector(

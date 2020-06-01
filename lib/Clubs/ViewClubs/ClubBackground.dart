@@ -19,7 +19,7 @@ class ClubsState extends State<Club> {
     return Scaffold(
         resizeToAvoidBottomPadding: true,
           body: SingleChildScrollView(child:Container(
-        color: backgroundColor,
+        color: blueColor,
         child: Column(
           children: <Widget>[
             Stack(
@@ -28,21 +28,24 @@ class ClubsState extends State<Club> {
                   padding: EdgeInsets.all(40),
                   constraints: BoxConstraints.expand(height: 225),
                   decoration: BoxDecoration(
-                    gradient: new LinearGradient(
-                      colors: [lightBlueIsh, lightGreen],
-                      begin: const FractionalOffset(1.0, 1.0),
-                      end: const FractionalOffset(0.2, 0.2),
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp
-                    ),
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight:  Radius.circular(30))
-                  ),
+           gradient: LinearGradient(
+             begin: Alignment.topRight,
+             end: Alignment.bottomLeft,
+             colors: [Colors.blueAccent, Colors.cyan])
+         ),
                   child: Container(
                     padding: EdgeInsets.only(top: 50),
+                    constraints: BoxConstraints.expand(height:225),
+                    decoration: BoxDecoration(
+                       gradient: LinearGradient(
+             begin: Alignment.topRight,
+             end: Alignment.bottomLeft,
+             colors: [Colors.blueAccent, Colors.cyan])
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('Find Your New Job', style: titleStyleWhite,)
+                        Text('Join a club or Society now!', style: titleStyleWhite,)
                       ],
                     ),
                   ),
@@ -87,7 +90,7 @@ class ClubsState extends State<Club> {
           ),
     );
   }
-  List<String> jobCategories = ["Sales", "Engineering", "Health", "Education", "Finance"];
+  List<String> jobCategories = ["Clubs", "Societies"];
 
   Map jobCatToIcon = {
     "Sales" : Icon(Icons.monetization_on, color: lightBlueIsh, size: 50,),

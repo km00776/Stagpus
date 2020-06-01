@@ -81,9 +81,13 @@ class _TimelineState extends State<Timeline> {
           }
         });
         return Container(
-          color: Theme.of(context).accentColor.withOpacity(0.2),
-          child: Column(children: <Widget>[
-            Container(
+decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Colors.blueAccent, Colors.cyan])
+      ),          child: Column(children: <Widget>[
+        Container(
               padding: EdgeInsets.all(12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -96,13 +100,16 @@ class _TimelineState extends State<Timeline> {
                   SizedBox(
                     width: 8.0,
                   ),
+                  Expanded(child:
                   Text(
                     "Users you may be interested in following",
                      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 30.0)
                   ),
+                  )
                 ],
             ),
             ),
+          
             Column(children: userResults,),
           ],
           ),

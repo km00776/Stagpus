@@ -36,6 +36,7 @@ class _MessengerState extends State<Messenger>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
         title: Text("Surrey Chat"),
         ),
@@ -68,6 +69,12 @@ class _MessengerState extends State<Messenger>{
                 ),
               ),
               Container(
+                decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Colors.blueAccent, Colors.cyan])
+      ),
                 child: Row(
                   children: <Widget> [
                     Expanded(

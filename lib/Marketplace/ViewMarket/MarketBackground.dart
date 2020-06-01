@@ -17,7 +17,7 @@ class MarketPlace extends StatelessWidget  {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: mintColor,
+      backgroundColor: blueColor,
       body: Stack(
         children: <Widget> [
           Background(width: width * 0.4, 

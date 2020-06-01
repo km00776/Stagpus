@@ -53,28 +53,29 @@ getProfilePosts() async {
   }
 
 
-  checkIfFollowing() async {
+checkIfFollowing() async {
    DocumentSnapshot doc = await followersRef.document(widget.profileId).collection('userFollowers').document(currentUserUid).get();
     setState(() {
       isFollowing = doc.exists;
     });
   }
 
-  getFollowers() async {
+
+getFollowers() async {
    QuerySnapshot snapshot =  await followersRef.document(widget.profileId).collection('userFollowers').getDocuments();
    setState(() {
      followerCount = snapshot.documents.length;
    });
   }
 
-  getFollowing() async{
+getFollowing() async{
    QuerySnapshot snapshot =  await followingRef.document(widget.profileId).collection('userFollowing').getDocuments();
    setState(() {
      followingCount = snapshot.documents.length; 
    });
   }
 
-  Column buildCountColumn(String label, int count) {
+Column buildCountColumn(String label, int count) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -204,7 +205,6 @@ buildProfileButton() {
                         CircleAvatar(
                          radius: 40.0,
                          backgroundColor: Colors.grey, 
-                      
                          ),
                          Expanded(
                            flex: 1,
@@ -223,7 +223,9 @@ buildProfileButton() {
                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                children: <Widget>[
                                  buildProfileButton(),
+                                 Expanded(child: 
                                  ChatButton(text: 'Message', icon: Icon(Icons.ac_unit)),
+                                 ),
                                ],
                              ),
                            ],
@@ -235,8 +237,8 @@ buildProfileButton() {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 12.0),
                       child: Text(
-                        // user.email, 
-                        'test',
+                         user.email, 
+                        
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,
@@ -247,8 +249,8 @@ buildProfileButton() {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 4.0),
                       child: Text(
-                     //  user.displayName,// currentUser.displayName, 
-                     'test',
+                      user.displayName,// currentUser.displayName, 
+                    
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -258,8 +260,8 @@ buildProfileButton() {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 2.0),
                       child: Text(
-                       // user.bio, // should be currentName.username
-                       'bio',
+                        user.bio, // should be currentName.username
+                       
                       ),
                     ),
                 ],
@@ -333,7 +335,12 @@ buildProfileButton() {
           return Scaffold(
             appBar: header(context,  titleText: "Profile", icon: Icon(Icons.message)),
             body: Container(
-              color: backgroundColor,
+              decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Colors.blueAccent, Colors.cyan])
+      ),
               child: ListView( 
               children: <Widget>[
               buildProfileHeader(),

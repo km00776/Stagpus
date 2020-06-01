@@ -84,11 +84,15 @@ class _UploadState extends State<Upload>
 
   Container buildSplashScreen() {
     return Container(
-      color: Theme.of(context).accentColor.withOpacity(0.6),
+    decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Colors.blueAccent, Colors.cyan])
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SvgPicture.asset('assets/images/upload.svg', height: 260.0),
           Padding(
             padding: EdgeInsets.only(top: 20.0),
             child: RaisedButton(

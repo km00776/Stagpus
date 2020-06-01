@@ -5,6 +5,7 @@ Color lightGreen = Color(0xFF0400E0);
 Color lightBlueIsh = Color(0xFF33BBB5);
 Color darkGreen = Color(0xFF00AA12);
 Color backgroundColor = Color(0xFFDC143C);
+Color blueColor = Color(0xFF33BBB6);
 
 
 
@@ -35,7 +36,7 @@ TextStyle titileStyleLighterBlack = new TextStyle(
 
 TextStyle titileStyleBlack = new TextStyle(
   fontFamily: 'Helvetica', 
-  color: Colors.black, 
+  color: Colors.white, 
   fontWeight: FontWeight.bold, 
   fontSize: 20
 );
