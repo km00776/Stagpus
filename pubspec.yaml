@@ -25,8 +25,8 @@ dependencies:
   cloud_firestore: ^0.13.4+2
   image_picker: ^0.6.0+2
   bloc: ^4.0.0
-  firebase_storage: ^3.1.5
-  firebase_auth: ^0.15.5+3
+  firebase_storage: ^3.1.6
+  firebase_auth: ^0.16.1
   email_validator: ^1.0.4
   firebase_auth_web:
   geolocator: 5.3.1
@@ -47,7 +47,10 @@ dependencies:
   clay_containers: ^0.2.2
   universal_html: ^1.1.0
   url_launcher: ^5.1.2
-
+  table_calendar: ^2.2.3
+  gradient_app_bar: ^0.0.1
+  provider: 
+  
   
 
 dev_dependencies:
@@ -59,6 +62,7 @@ dev_dependencies:
 
 
 dependency_overrides:
+  flutter_chips_input: ^1.9.0-dev.3
   
 
 # For information on the generic Dart part of this file, see the

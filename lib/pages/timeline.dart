@@ -94,7 +94,7 @@ decoration: BoxDecoration(
                 children: <Widget>[
                   Icon(
                     Icons.person_add,
-                    color: Theme.of(context).primaryColor,
+                    color: Colors.black54,
                     size: 30.0,
                   ),
                   SizedBox(
@@ -103,7 +103,7 @@ decoration: BoxDecoration(
                   Expanded(child:
                   Text(
                     "Users you may be interested in following",
-                     style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 30.0)
+                     style: TextStyle(color: Colors.black54, fontSize: 30.0)
                   ),
                   )
                 ],

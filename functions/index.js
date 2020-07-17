@@ -22,10 +22,12 @@ exports.onCreateFollower = functions.firestore.document("/followers/{userId}/use
         if(doc.exists) {
            const postId =  doc.id;
            const postData = doc.data();
-           timelinePostsRef.doc(postId).set(postData); 
+           timelinePostsRef.doc(postId).set(postData); x
         }
     })
 });
+
+exports.
 
 exports.onDeleteFollower = functions.firestore.document("/followers/{userId}/userFollowers/{followerId}").onDelete(async (snapshot, context) => {
     console.log("Follower Deleted", snapshot.id);

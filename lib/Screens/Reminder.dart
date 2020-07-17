@@ -36,3 +36,29 @@ Widget remind(BuildContext context) {
    
     );
   }
+
+  Widget privacy(BuildContext context) {
+    return Scaffold(
+       resizeToAvoidBottomPadding: false,
+       body: Container(
+         decoration: 
+          BoxDecoration(
+           gradient: LinearGradient(
+             begin: Alignment.topRight,
+             end: Alignment.bottomLeft,
+             colors: [Colors.blueAccent, Colors.cyan])
+         ),
+          alignment:Alignment.topCenter,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+             crossAxisAlignment: CrossAxisAlignment.center,
+           
+
+          
+          )
+         ),
+                 
+
+       
+    );
+  }

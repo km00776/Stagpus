@@ -56,7 +56,7 @@ class ClubsState extends State<Club> {
                   child: ListView(
                     padding: EdgeInsets.only(left: 40),
                     scrollDirection: Axis.horizontal,
-                    children: getRecentJobs()
+                    children: getRecentClubs()
                   ),
                 ),
                 Container(
@@ -69,14 +69,14 @@ class ClubsState extends State<Club> {
                       Container(
                         margin: EdgeInsets.only(top: 40),
                         child: Text(
-                          "Explore New Opportunities",
+                          "Explore New Opportunities...",
                           style: titileStyleBlack, 
                           ),
                       ),
                       Container(
                         height: 400,
                         child: ListView(
-                          children: getJobCategories(),
+                          children: getClubCategories(),
                         ),
                       )
                     ],
@@ -90,14 +90,14 @@ class ClubsState extends State<Club> {
           ),
     );
   }
-  List<String> jobCategories = ["Clubs", "Societies"];
+  List<String> clubCategories = ["Clubs", "Societies"];
 
-  Map jobCatToIcon = {
-    "Sales" : Icon(Icons.monetization_on, color: lightBlueIsh, size: 50,),
-    "Engineering" : Icon(Icons.settings, color: lightBlueIsh, size: 50),
-    "Health" : Icon(Icons.healing, color: lightBlueIsh, size: 50),
-    "Education" : Icon(Icons.search, color: lightBlueIsh, size: 50),
-    "Finance" : Icon(Icons.card_membership, color: lightBlueIsh, size: 50),
+  Map clubCatToIcon = {
+    "ArabicSoc" : Icon(Icons.monetization_on, color: lightBlueIsh, size: 50,),
+    "AnimeSoc" : Icon(Icons.settings, color: lightBlueIsh, size: 50),
+    "Boxing" : Icon(Icons.healing, color: lightBlueIsh, size: 50),
+    "MMA" : Icon(Icons.search, color: lightBlueIsh, size: 50),
+    "CompSoc" : Icon(Icons.card_membership, color: lightBlueIsh, size: 50),
   };
 
   Widget getCategoryContainer(String categoryName) {
@@ -125,7 +125,7 @@ class ClubsState extends State<Club> {
                 width: 70,
                 child: FloatingActionButton(
                   backgroundColor: Colors.white,
-                  child:  jobCatToIcon[categoryName],
+                  child:  clubCatToIcon[categoryName],
                   elevation: 10,
                   onPressed: () {
 
@@ -137,17 +137,17 @@ class ClubsState extends State<Club> {
         );
   }
 
-  List<Widget> getJobCategories() {
-    List<Widget> jobCategoriesCards = [];
+  List<Widget> getClubCategories() {
+    List<Widget> clubCategoriesCards = [];
     List<Widget> rows = [];
     int i = 0;
-    for (String category in jobCategories) {
+    for (String category in clubCategories) {
       if (i < 2) {
         rows.add(getCategoryContainer(category));
         i ++;
       } else {
         i = 0;
-        jobCategoriesCards.add(new Row(
+        clubCategoriesCards.add(new Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: rows,
         ));
@@ -157,16 +157,16 @@ class ClubsState extends State<Club> {
       }
     }
     if (rows.length > 0) {
-      jobCategoriesCards.add(new Row(
+      clubCategoriesCards.add(new Row(
         mainAxisAlignment: MainAxisAlignment.center,
           children: rows,
         ));
     }
-    return jobCategoriesCards;
+    return clubCategoriesCards;
   }
 
 
-  List<Society> findJobs() {
+  List<Society> findClubs() {
     List<Society> club = [];
     for (int i = 0; i < 10; i++) {
         club.add(new Society('Boxing', 'Join now for fee!'));
@@ -182,18 +182,18 @@ class ClubsState extends State<Club> {
   
 
   
-  List<Widget> getRecentJobs() {
+  List<Widget> getRecentClubs() {
     List<Widget> recentJobCards = [];
-    List<Society> club = findJobs();
+    List<Society> club = findClubs();
     for (Society clubs in club) {
-      recentJobCards.add(getJobCard(clubs));
+      recentJobCards.add(getClubCard(clubs));
     }
     return recentJobCards;
   }
 
 
 
-  Widget getJobCard(Society clubs) {
+  Widget getClubCard(Society clubs) {
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(right: 20, bottom: 30, top: 30),
@@ -221,8 +221,8 @@ class ClubsState extends State<Club> {
               )
             ],
           ),
-          Text("Boxing" + " - " + "Mondy", style: jobCardTitileStyleBlack),
-          Text("text"),
+          Text("Boxing" + " - " + "Monday", style: jobCardTitileStyleBlack),
+          Text("9:00 - 10:30PM"),
         
         ],
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clay_containers/clay_containers.dart';
 import 'package:clay_containers/widgets/clay_containers.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketBackground.dart';
-
+  
 class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -187,7 +187,6 @@ class FeatureBlocItem extends StatelessWidget {
   final IconData iconData;
   final String title, description;
 
-  //One learning - YOu cannot use Row here because of equal placements.. Table or reversing Row with Column will work. Let's see.
 
   const FeatureBlocItem({
     Key key,

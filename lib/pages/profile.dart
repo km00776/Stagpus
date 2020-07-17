@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/Posting/PostingModel/post.dart';
 import 'package:stagpus/Posting/PostingView/post_tile.dart';
 import 'package:stagpus/Screens/edit_profile.dart';
@@ -214,7 +213,7 @@ buildProfileButton() {
                                mainAxisSize: MainAxisSize.max,
                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                children: <Widget>[
-                                 buildCountColumn("posts", postCount),
+                                buildCountColumn("posts", postCount),
                                 buildCountColumn("followers", followerCount),
                                 buildCountColumn("following", followingCount),
                                ],
@@ -223,9 +222,8 @@ buildProfileButton() {
                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                children: <Widget>[
                                  buildProfileButton(),
-                                 Expanded(child: 
-                                 ChatButton(text: 'Message', icon: Icon(Icons.ac_unit)),
-                                 ),
+                                
+                                 
                                ],
                              ),
                            ],
@@ -233,6 +231,8 @@ buildProfileButton() {
                          )
                       ],
                     ),
+                  Row(
+                  children: <Widget> [
                     Container(
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 12.0),
@@ -244,7 +244,15 @@ buildProfileButton() {
                           fontSize: 16.0,
                           ),
                       ),
+                    
+                    
                     ),
+                    
+                  
+                  ]
+                  ),
+                  Row(
+                    children: <Widget> [
                     Container(
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 4.0),
@@ -255,15 +263,29 @@ buildProfileButton() {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                    Container(
+                    ),  
+                    ]
+                  ),
+                  Row(
+                    children: <Widget> [
+                     Container(
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.only(top: 2.0),
                       child: Text(
                         user.bio, // should be currentName.username
-                       
                       ),
                     ),
+                    SizedBox(width: 230.0),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(top: 2.0),
+                      child: ChatButton()
+
+                    )
+
+                  ],)
+
+                
                 ],
                 ),
               );
@@ -314,6 +336,22 @@ buildProfileButton() {
     });
   }
 
+  setColorOrientation() {
+    if(postOrientation == 'grid') {
+      Theme.of(context).primaryColor == Colors.white;
+    }
+    else if (postOrientation != 'grid') {
+      Theme.of(context).primaryColor == Colors.black;
+    }
+    if(postOrientation == 'list') {
+      Theme.of(context).primaryColor == Colors.white;
+    }
+    else if (postOrientation != 'list') {
+      Theme.of(context).primaryColor == Colors.black;
+    }
+  
+    }
+
   buildTogglePostOrientation() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -321,11 +359,13 @@ buildProfileButton() {
         IconButton(
           onPressed: () => setPostOrientation("grid"),
           icon: Icon(Icons.grid_on),
-          color: postOrientation == 'grid' ? Theme.of(context).primaryColor : Colors.grey),
+          color: setColorOrientation(),
+        ),
         IconButton(
           onPressed: () => setPostOrientation("list"),
           icon: Icon(Icons.list),
-          color: postOrientation == 'list' ? Theme.of(context).primaryColor : Colors.grey),
+          color: setColorOrientation(),
+        ),
       ],
     );
   }
@@ -365,18 +405,24 @@ class ChatButton extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      color: Colors.blue,
+    return Expanded(child:FlatButton(
+      color: Colors.white,
       child: Row(
         children: <Widget> [
-          Icon(Icons.filter_drama, size: 25.0,),
-          Text(text),
+          Icon(Icons.filter_drama, size: 2.0,),
+          Text("Message"),
           
       ]
       ),
-      onPressed: () => {}
-    );
-       
+      onPressed: () => {
+
+
+      }
+         
+    )
+    );  
   }
+
+
   
 }
