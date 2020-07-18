@@ -57,10 +57,10 @@ class FirebaseMethods {
     return User.fromMap(documentSnapshot.data);
   }
 
-  Future<User> getUserDetailsById(id) async {
+  Future<User> getUserDetailsById(uid) async {
     try {
       DocumentSnapshot documentSnapshot =
-          await _userCollection.document(id).get();
+      await _userCollection.document(uid).get();
       return User.fromMap(documentSnapshot.data);
     } catch (e) {
       print(e);

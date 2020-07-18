@@ -27,6 +27,9 @@ class MessageScreen extends StatelessWidget {
     );
   }
 
+ 
+
+
   CustomAppBar customAppBar(BuildContext context) {
     return CustomAppBar(
       title: UserCircle(),
@@ -63,17 +66,17 @@ class ChatListContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Container(
-        child: StreamBuilder<QuerySnapshot>(
-            stream: _chatMethods.fetchContacts(
-              userId: userProvider.getUser.uid,
-            ),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                var docList = snapshot.data.documents;
+      child: StreamBuilder<QuerySnapshot>(
+          stream: _chatMethods.fetchContacts(
+            userId: userProvider.getUser.uid,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var docList = snapshot.data.documents;
 
-                if (docList.isEmpty) {
-                  return QuietBox();
-                }
+              if (docList.isEmpty) {
+                return QuietBox();
+              }
               return ListView.builder(
                 padding: EdgeInsets.all(10),
                 itemCount: docList.length,
@@ -84,11 +87,8 @@ class ChatListContainer extends StatelessWidget {
                 },
               );
             }
-             return Center(
-               child: CircularProgressIndicator()
-               );
-            }
-            ),
-            );
+            return Center(child: CircularProgressIndicator());
+          }),
+    );
   }
 }

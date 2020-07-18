@@ -37,7 +37,9 @@ class ViewLayout extends StatelessWidget {
   final User contact;
   final ChatMethods _chatMethods = ChatMethods();
 
-  ViewLayout({@required this.contact});
+  ViewLayout({
+    @required this.contact
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +55,8 @@ class ViewLayout extends StatelessWidget {
               ),
             )),
         title: Text(
-          (contact != null ? contact.displayName : null) != null
-              ? contact.displayName
+          (contact != null ? contact.email : null) != null
+              ? contact.email
               : "..",
           style:
               TextStyle(color: Colors.white, fontFamily: "Arial", fontSize: 19),
