@@ -20,15 +20,12 @@ class MessageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.lightBlue,
       appBar: customAppBar(context),
       floatingActionButton: NewChatButton(),
       body: ChatListContainer(),
     );
   }
-
- 
-
 
   CustomAppBar customAppBar(BuildContext context) {
     return CustomAppBar(
@@ -64,12 +61,9 @@ class ChatListContainer extends StatelessWidget {
   final ChatMethods _chatMethods = ChatMethods();
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Container(
       child: StreamBuilder<QuerySnapshot>(
-          stream: _chatMethods.fetchContacts(
-            userId: userProvider.getUser.uid,
-          ),
+          stream: _chatMethods.fetchContacts(userId: currentUser.uid),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var docList = snapshot.data.documents;

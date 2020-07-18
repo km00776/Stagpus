@@ -9,7 +9,8 @@ class FirebaseMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   static final Firestore _firestore = Firestore.instance;
   final CollectionReference _userCollection = _firestore.collection("users");
-  final CollectionReference _messageCollection = _firestore.collection("messages");
+  final CollectionReference _messageCollection =
+      _firestore.collection("messages");
 
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;
@@ -35,15 +36,13 @@ class FirebaseMethods {
     var map = message.toMap();
 
     // Adding messages to the firebase with the collection name 'messages'
-    await _firestore
-        .collection("messages")
+    await _messageCollection
         .document(message.senderId)
         .collection(message.receiverId)
         .add(map);
 
     //to retrieve the messages from the database (reverse of collection)
-    return await _firestore
-        .collection("messages")
+    return await _messageCollection
         .document(message.receiverId)
         .collection(message.senderId)
         .add(map);
@@ -60,7 +59,7 @@ class FirebaseMethods {
   Future<User> getUserDetailsById(uid) async {
     try {
       DocumentSnapshot documentSnapshot =
-      await _userCollection.document(uid).get();
+          await _userCollection.document(uid).get();
       return User.fromMap(documentSnapshot.data);
     } catch (e) {
       print(e);
