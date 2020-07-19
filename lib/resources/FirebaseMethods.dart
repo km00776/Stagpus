@@ -14,7 +14,7 @@ class FirebaseMethods {
 
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;
-    currentUser = await (_auth.currentUser()).user;
+    currentUser = await _auth.currentUser();
     return currentUser;
   }
 
