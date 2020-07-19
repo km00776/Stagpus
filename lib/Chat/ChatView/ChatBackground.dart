@@ -59,11 +59,9 @@ class MessageScreen extends StatelessWidget {
 
 class ChatListContainer extends StatelessWidget {
   final ChatMethods _chatMethods = ChatMethods();
-
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-
     return Container(
         child: StreamBuilder<QuerySnapshot>(
             stream: _chatMethods.fetchContacts(
@@ -86,8 +84,9 @@ class ChatListContainer extends StatelessWidget {
                 },
               );
             }
-             return Center(child: CircularProgressIndicator());
-              
+             return Center(
+               child: CircularProgressIndicator()
+               );
             }
             ),
             );
