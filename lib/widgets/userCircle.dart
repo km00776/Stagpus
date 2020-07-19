@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stagpus/Provider/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:stagpus/pages/home.dart';
 
 class UserCircle extends StatelessWidget {
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
@@ -18,7 +23,7 @@ class UserCircle extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: Text(
-              userProvider.getUser.displayName,
+              currentUser.displayName,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.blueGrey,
@@ -33,9 +38,8 @@ class UserCircle extends StatelessWidget {
               width: 12,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black45, width: 2),
-                  color: Colors.greenAccent
-                  ),
+                  border: Border.all(color: Colors.purple, width: 2),
+                  color: Colors.greenAccent),
             ),
           )
         ],

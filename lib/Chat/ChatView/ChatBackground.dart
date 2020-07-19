@@ -20,7 +20,7 @@ class MessageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.lightBlue,
       appBar: customAppBar(context),
       floatingActionButton: NewChatButton(),
       body: ChatListContainer(),
@@ -61,19 +61,16 @@ class ChatListContainer extends StatelessWidget {
   final ChatMethods _chatMethods = ChatMethods();
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Container(
-        child: StreamBuilder<QuerySnapshot>(
-            stream: _chatMethods.fetchContacts(
-              userId: userProvider.getUser.uid,
-            ),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                var docList = snapshot.data.documents;
+      child: StreamBuilder<QuerySnapshot>(
+          stream: _chatMethods.fetchContacts(userId: currentUser.uid),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var docList = snapshot.data.documents;
 
-                if (docList.isEmpty) {
-                  return QuietBox();
-                }
+              if (docList.isEmpty) {
+                return QuietBox();
+              }
               return ListView.builder(
                 padding: EdgeInsets.all(10),
                 itemCount: docList.length,
@@ -84,11 +81,8 @@ class ChatListContainer extends StatelessWidget {
                 },
               );
             }
-             return Center(
-               child: CircularProgressIndicator()
-               );
-            }
-            ),
-            );
+            return Center(child: CircularProgressIndicator());
+          }),
+    );
   }
 }

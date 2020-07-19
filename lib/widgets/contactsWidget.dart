@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:stagpus/Chat/ChatView/ChatScreen.dart';
 import 'package:stagpus/Provider/user_provider.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/OnlineDotIndicator.dart';
 import 'package:stagpus/widgets/customTile.dart';
 import 'chatMethods.dart';
@@ -42,7 +43,6 @@ class ViewLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // find out what Provider.of<UserProvider does)
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return CustomTile(
         mini: false,
         onTap: () => Navigator.push(
@@ -61,14 +61,10 @@ class ViewLayout extends StatelessWidget {
         ),
         subtitle: LastMessageContainer(
           stream: _chatMethods.fetchLastMessageBetween(
-              senderId: userProvider.getUser.uid, receiverId: contact.uid),
+              senderId: currentUser.uid, receiverId: contact.uid),
         ),
         leading: Container(
             constraints: BoxConstraints(maxHeight: 60, maxWidth: 60),
-            child: Stack(children: <Widget>[
-              OnlineDotIndicator(
-                uid: contact.uid,
-              )
-            ])));
+            child: Stack(children: <Widget>[])));
   }
 }

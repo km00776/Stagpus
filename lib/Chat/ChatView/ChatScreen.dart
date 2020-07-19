@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:stagpus/Chat/ChatModel/Message.dart';
 import 'package:stagpus/constants/Strings.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:stagpus/widgets/appBar.dart';
+import 'package:stagpus/widgets/chatMethods.dart';
 import 'package:stagpus/widgets/customTile.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -22,6 +24,10 @@ class _ChatScreenState extends State<ChatScreen> {
   bool isWriting = false;
   User sender;
 
+  final ChatMethods _chatMethods = ChatMethods();
+  final FirebaseMethods _methods = FirebaseMethods();
+  ScrollController _listScrollController = ScrollController();
+
   String _currentUserId;
 
   @override
@@ -32,6 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         sender = User(
           uid: user.uid,
+          displayName: user.displayName,
           email: user.email,
         );
       });
@@ -65,6 +72,8 @@ class _ChatScreenState extends State<ChatScreen> {
         }
         return ListView.builder(
           padding: EdgeInsets.all(10),
+          controller: _listScrollController,
+          reverse: true,
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) {
             return chatMessageItem(snapshot.data.documents[index]);
@@ -152,7 +161,7 @@ class _ChatScreenState extends State<ChatScreen> {
       showModalBottomSheet(
           context: context,
           elevation: 0,
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.pink,
           builder: (context) {
             return Column(
               children: <Widget>[
@@ -234,7 +243,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
       textFieldController.text = "";
 
-      _repository.addMessageToDb(_message, sender, widget.receiver);
+      _chatMethods.addMessageToDb(_message, sender, widget.receiver);
     }
 
     return Container(
