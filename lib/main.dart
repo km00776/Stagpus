@@ -41,15 +41,7 @@ class MyApp extends StatelessWidget {
           routes: {
             '/search_screen': (context) => SearchScreen(),
           },
-          home: FutureBuilder(
-              future: _authMethods.getCurrentUser(),
-              builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
-                if (snapshot.hasData) {
-                  return Home();
-                } else {
-                  return Home();
-                }
-              })),
+          home: EventsPage()),
     );
   }
 }
