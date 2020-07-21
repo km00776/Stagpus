@@ -16,6 +16,7 @@ class ActivityFeed extends StatefulWidget {
 }
 
 class _ActivityFeedState extends State<ActivityFeed> {
+  
    getActivityFeed() async {
    QuerySnapshot snapshot =  await activityFeedRef.document(currentUser.uid).collection('feedItems').orderBy('timestamp', descending: true).limit(50).getDocuments();
    List<ActivityFeedItem> feedItems = [];

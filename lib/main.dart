@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stagpus/Chat/ChatView/ChatBackground.dart';
 import 'package:stagpus/Chat/ChatView/SearchScreen.dart';
-import 'package:stagpus/Events/EventsView/MainView.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketBackground.dart';
 import 'package:stagpus/pages/activity_feed.dart';
 import 'package:stagpus/pages/home.dart';
@@ -13,15 +12,17 @@ import 'package:stagpus/pages/search.dart';
 import 'package:stagpus/pages/timeline.dart';
 import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
+import 'package:stagpus/widgets/eventCard.dart';
 import 'Chat/ChatView/ChatScreen.dart';
 import 'Clubs/ViewClubs/ClubBackground.dart';
+import 'Events/EventsView/single_event_widget.dart';
 import 'Provider/user_provider.dart';
 import 'models/user.dart';
 
 void main() {
   /**  Firestore.instance.settings(timestampsInSnapshotsEnabled: true).then((_) {
     print("Timestamps enabled in snapshots\n");
-  }, onError: (_) {
+  }, onError: (_) { 
     print("Error enabling timestamps\n");
   }); */
   runApp(MyApp());
@@ -41,15 +42,7 @@ class MyApp extends StatelessWidget {
           routes: {
             '/search_screen': (context) => SearchScreen(),
           },
-          home: FutureBuilder(
-              future: _authMethods.getCurrentUser(),
-              builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
-                if (snapshot.hasData) {
-                  return Home();
-                } else {
-                  return Home();
-                }
-              })),
+          home: SingleEvent()),
     );
   }
 }
