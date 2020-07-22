@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:stagpus/Events/EventsView/Styles.dart';
 
 class SingleEvent extends StatelessWidget {
-   String eventType = "";
-   String eventDate = "";
-   String eventImage = "";
-   String eventName = "";
-   String eventPicture = "";
-   String eventVenue = "";  
-   String eventOffer = "";
-   String eventDJ = "";
-   String eventLocation = "";
-  
-  
+  final String eventType;
+  final String eventDate;
+  final String eventImage;
+  final String eventName;
+  final String eventVenue;
+  final String eventOffer;
+  final String eventDJ;
+  final String eventLocation;
+
+  const SingleEvent({Key key, this.eventType, this.eventDate, this.eventImage, this.eventName, this.eventVenue, this.eventOffer, this.eventDJ, this.eventLocation}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body:Container(
+    return Scaffold(
+        body: Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
@@ -190,8 +191,6 @@ class SingleEvent extends StatelessWidget {
           ],
         ),
       ),
-    )
-    
-    );
+    ));
   }
 }
