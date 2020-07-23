@@ -10,9 +10,9 @@ class SingleEvent extends StatelessWidget {
   final String eventImage;
   final String eventName;
   final String eventVenue;
-  final String guestPicture;
-  final String guestName;
-  final String guestDesignation;
+  final String eventOffer;
+  final String eventDJ;
+  final String eventLocation;
 
 //create parameterized constructor
   const SingleEvent(
@@ -22,9 +22,9 @@ class SingleEvent extends StatelessWidget {
       this.eventImage,
       this.eventName,
       this.eventVenue,
-      this.guestPicture,
-      this.guestName,
-      this.guestDesignation})
+      this.eventLocation,
+      this.eventDJ,
+      this.eventOffer})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class SingleEvent extends StatelessWidget {
                   ),
                   child: Center(
                       child: Text(
-                    eventType,
+                    "eventType",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -72,7 +72,7 @@ class SingleEvent extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  eventDate,
+                  "eventDate",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
@@ -101,12 +101,7 @@ class SingleEvent extends StatelessWidget {
               children: <Widget>[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    eventImage,
-                    height: 90,
-                    width: 100,
-                    fit: BoxFit.cover,
-                  ),
+                  
                 ),
                 SizedBox(width: 12),
                 Column(
@@ -114,7 +109,7 @@ class SingleEvent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      eventName,
+                      "eventName",
                       style: TextStyle(
                         color: searchBarColor,
                         fontSize: 18,
@@ -149,7 +144,7 @@ class SingleEvent extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  eventVenue,
+                  "eventVenue",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: searchBarColor,
@@ -169,11 +164,11 @@ class SingleEvent extends StatelessWidget {
               contentPadding: EdgeInsets.only(left: 0.0),
               leading: CircleAvatar(
                 radius: 22,
-                backgroundImage: NetworkImage(guestPicture),
+              
                 backgroundColor: Colors.grey,
               ),
-              title: Text(guestName),
-              subtitle: Text(guestDesignation),
+              title: Text("eventDJ"),
+              subtitle: Text("eventLocation"),
               trailing: Container(
                 height: 40,
                 width: 100,

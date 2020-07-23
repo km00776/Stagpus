@@ -22,7 +22,7 @@ dependencies:
   line_awesome_icons: ^1.0.4+2
   flutter_rating_bar: ^3.0.1+1
   curved_navigation_bar: ^0.3.2
-  cloud_firestore: ^0.13.4+2
+  cloud_firestore: ^0.13.7
   image_picker: ^0.6.0+2
   bloc: ^4.0.0
   firebase_storage: ^3.1.6
@@ -39,7 +39,7 @@ dependencies:
   firebase_messaging: ^4.0.0+1
   timeago: 2.0.17
   cached_network_image:
-  flutter_svg: ^0.17.3+1
+  flutter_svg: ^0.18.0
   location: ^3.0.0
   geoflutterfire: ^2.1.0
   flutter_bloc: ^4.0.0
@@ -62,7 +62,7 @@ dev_dependencies:
 
 
 dependency_overrides:
-  flutter_chips_input: ^1.9.0-dev.3
+  flutter_chips_input: ^1.9.0-dev.2
   
 
 # For information on the generic Dart part of this file, see the

@@ -16,7 +16,9 @@ class _ListingsState extends State<Listings> {
         body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[eventSlider()]));
+            children: <Widget>[
+              eventSlider()
+        ]));
   }
 
   Widget eventSlider() {
@@ -27,13 +29,16 @@ class _ListingsState extends State<Listings> {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               var event = events[index];
-
               return SingleEvent(
                   eventDate: event.eventDate,
                   eventType: event.eventType,
                   eventImage: event.eventImage,
                   eventName: event.eventName,
-                  eventVenue: event.eventVenue);
+                  eventVenue: event.eventVenue,
+                  eventOffer: event.eventOffer,
+                  eventDJ: event.eventDJ,
+                  eventLocation: event.eventLocation
+                  );
             }));
   }
 }

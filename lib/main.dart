@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stagpus/Chat/ChatView/ChatBackground.dart';
 import 'package:stagpus/Chat/ChatView/SearchScreen.dart';
+import 'package:stagpus/Events/EventsView/Listings.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketBackground.dart';
 import 'package:stagpus/pages/activity_feed.dart';
 import 'package:stagpus/pages/home.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
           routes: {
             '/search_screen': (context) => SearchScreen(),
           },
-          home: SingleEvent()),
+          home: Listings()),
     );
   }
 }

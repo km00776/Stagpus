@@ -78,8 +78,6 @@ class ActivityFeedItem extends StatelessWidget {
     this.timestamp,
   });
   
-  
-
   factory ActivityFeedItem.fromDocument(DocumentSnapshot doc) {
     return ActivityFeedItem(
       username: doc['username'],

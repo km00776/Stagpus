@@ -51,7 +51,7 @@ class SingleEvent extends StatelessWidget {
                   ),
                   child: Center(
                       child: Text(
-                    eventType,
+                    "eventType",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -60,7 +60,7 @@ class SingleEvent extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  eventDate,
+                  "eventDate",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
@@ -90,7 +90,7 @@ class SingleEvent extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
-                    eventImage,
+                    "eventImage",
                     height: 90,
                     width: 100,
                     fit: BoxFit.cover,
@@ -120,7 +120,7 @@ class SingleEvent extends StatelessWidget {
                         ),
                         SizedBox(width: 12),
                         Text(
-                          eventOffer,
+                          "MyTest",
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Colors.blue[300],
@@ -144,7 +144,7 @@ class SingleEvent extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  eventVenue,
+                  "eventVenue",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: searchBarColor,
@@ -167,8 +167,8 @@ class SingleEvent extends StatelessWidget {
                 //backgroundImage: NetworkImage(guestPicture),
                 backgroundColor: Colors.grey,
               ),
-              title: Text(eventName),
-              subtitle: Text(eventLocation),
+              title: Text("HEY"),
+              subtitle: Text("RUBIX"),
               trailing: Container(
                 height: 40,
                 width: 100,
