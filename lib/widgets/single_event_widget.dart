@@ -32,7 +32,7 @@ class SingleEvent extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
+          color: Colors.blueAccent,
           boxShadow: [
             BoxShadow(
               color: Colors.indigo[200],
@@ -63,7 +63,7 @@ class SingleEvent extends StatelessWidget {
                   ),
                   child: Center(
                       child: Text(
-                    "eventType",
+                    eventType,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -72,7 +72,7 @@ class SingleEvent extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  "eventDate",
+                  eventDate,
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
@@ -109,7 +109,7 @@ class SingleEvent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "eventName",
+                      eventName,
                       style: TextStyle(
                         color: searchBarColor,
                         fontSize: 18,
@@ -144,7 +144,7 @@ class SingleEvent extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  "eventVenue",
+                  eventVenue,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: searchBarColor,
@@ -164,11 +164,11 @@ class SingleEvent extends StatelessWidget {
               contentPadding: EdgeInsets.only(left: 0.0),
               leading: CircleAvatar(
                 radius: 22,
-              
+                backgroundImage: NetworkImage(eventImage),
                 backgroundColor: Colors.grey,
               ),
-              title: Text("eventDJ"),
-              subtitle: Text("eventLocation"),
+              title: Text(eventDJ),
+              subtitle: Text(eventLocation),
               trailing: Container(
                 height: 40,
                 width: 100,
