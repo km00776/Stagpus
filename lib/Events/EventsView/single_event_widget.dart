@@ -33,7 +33,7 @@ class SingleEvent extends StatelessWidget {
         onTap: () => {
           //TODO ripple effect
         },
-        highlightColor: Colors.blueGrey,
+        highlightColor: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

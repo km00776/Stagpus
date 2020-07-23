@@ -16,7 +16,7 @@ Widget remind(BuildContext context) {
             mainAxisAlignment:MainAxisAlignment.center,
             crossAxisAlignment:CrossAxisAlignment.center,
             children: <Widget> [
-              Text('  Please click the verification email sent!', 
+              Text('Please click the verification email sent!', 
               style: TextStyle(
                 fontFamily: "Signatra",
                 fontSize: 65,
@@ -52,9 +52,6 @@ Widget remind(BuildContext context) {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
              crossAxisAlignment: CrossAxisAlignment.center,
-           
-
-          
           )
          ),
                  

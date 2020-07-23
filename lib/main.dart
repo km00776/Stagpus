@@ -15,7 +15,6 @@ import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:stagpus/widgets/eventCard.dart';
 import 'Chat/ChatView/ChatScreen.dart';
-import 'Clubs/ViewClubs/ClubBackground.dart';
 import 'Events/EventsView/single_event_widget.dart';
 import 'Provider/user_provider.dart';
 import 'models/user.dart';

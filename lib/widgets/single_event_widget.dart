@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stagpus/Events/EventsView/styles.dart';
 
-
 class SingleEvent extends StatelessWidget {
-
   //define variables
   final String eventType;
   final String eventDate;
@@ -32,7 +30,7 @@ class SingleEvent extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Colors.blueAccent,
+          color: Colors.white10,
           boxShadow: [
             BoxShadow(
               color: Colors.indigo[200],
@@ -45,7 +43,7 @@ class SingleEvent extends StatelessWidget {
         onTap: () => {
           //TODO ripple effect
         },
-        highlightColor: Colors.blueGrey,
+        highlightColor: Colors.grey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +99,6 @@ class SingleEvent extends StatelessWidget {
               children: <Widget>[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  
                 ),
                 SizedBox(width: 12),
                 Column(
@@ -126,7 +123,6 @@ class SingleEvent extends StatelessWidget {
                           size: 22,
                         ),
                         SizedBox(width: 12),
-                       
                       ],
                     ),
                   ],
@@ -175,17 +171,19 @@ class SingleEvent extends StatelessWidget {
                 padding: EdgeInsets.only(left: 12, right: 12),
                 margin: EdgeInsets.only(right: 6),
                 decoration: BoxDecoration(
-                  color: Colors.indigo,
+                  color: Colors.yellow,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Center(
-                    child: Text(
-                  'Interested',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                )),
+                child: FlatButton(
+                  child: Text(
+                    'Interested',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  onPressed: () {},
+                ),
               ),
             )
           ],
