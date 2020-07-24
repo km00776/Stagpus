@@ -15,6 +15,7 @@ import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:stagpus/widgets/eventCard.dart';
 import 'Chat/ChatView/ChatScreen.dart';
+import 'Events/EventsView/EventsMain.dart';
 import 'Events/EventsView/single_event_widget.dart';
 import 'Provider/user_provider.dart';
 import 'models/user.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
           routes: {
             '/search_screen': (context) => SearchScreen(),
           },
-          home: Listings()),
+          home: Home()),
     );
   }
 }

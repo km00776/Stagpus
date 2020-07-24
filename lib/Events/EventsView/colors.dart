@@ -17,3 +17,4 @@ const purpleGradient = LinearGradient(
 );
 
 const USER_IMAGE='https://cdn4.iconfinder.com/data/icons/people-avatar-flat-1/64/girl_chubby_beautiful_people_woman_lady_avatar-512.png';
+
