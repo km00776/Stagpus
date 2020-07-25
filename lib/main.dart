@@ -11,8 +11,7 @@ import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/pages/profile.dart';
 import 'package:stagpus/pages/search.dart';
 import 'package:stagpus/pages/timeline.dart';
-import 'package:stagpus/resources/FirebaseMethods.dart';
-import 'package:stagpus/resources/FirebaseRepo.dart';
+
 import 'package:stagpus/widgets/eventCard.dart';
 import 'Chat/ChatView/ChatScreen.dart';
 import 'Events/EventsView/EventsMain.dart';
@@ -30,20 +29,15 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final FirebaseMethods _authMethods = FirebaseMethods();
-  FirebaseRepository _repository = FirebaseRepository();
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
-      child: MaterialApp(
-          title: 'StagPus',
-          debugShowCheckedModeBanner: false,
-          initialRoute: '/',
-          routes: {
-            '/search_screen': (context) => SearchScreen(),
-          },
-          home: Home()),
-    );
+    return MaterialApp(
+        title: 'StagPus',
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        routes: {
+          '/search_screen': (context) => SearchScreen(),
+        },
+        home: Home());
   }
 }

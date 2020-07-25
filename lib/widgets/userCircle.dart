@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:stagpus/Provider/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 
 class UserCircle extends StatelessWidget {
+  final User currentUser;
 
-
-
+  const UserCircle({Key key, this.currentUser}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Container(
       height: 40,
       width: 40,

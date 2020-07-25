@@ -122,7 +122,7 @@ class _HomeState extends State<Home> {
           Upload(currentUser: currentUser),
           SurreyMap(),
           Search(),
-          MessageScreen(),
+          MessageScreen(currentUser: currentUser),
           EventsHomePage(),
           MarketPlace(),
           Profile(profileId: currentUser?.uid),
