@@ -94,7 +94,7 @@ class SingleEvent extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 12),
+            SizedBox(height: 12), 
             Row(
               children: <Widget>[
                 ClipRRect(

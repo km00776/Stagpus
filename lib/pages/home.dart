@@ -11,7 +11,6 @@ import 'package:stagpus/Chat/ChatModel/Message.dart';
 import 'package:stagpus/Chat/ChatView/ChatBackground.dart';
 import 'package:stagpus/Chat/ChatView/ChatScreen.dart';
 import 'package:stagpus/Chat/ChatView/SearchScreen.dart';
-import 'package:stagpus/Clubs/ViewClubs/ClubBackground.dart';
 import 'package:stagpus/Map/Map.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketBackground.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
@@ -123,7 +122,7 @@ class _HomeState extends State<Home> {
           SurreyMap(),
           Search(),
           MessageScreen(),
-          Club(),
+        //  Society(),
           MarketPlace(),
           Profile(profileId: currentUser?.uid),
         ],
