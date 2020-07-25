@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:stagpus/Events/EventsModel/event.dart';
 import 'package:stagpus/widgets/single_event_widget.dart';
 
+
+// test view notice how singleevent is created do something similar
 class Listings extends StatefulWidget {
   @override
   _ListingsState createState() => _ListingsState();

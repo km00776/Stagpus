@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:stagpus/Marketplace/ControllerMarket/item_state.dart';
 
 class ExpandedSection extends StatefulWidget{
   final Widget child;

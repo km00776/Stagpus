@@ -1,54 +1,82 @@
 import 'package:flutter/material.dart';
 
+// list of colors that we use in our app
+const kBackgroundColor = Color(0xFFF1EFF1);
+const marketColor = Color(0xFF035AA6);
+const kSecondaryColor = Color(0xFFFFA41B);
+const kTextColor = Color(0xFF000839);
+const kTextLightColor = Color(0xFF747474);
+const kBlueColor = Color(0xFF40BAD5);
 
-Color lightGreen = Color(0xFF0400E0);
-Color lightBlueIsh = Color(0xFF33BBB5);
-Color darkGreen = Color(0xFF00AA12);
-Color backgroundColor = Color(0xFFDC143C);
-Color blueColor = Color(0xFF33BBB6);
+const kDefaultPadding = 20.0;
 
-
-
-TextStyle titleStyleWhite = new TextStyle(
-  fontFamily: 'Helvetica', 
-  color: Colors.white, 
-  fontWeight: FontWeight.bold, 
-  fontSize: 25
-);
-TextStyle jobCardTitileStyleBlue = new TextStyle(
-  fontFamily: 'Avenir', 
-  color: lightBlueIsh, 
-  fontWeight: FontWeight.bold, 
-  fontSize: 12
-);
-TextStyle jobCardTitileStyleBlack = new TextStyle(
-  fontFamily: 'Avenir', 
-  color: Colors.black, 
-  fontWeight: FontWeight.bold, 
-  fontSize: 12
-);
-TextStyle titileStyleLighterBlack = new TextStyle(
-  fontFamily: 'Avenir', 
-  color: Color(0xFF34475D), 
-  fontWeight: FontWeight.bold, 
-  fontSize: 20
-);
-
-TextStyle titileStyleBlack = new TextStyle(
-  fontFamily: 'Helvetica', 
-  color: Colors.white, 
-  fontWeight: FontWeight.bold, 
-  fontSize: 20
-);
-TextStyle salaryStyle = new TextStyle(
-  fontFamily: 'Avenir', 
-  color: darkGreen, 
-  fontWeight: FontWeight.bold, 
-  fontSize: 12
+// our default Shadow
+const kDefaultShadow = BoxShadow(
+  offset: Offset(0, 15),
+  blurRadius: 27,
+  color: Colors.black12, // Black color with 12% opacity
 );
 
 
+class ColorDot extends StatelessWidget {
+  const ColorDot({
+    Key key,
+    this.fillColor,
+    // by default we set it false
+    this.isSelected = false,
+  }) : super(key: key);
+  final Color fillColor;
+  final bool isSelected;
 
- 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin:
+          // left and right padding 8
+          EdgeInsets.symmetric(horizontal: kDefaultPadding / 2.5),
+      padding: EdgeInsets.all(3),
+      height: 24,
+      width: 24,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: isSelected ? Color(0xFF707070) : Colors.transparent,
+        ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: fillColor,
+        ),
+      ),
+    );
+  }
+}
 
+class ListOfColors extends StatelessWidget {
+  const ListOfColors({
+    Key key,
+  }) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          ColorDot(
+            fillColor: Color(0xFF80989A),
+            isSelected: true,
+          ),
+          ColorDot(
+            fillColor: Color(0xFFFF5200),
+          ),
+          ColorDot(
+            fillColor: marketColor,
+          ),
+        ],
+      ),
+    );
+  }
+}
