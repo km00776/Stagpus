@@ -17,6 +17,10 @@ import 'package:stagpus/widgets/quietbox.dart';
 import 'package:stagpus/widgets/userCircle.dart';
 
 class MessageScreen extends StatelessWidget {
+  final User currentUser;
+
+  const MessageScreen({Key key, this.currentUser}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +33,7 @@ class MessageScreen extends StatelessWidget {
 
   CustomAppBar customAppBar(BuildContext context) {
     return CustomAppBar(
-      title: UserCircle(),
+      title: UserCircle(currentUser: currentUser),
       leading: IconButton(
         icon: Icon(
           Icons.notifications,

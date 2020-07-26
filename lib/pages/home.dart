@@ -13,8 +13,7 @@ import 'package:stagpus/Chat/ChatView/ChatScreen.dart';
 import 'package:stagpus/Chat/ChatView/SearchScreen.dart';
 import 'package:stagpus/Events/EventsView/EventsMain.dart';
 import 'package:stagpus/Map/Map.dart';
-import 'package:stagpus/Marketplace/ViewMarket/MarketBackground.dart';
-import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
+
 import 'package:stagpus/Screens/Reminder.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/activity_feed.dart';
@@ -122,9 +121,9 @@ class _HomeState extends State<Home> {
           Upload(currentUser: currentUser),
           SurreyMap(),
           Search(),
-          MessageScreen(),
+          MessageScreen(currentUser: currentUser),
           EventsHomePage(),
-          MarketPlace(),
+          //MarketPlace(),
           Profile(profileId: currentUser?.uid),
         ],
         controller: page,
