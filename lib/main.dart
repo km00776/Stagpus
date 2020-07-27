@@ -42,6 +42,6 @@ class MyApp extends StatelessWidget {
         routes: {
           '/search_screen': (context) => SearchScreen(),
         },
-        home: SocietyScreen());
+        home: SocietyDescription());
   }
 }
