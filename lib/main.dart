@@ -17,6 +17,7 @@ import 'Events/EventsView/EventsMain.dart';
 import 'Events/EventsView/single_event_widget.dart';
 import 'Marketplace/ViewMarket/products_screen.dart';
 import 'Provider/user_provider.dart';
+import 'Societies/SocietyView/society_description.dart';
 import 'models/user.dart';
 
 void main() {
