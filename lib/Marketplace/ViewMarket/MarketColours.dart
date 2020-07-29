@@ -7,7 +7,6 @@ const kSecondaryColor = Color(0xFFFFA41B);
 const kTextColor = Color(0xFF000839);
 const kTextLightColor = Color(0xFF747474);
 const kBlueColor = Color(0xFF40BAD5);
-
 const kDefaultPadding = 20.0;
 
 // our default Shadow

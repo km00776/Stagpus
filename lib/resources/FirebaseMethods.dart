@@ -31,8 +31,7 @@ class FirebaseMethods {
     return userList;
   }
 
-  Future<void> addMessageToDb(
-      Message message, User sender, User receiver) async {
+  Future<void> addMessageToDb(Message message, User sender, User receiver) async {
     var map = message.toMap();
 
     // Adding messages to the firebase with the collection name 'messages'
@@ -50,16 +49,14 @@ class FirebaseMethods {
 
   Future<User> getUserDetails() async {
     FirebaseUser currentUser = await getCurrentUser();
-    DocumentSnapshot documentSnapshot =
-        await _userCollection.document(currentUser.uid).get();
+    DocumentSnapshot documentSnapshot = await _userCollection.document(currentUser.uid).get();
 
     return User.fromMap(documentSnapshot.data);
   }
 
   Future<User> getUserDetailsById(uid) async {
     try {
-      DocumentSnapshot documentSnapshot =
-          await _userCollection.document(uid).get();
+      DocumentSnapshot documentSnapshot = await _userCollection.document(uid).get();
       return User.fromMap(documentSnapshot.data);
     } catch (e) {
       print(e);

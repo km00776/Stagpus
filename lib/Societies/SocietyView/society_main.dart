@@ -10,7 +10,7 @@ class SocietyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context)
         .size; //this gonna give us total height and with of our device
-    return Scaffold(
+    return Scaffold(  
       body: Stack(
         children: <Widget>[
           Container(

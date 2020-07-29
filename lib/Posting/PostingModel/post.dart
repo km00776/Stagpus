@@ -178,11 +178,6 @@ class _PostState extends State<Post> {
      });
   }
 
-  
-  
-
-
-
   addLikeToActivityFeed() {
     activityFeedRef.document(ownerId).collection("feedItems").document(postId).setData({
       "type" : "like",

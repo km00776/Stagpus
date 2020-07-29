@@ -13,5 +13,6 @@ class Society {
    String imageUrl = "test";
    String description = "test";
 
-  Society(this.description,this.name, this.date, this.location, this.membership, this.logo, this.time, this.price, this.imageUrl);
+  Society({this.description,this.name, this.date, this.location, this.membership, this.logo, this.time, this.price, this.imageUrl});
+  
 }
