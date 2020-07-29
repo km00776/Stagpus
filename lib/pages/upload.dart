@@ -131,6 +131,7 @@ class _UploadState extends State<Upload>
     });
   }
 
+  //takes long to upload if the image is not compressed
   Future<String> uploadImage(imageFile) async {
     StorageUploadTask uploadTask = storageRef.child("post_$postId.jpg").putFile(imageFile);
     StorageTaskSnapshot storageSnap = await uploadTask.onComplete;

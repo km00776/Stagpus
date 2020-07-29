@@ -1,0 +1,1 @@
+// add society should be only available for superusers

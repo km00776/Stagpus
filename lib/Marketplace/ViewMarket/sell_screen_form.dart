@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/models/user.dart';
@@ -10,20 +11,26 @@ class SellScreen extends StatefulWidget {
   final User currentUser;
   final int price;
   final String description;
-  final String imageURL; 
+  final String imageURL;
   bool isUploading = false;
   Product product;
   File file;
-  
-  
-  SellScreen({Key key, @required this.currentUser, this.price, this.description, this.imageURL}) : super(key: key);
+
+  SellScreen(
+      {Key key,
+      @required this.currentUser,
+      this.price,
+      this.description,
+      this.imageURL})
+      : super(key: key);
 
   @override
   _SellScreenState createState() => new _SellScreenState(currentUser);
-  
-  }
-  
+}
+
 class _SellScreenState extends State<SellScreen> {
+  TextEditingController locationController = TextEditingController();
+
   _SellScreenState(User currentUser);
 
   @override
@@ -40,7 +47,7 @@ class _SellScreenState extends State<SellScreen> {
     );
     setState(() {
       this.widget.file = file;
-    }); 
+    });
   }
 
   handleChooseFromGallery() async {
@@ -53,28 +60,42 @@ class _SellScreenState extends State<SellScreen> {
 
   selectImage(parentContext) {
     return showDialog(
-      context: parentContext,
-      builder: (context) {
-        return  SimpleDialog(
-          title: Text("Add product to Market"),
-          children: <Widget> [
-            SimpleDialogOption(
-              child: Text("Photo with Camera"),
-              onPressed: handleProductPhoto
-            ),
-            SimpleDialogOption(
-              child: Text("Image from Gallery"),
-              onPressed: handleChooseFromGallery(),
-            ),
-            SimpleDialogOption(
-              child: Text("Cancel"),
-              onPressed: () => Navigator.pop(context),
-            )
-          ]
-        );
-      }
-    );
+        context: parentContext,
+        builder: (context) {
+          return SimpleDialog(
+              title: Text("Add product to Market"),
+              children: <Widget>[
+                SimpleDialogOption(
+                    child: Text("Photo with Camera"),
+                    onPressed: handleProductPhoto),
+                SimpleDialogOption(
+                  child: Text("Image from Gallery"),
+                  onPressed: handleChooseFromGallery(),
+                ),
+                SimpleDialogOption(
+                  child: Text("Cancel"),
+                  onPressed: () => Navigator.pop(context),
+                )
+              ]);
+        });
   }
 
+  clearImage() {
+    setState(() {
+      widget.file = null;
+    });
+  }
 
+  getUserLocation() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placemarks = await Geolocator()
+        .placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark placemark = placemarks[0];
+    String completeAddress =
+        '${placemark.subThoroughfare} ${placemark.thoroughfare}, ${placemark.subLocality} ${placemark.locality}, ${placemark.subAdministrativeArea}, ${placemark.administrativeArea} ${placemark.postalCode}, ${placemark.country}';
+    print(completeAddress);
+    String formattedAddress = "${placemark.locality}, ${placemark.country}";
+    locationController.text = formattedAddress;
+  }
 }
