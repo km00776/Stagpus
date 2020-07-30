@@ -2,16 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stagpus/Chat/ChatModel/Message.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:universal_html/js_util.dart';
+import 'package:uuid/uuid.dart';
 
 class FirebaseMethods {
+  String productId = Uuid().v4();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   static final Firestore _firestore = Firestore.instance;
   final CollectionReference _userCollection = _firestore.collection("users");
-  final CollectionReference _messageCollection = _firestore.collection("messages");
-  final CollectionReference _productCollectionRef = _firestore.collection("products");
-
+  final CollectionReference _messageCollection =
+      _firestore.collection("messages");
+  final CollectionReference _productCollectionRef =
+      _firestore.collection("products");
 
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;
@@ -32,7 +36,8 @@ class FirebaseMethods {
     return userList;
   }
 
-  Future<void> addMessageToDb(Message message, User sender, User receiver) async {
+  Future<void> addMessageToDb(
+      Message message, User sender, User receiver) async {
     var map = message.toMap();
 
     // Adding messages to the firebase with the collection name 'messages'
@@ -48,16 +53,34 @@ class FirebaseMethods {
         .add(map);
   }
 
+  addProductToFirestore(
+      {String id,
+      String price,
+      String title,
+      String mediaUrl,
+      String location,
+      String description}) async {
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    DocumentSnapshot doc = await usersRef.document(user.uid).get();
+    currentUser = User.fromDocument(doc);
+    _productCollectionRef
+        .document(currentUser.uid)
+        .collection("userProducts")
+        .document(productId);
+  }
+
   Future<User> getUserDetails() async {
     FirebaseUser currentUser = await getCurrentUser();
-    DocumentSnapshot documentSnapshot = await _userCollection.document(currentUser.uid).get();
+    DocumentSnapshot documentSnapshot =
+        await _userCollection.document(currentUser.uid).get();
 
     return User.fromMap(documentSnapshot.data);
   }
 
   Future<User> getUserDetailsById(uid) async {
     try {
-      DocumentSnapshot documentSnapshot = await _userCollection.document(uid).get();
+      DocumentSnapshot documentSnapshot =
+          await _userCollection.document(uid).get();
       return User.fromMap(documentSnapshot.data);
     } catch (e) {
       print(e);

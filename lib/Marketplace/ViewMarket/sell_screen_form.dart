@@ -13,6 +13,7 @@ import 'package:stagpus/models/user.dart';
 import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseMethods.dart';
+import 'package:stagpus/resources/FirebaseRepo.dart';
 
 class SellScreen extends StatefulWidget {
   final User currentUser;
@@ -35,10 +36,12 @@ class SellScreen extends StatefulWidget {
   _SellScreenState createState() => new _SellScreenState(currentUser);
 }
 
+
 class _SellScreenState extends State<SellScreen> {
   final FirebaseMethods fbMethods = new FirebaseMethods();
-  FirebaseAuth currentUser;
+  User currentUser;
   TextEditingController locationController = TextEditingController();
+  FirebaseRepository _repository = FirebaseRepository();
 
   _SellScreenState(User currentUser);
 
@@ -46,6 +49,15 @@ class _SellScreenState extends State<SellScreen> {
   Widget build(BuildContext context) {
     return Container();
   }
+
+  
+@override
+void initState() { 
+  super.initState();
+  _repository.getCurrentUser().then((user) => 
+    currentUser = user as User
+  );
+}
 
   handleProductPhoto() async {
     Navigator.pop(context);
@@ -77,11 +89,7 @@ class _SellScreenState extends State<SellScreen> {
     });
   }
 
-  addProductToFirestore({String mediaUrl, String location, String description, String price}) async {
-     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-     DocumentSnapshot doc = await f
-
-  }
+  
 
   selectImage(parentContext) {
     return showDialog(
@@ -140,7 +148,7 @@ class _SellScreenState extends State<SellScreen> {
           onPressed: clearImage(),
         ),
         title: Text(
-          'Caption Post',
+          'Product details',
         style: TextStyle(
           color: Colors.blueAccent
           ), 
@@ -149,7 +157,7 @@ class _SellScreenState extends State<SellScreen> {
           FlatButton(
             onPressed: widget.isUploading ? null : () => handleSubmission(),
             child: Text(
-              "Post",
+              "Add to Market",
               style: TextStyle(
                 color: Colors.blueAccent,
                 fontWeight: FontWeight.bold,
