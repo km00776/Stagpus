@@ -98,4 +98,10 @@ class _SellScreenState extends State<SellScreen> {
     String formattedAddress = "${placemark.locality}, ${placemark.country}";
     locationController.text = formattedAddress;
   }
+
+  Scaffold buildProductForm() {
+    return Scaffold(
+      
+    );
+  }
 }
