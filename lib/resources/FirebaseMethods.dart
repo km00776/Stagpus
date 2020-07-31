@@ -9,8 +9,9 @@ class FirebaseMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   static final Firestore _firestore = Firestore.instance;
   final CollectionReference _userCollection = _firestore.collection("users");
-  final CollectionReference _messageCollection =
-      _firestore.collection("messages");
+  final CollectionReference _messageCollection = _firestore.collection("messages");
+  final CollectionReference _productCollectionRef = _firestore.collection("products");
+
 
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;

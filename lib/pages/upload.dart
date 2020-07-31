@@ -23,7 +23,7 @@ class Upload extends StatefulWidget {
   
   Upload({Key key, @required this.currentUser});
 
-  
+
   @override
   _UploadState createState() => new _UploadState(currentUser);
 }

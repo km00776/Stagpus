@@ -1,11 +1,18 @@
 // this page will be available for all users.
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image/image.dart' as Im;
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/resources/FirebaseMethods.dart';
+import 'package:stagpus/resources/FirebaseMethods.dart';
+import 'package:stagpus/resources/FirebaseMethods.dart';
 
 class SellScreen extends StatefulWidget {
   final User currentUser;
@@ -29,6 +36,8 @@ class SellScreen extends StatefulWidget {
 }
 
 class _SellScreenState extends State<SellScreen> {
+  final FirebaseMethods fbMethods = new FirebaseMethods();
+  FirebaseAuth currentUser;
   TextEditingController locationController = TextEditingController();
 
   _SellScreenState(User currentUser);
@@ -56,6 +65,22 @@ class _SellScreenState extends State<SellScreen> {
     setState(() {
       this.widget.file = file;
     });
+  }
+
+  compressImage() async {
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    Im.Image imageFile = Im.decodeImage(widget.file.readAsBytesSync());
+    final compressedImageFile = File('$path/img_$productId.jpg')..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
+    setState(() {
+      widget.file = compressedImageFile;
+    });
+  }
+
+  addProductToFirestore({String mediaUrl, String location, String description, String price}) async {
+     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+     DocumentSnapshot doc = await f
+
   }
 
   selectImage(parentContext) {
@@ -99,9 +124,41 @@ class _SellScreenState extends State<SellScreen> {
     locationController.text = formattedAddress;
   }
 
+  handleSubmission() async {
+    setState(() {
+      widget.isUploading = false;
+    });
+    await compressImage();
+  }
+
   Scaffold buildProductForm() {
     return Scaffold(
-      
+      appBar: AppBar(
+        backgroundColor: Colors.white70,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.blueAccent),
+          onPressed: clearImage(),
+        ),
+        title: Text(
+          'Caption Post',
+        style: TextStyle(
+          color: Colors.blueAccent
+          ), 
+        ),
+        actions: [
+          FlatButton(
+            onPressed: widget.isUploading ? null : () => handleSubmission(),
+            child: Text(
+              "Post",
+              style: TextStyle(
+                color: Colors.blueAccent,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0
+              )
+            )
+          )
+        ],
+      ),
     );
   }
 }
