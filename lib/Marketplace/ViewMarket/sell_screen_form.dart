@@ -79,18 +79,17 @@ void initState() {
     });
   }
 
-  compressImage() async {
-    final tempDir = await getTemporaryDirectory();
-    final path = tempDir.path;
-    Im.Image imageFile = Im.decodeImage(widget.file.readAsBytesSync());
-    final compressedImageFile = File('$path/img_$productId.jpg')..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
-    setState(() {
-      widget.file = compressedImageFile;
-    });
-  }
+  // compressImage() async {
+  //   final tempDir = await getTemporaryDirectory();
+  //   final path = tempDir.path;
+  //   Im.Image imageFile = Im.decodeImage(widget.file.readAsBytesSync());
+  //   final compressedImageFile = File('$path/img_$productId.jpg')..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
+  //   setState(() {
+  //     widget.file = compressedImageFile;
+  //   });
+  // }
 
   
-
   selectImage(parentContext) {
     return showDialog(
         context: parentContext,
@@ -136,7 +135,7 @@ void initState() {
     setState(() {
       widget.isUploading = false;
     });
-    await compressImage();
+   // await compressImage();
   }
 
   Scaffold buildProductForm() {
