@@ -53,21 +53,12 @@ class FirebaseMethods {
         .add(map);
   }
 
-  addProductToFirestore(
-      {String id,
-      String price,
-      String title,
-      String mediaUrl,
-      String location,
-      String description}) async {
-    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    DocumentSnapshot doc = await usersRef.document(user.uid).get();
-    currentUser = User.fromDocument(doc);
-    _productCollectionRef
-        .document(currentUser.uid)
-        .collection("userProducts")
-        .document(productId);
-  }
+
+
+
+
+
+
 
   Future<User> getUserDetails() async {
     FirebaseUser currentUser = await getCurrentUser();
