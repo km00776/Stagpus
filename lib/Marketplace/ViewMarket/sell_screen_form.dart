@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image/image.dart' as Im;
 
 import 'package:flutter/material.dart';
@@ -9,65 +10,47 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
+import 'package:stagpus/Posting/PostingModel/post.dart';
 import 'package:stagpus/models/user.dart';
-import 'package:stagpus/resources/FirebaseMethods.dart';
-import 'package:stagpus/resources/FirebaseMethods.dart';
-import 'package:stagpus/resources/FirebaseMethods.dart';
-import 'package:stagpus/resources/FirebaseRepo.dart';
+import 'package:stagpus/pages/home.dart';
+import 'package:stagpus/widgets/progress.dart';
+import 'package:uuid/uuid.dart';
+
+final productCollectionRef = Firestore.instance.collection("products");
 
 class SellScreen extends StatefulWidget {
   final User currentUser;
-  final int price;
-  final String description;
-  final String imageURL;
-  bool isUploading = false;
-  Product product;
-  File file;
 
-  SellScreen(
-      {Key key,
-      @required this.currentUser,
-      this.price,
-      this.description,
-      this.imageURL})
-      : super(key: key);
+  SellScreen({Key key, @required this.currentUser});
 
   @override
   _SellScreenState createState() => new _SellScreenState(currentUser);
 }
 
-
-class _SellScreenState extends State<SellScreen> {
-  final FirebaseMethods fbMethods = new FirebaseMethods();
-  User currentUser;
+class _SellScreenState extends State<SellScreen>
+    with AutomaticKeepAliveClientMixin<SellScreen> {
   TextEditingController locationController = TextEditingController();
-  FirebaseRepository _repository = FirebaseRepository();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController productNameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
-  _SellScreenState(User currentUser);
+  File file;
+  bool isUploading = false;
+  User currentUser;
+  String productId = Uuid().v4();
+  Product product;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
+  _SellScreenState(this.currentUser);
 
-  
-@override
-void initState() { 
-  super.initState();
-  _repository.getCurrentUser().then((user) => 
-    currentUser = user as User
-  );
-}
-
-  handleProductPhoto() async {
+  handleTakePhoto() async {
     Navigator.pop(context);
     File file = await ImagePicker.pickImage(
       source: ImageSource.camera,
-      maxHeight: 400,
-      maxWidth: 400,
+      maxHeight: 675,
+      maxWidth: 960,
     );
     setState(() {
-      this.widget.file = file;
+      this.file = file;
     });
   }
 
@@ -75,48 +58,269 @@ void initState() {
     Navigator.pop(context);
     File file = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
-      this.widget.file = file;
+      this.file = file;
     });
   }
-
-  compressImage() async {
-    final tempDir = await getTemporaryDirectory();
-    final path = tempDir.path;
-    Im.Image imageFile = Im.decodeImage(widget.file.readAsBytesSync());
-    final compressedImageFile = File('$path/img_$productId.jpg')..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
-    setState(() {
-      widget.file = compressedImageFile;
-    });
-  }
-
-  
 
   selectImage(parentContext) {
     return showDialog(
-        context: parentContext,
-        builder: (context) {
-          return SimpleDialog(
-              title: Text("Add product to Market"),
-              children: <Widget>[
-                SimpleDialogOption(
-                    child: Text("Photo with Camera"),
-                    onPressed: handleProductPhoto),
-                SimpleDialogOption(
-                  child: Text("Image from Gallery"),
-                  onPressed: handleChooseFromGallery(),
+      context: parentContext,
+      builder: (context) {
+        return SimpleDialog(
+          title: Text("Add to market"),
+          children: <Widget>[
+            SimpleDialogOption(
+                child: Text("Photo with Camera"), onPressed: handleTakePhoto),
+            SimpleDialogOption(
+                child: Text("Image from Gallery"),
+                onPressed: handleChooseFromGallery),
+            SimpleDialogOption(
+              child: Text("Cancel"),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Container buildSplashScreen() {
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [Colors.blueAccent, Colors.cyan])),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 20.0),
+            child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                SimpleDialogOption(
-                  child: Text("Cancel"),
-                  onPressed: () => Navigator.pop(context),
-                )
-              ]);
-        });
+                child: Text(
+                  "Upload Image",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22.0,
+                  ),
+                ),
+                color: Colors.deepOrange,
+                onPressed: () => selectImage(context)),
+          ),
+        ],
+      ),
+    );
   }
 
   clearImage() {
     setState(() {
-      widget.file = null;
+      file = null;
     });
+  }
+
+  //resize image and store it a .jpg
+  compressImage() async {
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    Im.Image imageFile = Im.decodeImage(file.readAsBytesSync());
+    final compressedImageFile = File('$path/img_$productId.jpg')
+      ..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
+    setState(() {
+      file = compressedImageFile;
+    });
+  }
+
+  //takes long to upload if the image is not compressed
+  Future<String> uploadImage(imageFile) async {
+    StorageUploadTask uploadTask =
+        storageRef.child("post_$productId.jpg").putFile(imageFile);
+    StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
+    String downloadUrl = await storageSnap.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  createPostInFirestore(
+      {String mediaUrl,
+      String location,
+      String description,
+      String productName,
+      String price}) async {
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    DocumentSnapshot doc = await usersRef.document(user.uid).get();
+    currentUser = User.fromDocument(doc);
+    productCollectionRef
+        .document(currentUser.uid)
+        .collection("userProducts")
+        .document(productId)
+        .setData({
+      "productId": productId,
+      "sellerId": currentUser.uid,
+      "username": currentUser.displayName,
+      "mediaUrl": mediaUrl,
+      "description": description,
+      "location": location,
+      "timestamp": timestamp,
+      "name": productName,
+      "Price": price
+    });
+  }
+
+  handleSubmit() async {
+    setState(() {
+      isUploading = true;
+    });
+    await compressImage();
+    String mediaUrl = await uploadImage(file);
+    createPostInFirestore(
+      mediaUrl: mediaUrl,
+      location: locationController.text,
+      description: descriptionController.text,
+      price: priceController.text,
+      productName: productNameController.text,
+    );
+    descriptionController.clear();
+    locationController.clear();
+    priceController.clear();
+    productNameController.clear();
+    setState(() {
+      file = null;
+      isUploading = false;
+      productId = Uuid().v4();
+    });
+  }
+
+  Scaffold buildUploadForm() {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white70,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: clearImage),
+        title: Text(
+          "Product Details",
+          style: TextStyle(color: Colors.black),
+        ),
+        actions: [
+          FlatButton(
+            onPressed: isUploading ? null : () => handleSubmit(),
+            child: Text(
+              "Add to market",
+              style: TextStyle(
+                color: Colors.blueAccent,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: ListView(
+        children: <Widget>[
+          isUploading ? linearProgress() : Text(""),
+          Container(
+            height: 220.0,
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Center(
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: FileImage(file),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 10.0),
+          ),
+          ListTile(
+            leading:
+                Icon(Icons.card_membership, size: 35.0, color: Colors.green),
+            title: Container(
+              width: 250.0,
+              child: TextField(
+                controller: priceController,
+                decoration: InputDecoration(
+                  hintText: "Product name:",
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          Divider(),
+          ListTile(
+            leading:
+                Icon(Icons.card_membership, size: 35.0, color: Colors.green),
+            title: Container(
+              width: 250.0,
+              child: TextField(
+                controller: priceController,
+                decoration: InputDecoration(
+                  hintText: "Price:",
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          Divider(),
+          ListTile(
+              leading: Icon(Icons.description, color: Colors.red, size: 35.0),
+              title: Container(
+                  width: 250.0,
+                  child: TextField(
+                      controller: descriptionController,
+                      decoration: InputDecoration(
+                        hintText: "Details of the product:",
+                        border: InputBorder.none,
+                      )))),
+          Divider(),
+          ListTile(
+            leading: Icon(
+              Icons.pin_drop,
+              color: Colors.orange,
+              size: 35.0,
+            ),
+            title: Container(
+              width: 250.0,
+              child: TextField(
+                controller: locationController,
+                decoration: InputDecoration(
+                  hintText: "Find me in...",
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 200.0,
+            height: 100.0,
+            alignment: Alignment.center,
+            child: RaisedButton.icon(
+              label: Text(
+                "Use Current Location",
+                style: TextStyle(color: Colors.white),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.blue,
+              onPressed: getUserLocation,
+              icon: Icon(
+                Icons.my_location,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   getUserLocation() async {
@@ -132,41 +336,12 @@ void initState() {
     locationController.text = formattedAddress;
   }
 
-  handleSubmission() async {
-    setState(() {
-      widget.isUploading = false;
-    });
-    await compressImage();
-  }
+  bool get wantKeepAlive => true;
 
-  Scaffold buildProductForm() {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white70,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.blueAccent),
-          onPressed: clearImage(),
-        ),
-        title: Text(
-          'Product details',
-        style: TextStyle(
-          color: Colors.blueAccent
-          ), 
-        ),
-        actions: [
-          FlatButton(
-            onPressed: widget.isUploading ? null : () => handleSubmission(),
-            child: Text(
-              "Add to Market",
-              style: TextStyle(
-                color: Colors.blueAccent,
-                fontWeight: FontWeight.bold,
-                fontSize: 20.0
-              )
-            )
-          )
-        ],
-      ),
-    );
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return file == null ? buildSplashScreen() : buildUploadForm();
   }
 }

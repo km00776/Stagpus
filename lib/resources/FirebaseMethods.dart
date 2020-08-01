@@ -6,7 +6,6 @@ import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:universal_html/js_util.dart';
 import 'package:uuid/uuid.dart';
-
 class FirebaseMethods {
   String productId = Uuid().v4();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -53,12 +52,24 @@ class FirebaseMethods {
         .add(map);
   }
 
-
-
-
-
-
-
+  addProductToFirestore({String id, String price, String mediaUrl, String location, String description, String productName}) async {
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    DocumentSnapshot doc = await usersRef.document(user.uid).get();
+    currentUser = User.fromDocument(doc);
+    _productCollectionRef
+        .document(currentUser.uid)
+        .collection("userProducts")
+        .document(productId).setData({
+          "productId": productId,
+          "sellerId": currentUser.uid,
+          "username": currentUser.displayName,
+          "mediaUrl": mediaUrl,
+          "description": description,
+          "location": location,
+          "timestamp": timestamp,
+          "name": productName
+        });
+  }
 
   Future<User> getUserDetails() async {
     FirebaseUser currentUser = await getCurrentUser();

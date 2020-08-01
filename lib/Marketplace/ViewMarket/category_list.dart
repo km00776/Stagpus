@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 
-
 class CategoryList extends StatefulWidget {
   @override
   _CategoryListState createState() => _CategoryListState();
@@ -10,7 +9,7 @@ class CategoryList extends StatefulWidget {
 class _CategoryListState extends State<CategoryList> {
   // by default first item will be selected
   int selectedIndex = 0;
-  List categories = ['All', 'Sofa', 'Park bench', 'Armchair'];
+  List categories = ['All', 'Books', 'Furniture', 'Technology'];
   @override
   Widget build(BuildContext context) {
     return Container(

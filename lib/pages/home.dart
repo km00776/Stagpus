@@ -13,6 +13,8 @@ import 'package:stagpus/Chat/ChatView/ChatScreen.dart';
 import 'package:stagpus/Chat/ChatView/SearchScreen.dart';
 import 'package:stagpus/Events/EventsView/EventsMain.dart';
 import 'package:stagpus/Map/Map.dart';
+import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
+import 'package:stagpus/Marketplace/ViewMarket/sell_screen_form.dart';
 
 import 'package:stagpus/Screens/Reminder.dart';
 import 'package:stagpus/models/user.dart';
@@ -118,12 +120,12 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           Timeline(currentUser: currentUser),
           ActivityFeed(),
-          Upload(currentUser: currentUser),
+          SellScreen(currentUser: currentUser),
           SurreyMap(),
           Search(),
           MessageScreen(currentUser: currentUser),
           EventsHomePage(),
-          //MarketPlace(),
+          ProductScreen(),
           Profile(profileId: currentUser?.uid),
         ],
         controller: page,
@@ -161,7 +163,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     page = PageController();
-    Login();
+    login();
   }
 
   void _setAgreed(bool newValue) {
@@ -368,12 +370,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void Register() {
+  void register() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => registerScreen(context)));
   }
 
-  Future<void> Login() async {
+  Future<void> login() async {
     FirebaseUser user;
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -381,7 +383,6 @@ class _HomeState extends State<Home> {
           .signInWithEmailAndPassword(email: _email, password: _password);
       user = result.user;
     }
-
     if (user.isEmailVerified) {
       await doesUserExist();
       Navigator.push(
@@ -451,7 +452,7 @@ class _HomeState extends State<Home> {
                     RaisedButton(
                       color: Color.alphaBlend(Colors.cyan, Colors.cyanAccent),
                       onPressed: () {
-                        Login();
+                        login();
                       },
                       child: Text('Login'),
                     ),
@@ -459,7 +460,7 @@ class _HomeState extends State<Home> {
                     RaisedButton(
                       color: Color.alphaBlend(Colors.cyan, Colors.cyanAccent),
                       onPressed: () {
-                        Register();
+                        register();
                       },
                       child: Text('Register'),
                     )
