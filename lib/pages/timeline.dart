@@ -6,8 +6,6 @@ import 'package:stagpus/pages/search.dart';
 import 'package:stagpus/widgets/header.dart';
 import 'package:stagpus/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:universal_html/html.dart';
 
 
 
@@ -84,7 +82,7 @@ class _TimelineState extends State<Timeline> {
           }
         });
         return Container(
-decoration: BoxDecoration(
+        decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,

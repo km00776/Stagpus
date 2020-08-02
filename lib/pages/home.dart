@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
           Search(),
           MessageScreen(currentUser: currentUser),
           EventsHomePage(),
-          ProductScreen(),
+          ProductScreen(currentUser: currentUser),
           Profile(profileId: currentUser?.uid),
         ],
         controller: page,
