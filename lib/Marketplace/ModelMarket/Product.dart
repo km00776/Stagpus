@@ -1,13 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Product {
   final String productId;
   final String price;
   final String productName;
   final String description;
   final String mediaUrl;
-  final String location;
 
-  Product({this.productId, this.price, this.productName, this.description, this.mediaUrl, this.location});
+
+  Product({this.productId, this.price, this.productName, this.description, this.mediaUrl});
+
+
+  factory Product.fromDocument(DocumentSnapshot doc) {
+    return Product(
+      productId: doc['productId'],
+      price: doc['price'],
+      productName: doc['productName'],
+      description: doc['description'],
+      mediaUrl: doc['mediaUrl']
+    );
+  }
+
+  
+
+  
+
+
 }
+
+ 
 
 // list of products
 // for our demo (dummy data)

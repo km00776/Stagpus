@@ -7,6 +7,7 @@ import 'package:stagpus/widgets/header.dart';
 import 'package:stagpus/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:universal_html/html.dart';
 
 
 
@@ -36,6 +37,8 @@ class _TimelineState extends State<Timeline> {
        this.posts = posts;
      });
   }
+
+  
 
   getFollowing() async {
     QuerySnapshot snapshot = await followingRef.document(currentUser.uid).collection('userFollowing').getDocuments();
