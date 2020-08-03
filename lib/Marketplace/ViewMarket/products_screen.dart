@@ -9,6 +9,7 @@ import 'package:stagpus/Marketplace/ViewMarket/sell_screen_form.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
+import 'package:stagpus/widgets/progress.dart';
 
 final productCollectionRef = Firestore.instance.collection("products");
 
@@ -22,45 +23,32 @@ class ProductScreen extends StatefulWidget {
 
 class ProductScreenState extends State<ProductScreen> {
   FirebaseMethods m1 = new FirebaseMethods();
-  FirebaseRepository _repository = new FirebaseRepository();
   User currentUser;
   List<Product> p;
-  String _currentUserId;
-  Product product;
 
-  getProducts() async {
-    QuerySnapshot snapshot = await productCollectionRef
-        .document(currentUser.uid)
-        .collection('userProducts')
-        .getDocuments();
-
-    List<Product> products =
-        snapshot.documents.map((doc) => Product.fromDocument(doc)).toList();
-    setState(() {
-      this.p = products;
-    });
-  }
-
-  Widget productList() {
-    return StreamBuilder(
-        stream: productCollectionRef
-            .document(_currentUserId)
-            .collection('userProducts')
-            .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.data == null) {
-            return Center(child: CircularProgressIndicator());
+  getProducts() {
+    return FutureBuilder(
+        future: productCollectionRef.document("Tester").get(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return circularProgress();
           }
+          Product product = Product.fromDocument(snapshot.data);
           return ListView.builder(
-              itemCount: snapshot.data.documents.length,
-              itemBuilder: (context, index) {
-                return productTest(snapshot.data.documents[index]);
-              });
+            itemCount: 1,
+            itemBuilder: (context, index) => ProductCard(
+              itemIndex: index,
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailsScreen(),
+                  ),
+                );
+              },
+            ),
+          );
         });
-  }
-
-  Widget productTest(DocumentSnapshot snapshot) {
-    Product _product = Product.fromMap(snapshot.data);
   }
 
   @override
@@ -90,45 +78,13 @@ class ProductScreenState extends State<ProductScreen> {
                       ),
                     ),
 
-                    ListView.builder(
-                      itemCount: products.length,
-                      itemBuilder: (context, index) => ProductCard(
-                        itemIndex: index,
-                        product: products[index],
-                        press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                product: products[index],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    )
+                    getProducts()
                   ],
                 ),
               ),
             ],
           ),
         ));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getProducts();
-    _repository.getCurrentUser().then((user) {
-      _currentUserId = user.uid;
-      setState(() {
-        currentUser = User(
-            uid: user.uid,
-            displayName: user.displayName,
-            email: user.email,
-            photoUrl: user.photoUrl);
-      });
-    });
   }
 
   AppBar buildAppBar() {
@@ -194,7 +150,7 @@ class ProductCard extends StatelessWidget {
               top: 0,
               right: 0,
               child: Hero(
-                tag: product.productId,
+                tag: "product.productId,",
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
                   height: 160,
