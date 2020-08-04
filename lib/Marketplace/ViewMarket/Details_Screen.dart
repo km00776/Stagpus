@@ -7,7 +7,6 @@ import 'package:stagpus/widgets/product_image.dart';
 
 class   DetailsScreen extends StatelessWidget {
   final Product product;
-
   const DetailsScreen({Key key, this.product}) : super(key: key);
   @override
   Widget build(BuildContext context) {

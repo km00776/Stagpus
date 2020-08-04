@@ -10,6 +10,7 @@ import 'package:stagpus/Marketplace/ViewMarket/search_market.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
+import 'package:stagpus/widgets/progress.dart';
 
 final productCollectionRef = Firestore.instance.collection("products");
 
