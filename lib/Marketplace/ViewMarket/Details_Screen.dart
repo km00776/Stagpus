@@ -5,7 +5,7 @@ import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
 import 'package:stagpus/widgets/product_image.dart';
 
-class DetailsScreen extends StatelessWidget {
+class   DetailsScreen extends StatelessWidget {
   final Product product;
 
   const DetailsScreen({Key key, this.product}) : super(key: key);
@@ -76,10 +76,10 @@ class Body extends StatelessWidget {
                 children: <Widget>[
                   Center(
                     child: Hero(
-                      tag: '${product.productId}',
+                      tag: 'id',
                       child: ProductPoster(
                         size: size,
-                        image: product.mediaUrl,
+                        image: 'product.mediaUrl,',
                       ),
                     ),
                   ),
@@ -88,12 +88,12 @@ class Body extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: kDefaultPadding / 2),
                     child: Text(
-                      product.productName,
+                      'product.productName,',
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
                   Text(
-                    '\$${product.price}',
+                    "'\$${product.price}',",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -104,7 +104,7 @@ class Body extends StatelessWidget {
                     padding:
                         EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
                     child: Text(
-                      product.description,
+                      "product.description,",
                       style: TextStyle(color: kTextLightColor),
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stagpus/Chat/ChatModel/Message.dart';
+import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/resources/FirebaseMethods.dart';
 
@@ -13,4 +14,7 @@ class FirebaseRepository {
 
   Future<void> addMessageToDb(Message message, User sender, User receiver) =>
       _method.addMessageToDb(message, sender, receiver);
+
+  Future<List<Product>> fetchAllProducts(FirebaseUser user) =>
+      _method.fetchAllProducts();
 }

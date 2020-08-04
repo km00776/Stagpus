@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/Chat/ChatModel/Message.dart';
-import 'package:stagpus/constants/Strings.dart';
 import 'package:stagpus/models/user.dart';
-import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:stagpus/widgets/appBar.dart';
 import 'package:stagpus/widgets/chatMethods.dart';
@@ -25,7 +23,6 @@ class _ChatScreenState extends State<ChatScreen> {
   User sender;
 
   final ChatMethods _chatMethods = ChatMethods();
-  final FirebaseMethods _methods = FirebaseMethods();
   ScrollController _listScrollController = ScrollController();
 
   String _currentUserId;

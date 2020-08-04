@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stagpus/Chat/ChatModel/Message.dart';
+import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
+import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
@@ -15,6 +17,9 @@ class FirebaseMethods {
       _firestore.collection("messages");
   final CollectionReference _productCollectionRef =
       _firestore.collection("products");
+      final productCollectionRef = Firestore.instance.collection("products");
+
+  
 
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;
@@ -31,9 +36,24 @@ class FirebaseMethods {
       if (querySnapshot.documents[i].documentID != currentUser.uid) {
         userList.add(User.fromMap(querySnapshot.documents[i].data));
       }
-    }
+    } //products --> users --> userProducts
     return userList;
   }
+  
+
+  Future<List<Product>> fetchAllProducts() async {
+    List<Product> productList = List<Product>();
+
+    QuerySnapshot querySnapshot = await productCollectionRef.document("users").collection("userProducts").getDocuments();
+    for(var i = 0; i < querySnapshot.documents.length; i++) {
+      productList.add(Product.fromMap(querySnapshot.documents[i].data));
+    }
+    return productList;
+  }
+
+
+
+
 
   Future<void> addMessageToDb(
       Message message, User sender, User receiver) async {
