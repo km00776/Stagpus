@@ -4,15 +4,18 @@ import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/pages/home.dart';
 
 class ProductCard extends StatefulWidget {
   final int itemIndex;
   final Product product;
   final Function press;
+  final User currentUser;
   
 
 
- ProductCard({Key key, this.itemIndex, this.product, this.press}) : super(key: key);
+
+ ProductCard({Key key, this.itemIndex, this.product, this.press, this.currentUser}) : super(key: key);
 
  @override
  ProductCardState createState() => ProductCardState();
@@ -27,7 +30,6 @@ class ProductCardState extends State<ProductCard>  {
 @override
 void initState() { 
   super.initState();
-  
   
 }
 
@@ -70,16 +72,16 @@ void initState() {
                 tag: 'p',
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  height: 160,
+                  height: 40,
                   // image is square but we add extra 20 + 20 padding thats why width is 200
-                  width: 200,
-                  //    child: Image.asset(
-                  // product.mediaUrl,
-                  //fit: BoxFit.cover,
+                  width: 40,
+                  child: Image.asset(
+                   widget.product.mediaUrl,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            // ),
+            ),
             // Product title and price
             Positioned(
               bottom: 0,
@@ -96,7 +98,7 @@ void initState() {
                       padding: const EdgeInsets.symmetric(
                       horizontal: kDefaultPadding),
                       child: Text(
-                         "product.l;",
+                       widget.product.productId,
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),

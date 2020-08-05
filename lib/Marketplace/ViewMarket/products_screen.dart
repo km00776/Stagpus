@@ -8,6 +8,7 @@ import 'package:stagpus/Marketplace/ViewMarket/category_list.dart';
 import 'package:stagpus/Marketplace/ViewMarket/product_card.dart';
 import 'package:stagpus/Marketplace/ViewMarket/search_market.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:stagpus/widgets/progress.dart';
@@ -33,12 +34,20 @@ class ProductScreenState extends State<ProductScreen> {
   String productName;
   String description;
 
+  @override
+  void initState() {
+    super.initState();
+    getProducts();
+    
+  }
 
-
-  
-
-
-
+  getProducts() async {
+    QuerySnapshot snapshot = await productCollectionRef.document(widget.currentUser.uid).collection('userProducts').getDocuments();
+    List<Product> products = snapshot.documents.map((doc) => Product.fromDocument(doc)).toList();
+    setState(() {
+      this.productList = products;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,6 +78,7 @@ class ProductScreenState extends State<ProductScreen> {
                     ListView.builder(
                       itemCount: productList.length,
                       itemBuilder: (context, index) => ProductCard(
+                        currentUser: currentUser,
                         itemIndex: index,
                         product: productList[index],
                         press: () {
@@ -91,17 +101,7 @@ class ProductScreenState extends State<ProductScreen> {
         ));
   }
 
-  @override
-  void initState() {
-    super.initState();
-    r.getCurrentUser().then((FirebaseUser user) {
-      r.fetchAllProducts(user).then((List<Product> products) {
-        setState(() {
-          productList = products;
-        });
-      });
-    });
-  }
+  
 
   AppBar buildAppBar() {
     return AppBar(
