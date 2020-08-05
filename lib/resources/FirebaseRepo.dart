@@ -15,6 +15,6 @@ class FirebaseRepository {
   Future<void> addMessageToDb(Message message, User sender, User receiver) =>
       _method.addMessageToDb(message, sender, receiver);
 
-  Future<List<Product>> fetchAllProducts(FirebaseUser user) =>
+  Future<List<Product>> fetchAllProducts(Product product) =>
       _method.fetchAllProducts();
 }

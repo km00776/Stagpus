@@ -15,8 +15,7 @@ class FirebaseMethods {
   final CollectionReference _userCollection = _firestore.collection("users");
   final CollectionReference _messageCollection =
       _firestore.collection("messages");
-  final CollectionReference _productCollectionRef =
-      _firestore.collection("products");
+  final CollectionReference _productCollectionRef = _firestore.collection("products");
       final productCollectionRef = Firestore.instance.collection("products");
 
   
@@ -43,7 +42,6 @@ class FirebaseMethods {
 
   Future<List<Product>> fetchAllProducts() async {
     List<Product> productList = List<Product>();
-
     QuerySnapshot querySnapshot = await productCollectionRef.document("users").collection("userProducts").getDocuments();
     for(var i = 0; i < querySnapshot.documents.length; i++) {
       productList.add(Product.fromMap(querySnapshot.documents[i].data));

@@ -58,6 +58,8 @@ class Post extends StatefulWidget {
     return count;
   }
 
+
+
   @override
   _PostState createState() => _PostState(
       postId: this.postId,

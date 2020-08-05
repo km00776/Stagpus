@@ -7,12 +7,11 @@ import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/Marketplace/ViewMarket/category_list.dart';
 import 'package:stagpus/Marketplace/ViewMarket/product_card.dart';
 import 'package:stagpus/Marketplace/ViewMarket/search_market.dart';
+import 'package:stagpus/Marketplace/ViewMarket/sell_screen_form.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/resources/FirebaseMethods.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:stagpus/widgets/progress.dart';
-
-final productCollectionRef = Firestore.instance.collection("products");
 
 class ProductScreen extends StatefulWidget {
   final User currentUser;
@@ -21,8 +20,6 @@ class ProductScreen extends StatefulWidget {
   @override
   ProductScreenState createState() => ProductScreenState();
 }
-
-
 
 class ProductScreenState extends State<ProductScreen> {
   FirebaseMethods m1 = new FirebaseMethods();
@@ -33,11 +30,44 @@ class ProductScreenState extends State<ProductScreen> {
   String productName;
   String description;
 
+  Widget workplease() {
+    return StreamBuilder(
+        stream: productCollectionRef
+            .document(widget.currentUser.uid)
+            .collection("userProducts")
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.data == null) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return ListView.builder(
+            itemCount: snapshot.data.documents.length,
+            itemBuilder: (context, index) {
+              return (getProducts(snapshot.data.documents[index]));
+            },
+          );
+        });
+  }
 
-
-  
-
-
+  Widget getProducts(DocumentSnapshot snapshot) {
+    FirebaseRepository f1 = new FirebaseRepository();
+    Product product = Product.fromMap(snapshot.data);
+    productList.add(product);
+    return ListView.builder(
+        itemCount: productList.length,
+        itemBuilder: (context, index) {
+          return ProductCard(
+              itemIndex: index,
+              product: productList[index],
+              press: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            DetailsScreen(product: productList[index])));
+              });
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,41 +96,24 @@ class ProductScreenState extends State<ProductScreen> {
                       ),
                     ),
 
-                    ListView.builder(
-                      itemCount: productList.length,
-                      itemBuilder: (context, index) => ProductCard(
-                        itemIndex: index,
-                        product: productList[index],
-                        press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                product: productList[index],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    )
                   ],
                 ),
               ),
             ],
           ),
         ));
+        
   }
 
   @override
   void initState() {
     super.initState();
-    r.getCurrentUser().then((FirebaseUser user) {
-      r.fetchAllProducts(user).then((List<Product> products) {
+      r.fetchAllProducts.then((List<Product> products) {
         setState(() {
           productList = products;
         });
       });
-    });
+ 
   }
 
   AppBar buildAppBar() {
@@ -117,5 +130,3 @@ class ProductScreenState extends State<ProductScreen> {
         ]);
   }
 }
-
-

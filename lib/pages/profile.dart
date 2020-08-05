@@ -53,7 +53,9 @@ getProfilePosts() async {
 
 
 checkIfFollowing() async {
-   DocumentSnapshot doc = await followersRef.document(widget.profileId).collection('userFollowers').document(currentUserUid).get();
+   DocumentSnapshot doc = await followersRef.document(widget.profileId).
+   collection('userFollowers').
+   document(currentUserUid).get();
     setState(() {
       isFollowing = doc.exists;
     });
