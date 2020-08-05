@@ -78,7 +78,7 @@ class Body extends StatelessWidget {
                       tag: 'id',
                       child: ProductPoster(
                         size: size,
-                        image: 'product.mediaUrl,',
+                        image: product.mediaUrl,
                       ),
                     ),
                   ),
@@ -87,7 +87,7 @@ class Body extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: kDefaultPadding / 2),
                     child: Text(
-                      'product.productName,',
+                      product.productName,  
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
@@ -103,7 +103,7 @@ class Body extends StatelessWidget {
                     padding:
                         EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
                     child: Text(
-                      "product.description,",
+                      product.description,
                       style: TextStyle(color: kTextLightColor),
                     ),
                   ),

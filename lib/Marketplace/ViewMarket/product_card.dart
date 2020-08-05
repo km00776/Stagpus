@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
@@ -5,6 +6,7 @@ import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
+import 'package:stagpus/widgets/custom_image.dart';
 
 class ProductCard extends StatefulWidget {
   final int itemIndex;
@@ -75,10 +77,11 @@ void initState() {
                   height: 40,
                   // image is square but we add extra 20 + 20 padding thats why width is 200
                   width: 40,
-                  child: Image.asset(
+                  child: cachedNetworkImage(
                    widget.product.mediaUrl,
-                  fit: BoxFit.cover,
+
                 ),
+
               ),
             ),
             ),
@@ -98,7 +101,7 @@ void initState() {
                       padding: const EdgeInsets.symmetric(
                       horizontal: kDefaultPadding),
                       child: Text(
-                       widget.product.productId,
+                       'widget.product.mediaUrl,',
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),
@@ -117,7 +120,7 @@ void initState() {
                         ),
                       ),
                       child: Text(
-                        "wew",
+                        widget.product.price,
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),

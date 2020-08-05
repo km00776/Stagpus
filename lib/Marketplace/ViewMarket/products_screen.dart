@@ -29,10 +29,7 @@ class ProductScreenState extends State<ProductScreen> {
   FirebaseMethods m1 = new FirebaseMethods();
   FirebaseRepository r = new FirebaseRepository();
   List<Product> productList;
-  String productId;
-  String price;
-  String productName;
-  String description;
+
 
   @override
   void initState() {
