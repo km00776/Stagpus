@@ -3,9 +3,10 @@ import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketChat.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
+import 'package:stagpus/widgets/custom_image.dart';
 import 'package:stagpus/widgets/product_image.dart';
 
-class   DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatelessWidget {
   final Product product;
   const DetailsScreen({Key key, this.product}) : super(key: key);
   @override
@@ -46,9 +47,9 @@ class   DetailsScreen extends StatelessWidget {
 }
 
 class Body extends StatelessWidget {
-  final Product product;
+  Product product;
 
-  const Body({Key key, this.product}) : super(key: key);
+  Body({Key key, this.product}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // it provide us total height and width
@@ -76,10 +77,8 @@ class Body extends StatelessWidget {
                   Center(
                     child: Hero(
                       tag: 'id',
-                      child: ProductPoster(
-                        size: size,
-                        image: 'product.mediaUrl,',
-                      ),
+                      child:
+                          ProductPoster(size: size, mediaUrl: product.mediaUrl),
                     ),
                   ),
                   ListOfColors(),
@@ -87,12 +86,12 @@ class Body extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: kDefaultPadding / 2),
                     child: Text(
-                      'product.productName,',
+                      product.productName,
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
                   Text(
-                    "'\$${product.price}',",
+                    "'\£${product.price}',",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -103,7 +102,7 @@ class Body extends StatelessWidget {
                     padding:
                         EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
                     child: Text(
-                      "product.description,",
+                      product.description,
                       style: TextStyle(color: kTextLightColor),
                     ),
                   ),

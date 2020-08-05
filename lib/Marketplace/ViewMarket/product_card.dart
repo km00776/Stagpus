@@ -1,35 +1,40 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/pages/home.dart';
+import 'package:stagpus/widgets/custom_image.dart';
 
 class ProductCard extends StatefulWidget {
   final int itemIndex;
   final Product product;
   final Function press;
-  
+  final User currentUser;
+  final String mediaUrl;
 
+  ProductCard(
+      {Key key,
+      this.itemIndex,
+      this.product,
+      this.press,
+      this.currentUser,
+      this.mediaUrl})
+      : super(key: key);
 
- ProductCard({Key key, this.itemIndex, this.product, this.press}) : super(key: key);
-
- @override
- ProductCardState createState() => ProductCardState();
-
+  @override
+  ProductCardState createState() => ProductCardState();
 }
 
-class ProductCardState extends State<ProductCard>  {
+class ProductCardState extends State<ProductCard> {
   List<Product> p = [];
 
-
-
-@override
-void initState() { 
-  super.initState();
-  
-  
-}
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,22 +69,18 @@ void initState() {
             ),
             // our product imager
             Positioned(
-              top: 0,
-              right: 0,
+              top: 30,
+              right: 50,
               child: Hero(
-                tag: 'p',
+                tag: widget.product.productId,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  height: 160,
-                  // image is square but we add extra 20 + 20 padding thats why width is 200
-                  width: 200,
-                  //    child: Image.asset(
-                  // product.mediaUrl,
-                  //fit: BoxFit.cover,
-                ),
+                    padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                    height: 120,
+                    // image is square but we add extra 20 + 20 padding thats why width is 200
+                    width: 200,
+                    child: cachedNetworkImage(widget.product.mediaUrl)),
               ),
             ),
-            // ),
             // Product title and price
             Positioned(
               bottom: 0,
@@ -94,9 +95,9 @@ void initState() {
                     Spacer(),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                      horizontal: kDefaultPadding),
+                          horizontal: kDefaultPadding),
                       child: Text(
-                         "product.l;",
+                        widget.product.productName,
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),
@@ -115,7 +116,7 @@ void initState() {
                         ),
                       ),
                       child: Text(
-                        "wew",
+                        widget.product.price,
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),
@@ -128,6 +129,4 @@ void initState() {
       ),
     );
   }
-
-
 }

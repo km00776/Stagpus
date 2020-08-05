@@ -136,7 +136,7 @@ class _SellScreenState extends State<SellScreen>
   //takes long to upload if the image is not compressed
   Future<String> uploadImage(imageFile) async {
     StorageUploadTask uploadTask =
-        storageRef.child("post_$productId.jpg").putFile(imageFile);
+        storageRef.child("product_$productId.jpg").putFile(imageFile);
     StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
     String downloadUrl = await storageSnap.ref.getDownloadURL();
     return downloadUrl;
@@ -163,8 +163,8 @@ class _SellScreenState extends State<SellScreen>
       "description": description,
       "location": location,
       "timestamp": timestamp,
-      "name": productName,
-      "Price": price
+      "productName": productName,
+      "price": price
     });
   }
 
@@ -246,7 +246,7 @@ class _SellScreenState extends State<SellScreen>
             title: Container(
               width: 250.0,
               child: TextField(
-                controller: priceController,
+                controller: productNameController,
                 decoration: InputDecoration(
                   hintText: "Product name:",
                   border: InputBorder.none,
