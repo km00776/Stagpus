@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 
-class SearchMarket extends StatelessWidget {
-  final ValueChanged onChanged;
+class SearchMarket extends StatefulWidget {
+  @override
+  _SearchMarketState createState() => _SearchMarketState();
+  
+  }
+  
+  class _SearchMarketState extends State<SearchMarket>  {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
 
-  const SearchMarket({
-    Key key,
-    this.onChanged,
-  }) : super(key: key);
+
+
+
 
 
 

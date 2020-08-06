@@ -58,7 +58,9 @@ class ProductScreenState extends State<ProductScreen> {
           bottom: false,
           child: Column(
             children: <Widget>[
-              SearchMarket(onChanged: (value) {}),
+              SearchMarket(onChanged: (value) {
+                
+              }),
               CategoryList(),
               SizedBox(height: kDefaultPadding / 2),
               Expanded(
