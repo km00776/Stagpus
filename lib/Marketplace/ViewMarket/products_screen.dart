@@ -52,13 +52,12 @@ class ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
         backgroundColor: marketColor,
         body: SafeArea(
           bottom: false,
           child: Column(
             children: <Widget>[
-              SearchMarket(onChanged: (value) {
+              SearchMarket({
                 
               }),
               CategoryList(),
