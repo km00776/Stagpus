@@ -6,13 +6,19 @@ class Product {
   String productName;
   String description;
   String mediaUrl;
+  String sellerUsername;
+  String location;
+  
 
   Product(
       {this.productId,
       this.price,
       this.productName,
       this.description,
-      this.mediaUrl});
+      this.mediaUrl,
+      this.sellerUsername,
+      this.location
+      });
 
   factory Product.fromDocument(DocumentSnapshot doc) {
     return Product(
@@ -20,7 +26,10 @@ class Product {
         price: doc['price'],
         productName: doc['productName'],
         description: doc['description'],
-        mediaUrl: doc['mediaUrl']);
+        mediaUrl: doc['mediaUrl'],
+        sellerUsername: doc['sellerUsername'],
+        location: doc['location']
+    );
   }
 
   Product.fromMap(Map<String, dynamic> map) {

@@ -90,6 +90,7 @@ class Body extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
+                  Text(product.sellerUsername),
                   Text(
                     "'\£${product.price}',",
                     style: TextStyle(

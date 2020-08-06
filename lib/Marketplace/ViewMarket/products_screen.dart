@@ -22,6 +22,9 @@ class ProductScreen extends StatefulWidget {
   ProductScreenState createState() => ProductScreenState();
 }
 
+
+
+
 class ProductScreenState extends State<ProductScreen> {
   FirebaseMethods m1 = new FirebaseMethods();
   FirebaseRepository r = new FirebaseRepository();
@@ -35,20 +38,21 @@ class ProductScreenState extends State<ProductScreen> {
 
   getProducts() async {
     QuerySnapshot snapshot = await productCollectionRef
-        .document(widget.currentUser.uid)
+        .document("users")
         .collection('userProducts')
         .getDocuments();
     List<Product> products =
         snapshot.documents.map((doc) => Product.fromDocument(doc)).toList();
     setState(() {
       this.productList = products;
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: buildAppBar(),
+      
         backgroundColor: marketColor,
         body: SafeArea(
           bottom: false,

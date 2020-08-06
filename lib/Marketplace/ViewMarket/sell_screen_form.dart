@@ -152,13 +152,13 @@ class _SellScreenState extends State<SellScreen>
     DocumentSnapshot doc = await usersRef.document(user.uid).get();
     currentUser = User.fromDocument(doc);
     productCollectionRef
-        .document(currentUser.uid)
+        .document("users")
         .collection("userProducts")
         .document(productId)
         .setData({
       "productId": productId,
       "sellerId": currentUser.uid,
-      "username": currentUser.displayName,
+      "sellerUsername": currentUser.displayName,
       "mediaUrl": mediaUrl,
       "description": description,
       "location": location,
@@ -242,7 +242,7 @@ class _SellScreenState extends State<SellScreen>
           ),
           ListTile(
             leading:
-                Icon(Icons.card_membership, size: 35.0, color: Colors.green),
+                Icon(Icons.pageview, size: 35.0, color: Colors.green),
             title: Container(
               width: 250.0,
               child: TextField(
