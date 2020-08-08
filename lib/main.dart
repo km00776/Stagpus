@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:stagpus/Chat/ChatView/ChatBackground.dart';
 import 'package:stagpus/Chat/ChatView/SearchScreen.dart';
 import 'package:stagpus/Events/EventsView/Listings.dart';
+import 'package:stagpus/Marketplace/ViewMarket/search_market.dart';
 import 'package:stagpus/Marketplace/ViewMarket/sell_screen_form.dart';
 import 'package:stagpus/Societies/SocietyView/society_main.dart';
 import 'package:stagpus/pages/activity_feed.dart';

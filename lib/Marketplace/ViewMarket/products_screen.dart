@@ -22,9 +22,6 @@ class ProductScreen extends StatefulWidget {
   ProductScreenState createState() => ProductScreenState();
 }
 
-
-
-
 class ProductScreenState extends State<ProductScreen> {
   FirebaseMethods m1 = new FirebaseMethods();
   FirebaseRepository r = new FirebaseRepository();
@@ -45,7 +42,6 @@ class ProductScreenState extends State<ProductScreen> {
         snapshot.documents.map((doc) => Product.fromDocument(doc)).toList();
     setState(() {
       this.productList = products;
-
     });
   }
 
@@ -57,9 +53,7 @@ class ProductScreenState extends State<ProductScreen> {
           bottom: false,
           child: Column(
             children: <Widget>[
-              SearchMarket({
-                
-              }),
+              SearchMarket(),
               CategoryList(),
               SizedBox(height: kDefaultPadding / 2),
               Expanded(
@@ -90,7 +84,6 @@ class ProductScreenState extends State<ProductScreen> {
                             MaterialPageRoute(
                               builder: (context) => DetailsScreen(
                                 product: productList[index],
-                              
                               ),
                             ),
                           );
