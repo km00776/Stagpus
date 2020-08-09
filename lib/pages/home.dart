@@ -38,6 +38,8 @@ final activityFeedRef = Firestore.instance.collection('feed');
 final followersRef = Firestore.instance.collection('followers');
 final followingRef = Firestore.instance.collection('following');
 final timelineRef = Firestore.instance.collection('timeline');
+final productCollectionRef = Firestore.instance.collection("products");
+
 
 const blueg = LinearGradient(
   colors: <Color>[Colors.cyan, Colors.cyanAccent],

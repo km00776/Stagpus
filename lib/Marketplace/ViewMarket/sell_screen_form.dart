@@ -16,7 +16,6 @@ import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/progress.dart';
 import 'package:uuid/uuid.dart';
 
-final productCollectionRef = Firestore.instance.collection("products");
 
 class SellScreen extends StatefulWidget {
   final User currentUser;

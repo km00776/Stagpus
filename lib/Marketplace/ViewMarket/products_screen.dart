@@ -22,9 +22,6 @@ class ProductScreen extends StatefulWidget {
   ProductScreenState createState() => ProductScreenState();
 }
 
-
-
-
 class ProductScreenState extends State<ProductScreen> {
   FirebaseMethods m1 = new FirebaseMethods();
   FirebaseRepository r = new FirebaseRepository();
@@ -52,15 +49,14 @@ class ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
         backgroundColor: marketColor,
         body: SafeArea(
           bottom: false,
           child: Column(
             children: <Widget>[
-              SearchMarket(onChanged: (value) {
-                
-              }),
+              SearchMarket(
+
+              ),
               CategoryList(),
               SizedBox(height: kDefaultPadding / 2),
               Expanded(
