@@ -17,58 +17,31 @@ class _SearchMarketState extends State<SearchMarket> {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
 
-  // Widget buildProductSearch() {
-  //   return Container(
-  //     margin: EdgeInsets.all(kDefaultPadding),
-  //     padding: EdgeInsets.symmetric(
-  //       horizontal: kDefaultPadding,
-  //       vertical: kDefaultPadding / 4, // 5 top and bottom
-  //     ),
-  //     decoration: BoxDecoration(
-  //       color: Colors.white.withOpacity(0.4),
-  //       borderRadius: BorderRadius.circular(12),
-  //     ),
-  //     child: TextFormField(
-  //       style: TextStyle(color: Colors.white),
-  //       decoration: InputDecoration(
-  //         enabledBorder: InputBorder.none,
-  //         focusedBorder: InputBorder.none,
-  //         icon: Icon(Icons.search),
-  //         hintText: 'Search',
-  //         filled: true,
-  //         hintStyle: TextStyle(color: Colors.white),
-  //       ),
-  //       onFieldSubmitted: handleSearch,
-  //     ),
-  //   );
-  // }
-
-  AppBar buildSearchField() {
-    return AppBar(
-        title: Container(
-            margin: EdgeInsets.all(kDefaultPadding),
-            padding: EdgeInsets.symmetric(
-              horizontal: kDefaultPadding,
-              vertical: kDefaultPadding / 4, // 5 top and bottom
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.4),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: TextFormField(
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                icon: Icon(Icons.search),
-                hintText: 'Search',
-                filled: true,
-                hintStyle: TextStyle(color: Colors.white),
-              ),
-              onFieldSubmitted: handleSearch,
-            ),
-            ),
-            );
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(kDefaultPadding),
+      padding: EdgeInsets.symmetric(
+        horizontal: kDefaultPadding,
+        vertical: kDefaultPadding / 4, // 5 top and bottom
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: TextFormField(
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          icon: Icon(Icons.search),
+          hintText: 'Search',
+          filled: true,
+          hintStyle: TextStyle(color: Colors.white),
+        ),
+        onFieldSubmitted: handleSearch,
+      ),
+    );
   }
 
   Container buildNoContent() {
@@ -95,17 +68,6 @@ class _SearchMarketState extends State<SearchMarket> {
           ],
         ),
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
-      appBar: buildSearchField(),
-      body: searchResultsFuture == null
-          ? buildNoContent()
-          : buildProductSearchResults(),
     );
   }
 

@@ -59,37 +59,50 @@ class ProductScreenState extends State<ProductScreen> {
               Expanded(
                 child: Stack(
                   children: <Widget>[
-                    // Our background
-                    Container(
-                      margin: EdgeInsets.only(top: 70),
-                      decoration: BoxDecoration(
-                        color: kBackgroundColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
-                        ),
-                      ),
-                    ),
+                    StreamBuilder(
+                        stream: productCollectionRef
+                            .document("users")
+                            .collection("userProducts")
+                            .snapshots(),
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.data == null) {
+                            return circularProgress();
+                          }
+                          List<Product> products = snapshot.data.documents
+                              .map((doc) => Product.fromDocument(doc))
+                              .toList();
 
-                    ListView.builder(
-                      itemCount: productList.length,
-                      itemBuilder: (context, index) => ProductCard(
-                        mediaUrl: productList[index].mediaUrl,
-                        currentUser: currentUser,
-                        itemIndex: index,
-                        product: productList[index],
-                        press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                product: productList[index],
+                          return Container(
+                            child: ListView.builder(
+                              itemCount: products.length,
+                              itemBuilder: (context, index) => ProductCard(
+                                mediaUrl: products[index].mediaUrl,
+                                currentUser: currentUser,
+                                itemIndex: index,
+                                product: products[index],
+                                press: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailsScreen(
+                                        product: productList[index],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            margin: EdgeInsets.only(top: 70),
+                            decoration: BoxDecoration(
+                              color: kBackgroundColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40),
                               ),
                             ),
                           );
-                        },
-                      ),
-                    )
+                        })
                   ],
                 ),
               ),
