@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/Chat/ChatModel/Message.dart';
+import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:stagpus/widgets/appBar.dart';
@@ -9,8 +10,8 @@ import 'package:stagpus/widgets/customTile.dart';
 
 class ChatScreen extends StatefulWidget {
   final User receiver;
-
-  ChatScreen({this.receiver});
+  final String product;
+  ChatScreen({this.receiver, this.product});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
