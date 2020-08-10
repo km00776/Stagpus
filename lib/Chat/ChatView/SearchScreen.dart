@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'package:stagpus/Chat/ChatController/SearchController.dart';
 import 'package:stagpus/Chat/ChatView/ChatScreen.dart';
 import 'package:stagpus/models/user.dart';
-import 'package:stagpus/pages/home.dart';
+
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:stagpus/widgets/customTile.dart';
 

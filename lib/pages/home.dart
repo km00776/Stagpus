@@ -45,6 +45,7 @@ const blueg = LinearGradient(
 User currentUser;
 
 class Home extends StatefulWidget {
+  User currentUser;
   @override
   _HomeState createState() => new _HomeState(); // creates an immutable state.
 }

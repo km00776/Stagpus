@@ -29,8 +29,11 @@ class _TimelineState extends State<Timeline> {
   }
  
   getTimeline() async {
-     QuerySnapshot snapshot = await timelineRef.document(widget.currentUser.uid).collection('timelinePosts').orderBy('timestamp', descending: true).getDocuments();
-     List<Post> posts = snapshot.documents.map((doc) => Post.fromDocument(doc)).toList();
+     QuerySnapshot snapshot = await timelineRef.document(widget.currentUser.uid).collection('timelinePosts')
+     .orderBy('timestamp', descending: true)
+     .getDocuments();
+     List<Post> posts =
+      snapshot.documents.map((doc) => Post.fromDocument(doc)).toList();
      setState(() {
        this.posts = posts;
      });
@@ -39,7 +42,10 @@ class _TimelineState extends State<Timeline> {
   
 
   getFollowing() async {
-    QuerySnapshot snapshot = await followingRef.document(currentUser.uid).collection('userFollowing').getDocuments();
+    QuerySnapshot snapshot = await followingRef.
+    document(currentUser.uid).
+    collection('userFollowing').
+    getDocuments();
     setState(()  {
       followingList = snapshot.documents.map((doc) => doc.documentID).toList();
     });

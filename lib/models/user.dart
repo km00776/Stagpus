@@ -29,7 +29,6 @@ class User {
     user.displayName = data['displayName'];
     user.bio = data['bio'];
     user.myLocation = data['location'];
-
     return data;
   }
 

@@ -12,12 +12,14 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
 
   handleSearch(String query) {
-    Future<QuerySnapshot> users = usersRef.where("displayName", isLessThanOrEqualTo: query).getDocuments();
+    Future<QuerySnapshot> users = usersRef
+        .where("displayName", isLessThanOrEqualTo: query)
+        .getDocuments();
     setState(() {
       searchResultsFuture = users;
     });
@@ -27,7 +29,7 @@ class _SearchState extends State<Search> {
     searchController.clear();
   }
 
- AppBar buildSearchField() {
+  AppBar buildSearchField() {
     return AppBar(
       backgroundColor: Colors.white,
       title: TextFormField(
@@ -35,14 +37,14 @@ class _SearchState extends State<Search> {
         decoration: InputDecoration(
           hintText: "Search for a user...",
           filled: true,
-          prefixIcon: Icon( 
+          prefixIcon: Icon(
             Icons.account_box,
             size: 28.0,
           ),
           suffixIcon: IconButton(
             icon: Icon(Icons.clear),
             onPressed: clearSearch,
-            ),
+          ),
         ),
         onFieldSubmitted: handleSearch,
       ),
@@ -50,88 +52,87 @@ class _SearchState extends State<Search> {
   }
 
   Container buildNoContent() {
-   final Orientation orientation =  MediaQuery.of(context).orientation;
+    final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [Colors.blueAccent, Colors.cyan])
-      ),
-      child: Center(child: ListView(
-        shrinkWrap: true,
-        children: <Widget>[
-        
-          Text(
-            "Find Users", 
-            textAlign: TextAlign.center, style: TextStyle(
-            color: Colors.white,
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.w600,
-            fontSize: 60.0,
-
-          
-          ),
-          ),
-      ],
-      ),
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [Colors.blueAccent, Colors.cyan])),
+      child: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            Text(
+              "Find Users",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+                fontSize: 60.0,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-buildSearchResults() {
-  return FutureBuilder(
-    future: searchResultsFuture,
-    builder: (context, snapshot) {
-      if(!snapshot.hasData) {
-        return circularProgress();
-      }
-      List<UserResult> searchResults = [];
-      snapshot.data.documents.forEach((doc) {
-        User user = User.fromDocument(doc);
-        UserResult searchResult = UserResult(user);
-        searchResults.add(searchResult);
-      });
-      return ListView(children: searchResults,
-      );
-    }
-  );
-}
+  buildSearchResults() {
+    return FutureBuilder(
+        future: searchResultsFuture,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return circularProgress();
+          }
+          List<UserResult> searchResults = [];
+          snapshot.data.documents.forEach((doc) {
+            User user = User.fromDocument(doc);
+            UserResult searchResult = UserResult(user);
+            searchResults.add(searchResult);
+          });
+          return ListView(
+            children: searchResults,
+          );
+        });
+  }
 
+  bool get wantKeepAlive => true;
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
-    appBar: buildSearchField(),
-    body: searchResultsFuture == null ? buildNoContent() : 
-    buildSearchResults(),
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
 
-  );
-}
+    return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
+      appBar: buildSearchField(),
+      body:
+          searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
+    );
+  }
 }
 
 class UserResult extends StatelessWidget {
   final User user;
-  
+
   UserResult(this.user);
 
-   showProfile(BuildContext context, {String profileId}) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(profileId: user.uid)));
-    
+  showProfile(BuildContext context, {String profileId}) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => Profile(profileId: user.uid)));
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
-      return Container(
-        decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [Colors.blueAccent, Colors.cyan])
-      ),
-        child: Column(
-          children: <Widget>[
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [Colors.blueAccent, Colors.cyan])),
+      child: Column(
+        children: <Widget>[
           GestureDetector(
             onTap: () => showProfile(context, profileId: user.uid),
             child: ListTile(
@@ -142,17 +143,14 @@ class UserResult extends StatelessWidget {
                 user.displayName,
                 style: TextStyle(color: Colors.white),
               ),
-              
+            ),
           ),
-        ),
-        Divider(
-          height: 2.0,
-          color: Colors.white54, 
-        ),
-     ],),
-     );
+          Divider(
+            height: 2.0,
+            color: Colors.white54,
+          ),
+        ],
+      ),
+    );
   }
-
-
 }
-
