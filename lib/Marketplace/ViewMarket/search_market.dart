@@ -252,6 +252,6 @@ class _NewSearchState extends State<NewSearch> {
       ),
       
       )
-      )
+      );
   }
 }
