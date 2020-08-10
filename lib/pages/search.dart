@@ -35,7 +35,7 @@ class _SearchState extends State<Search> {
         decoration: InputDecoration(
           hintText: "Search for a user...",
           filled: true,
-          prefixIcon: Icon(
+          prefixIcon: Icon( 
             Icons.account_box,
             size: 28.0,
           ),
