@@ -7,10 +7,13 @@ import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:stagpus/widgets/customTile.dart';
+import 'package:stagpus/widgets/custom_image.dart';
 import 'package:stagpus/widgets/progress.dart';
 
 class SearchMarket extends StatefulWidget {
-  SearchMarket();
+  List<Product> productList;
+
+  SearchMarket({this.productList});
 
   @override
   _SearchMarketState createState() => _SearchMarketState();
@@ -44,7 +47,11 @@ class _SearchMarketState extends State<SearchMarket> {
         ),
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => NewSearch()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NewSearch(
+                      productList: widget.productList,
+                      searchedProductName: searchController.text)));
         },
       ),
     );
@@ -142,39 +149,28 @@ class ProductResult extends StatelessWidget {
           Divider(height: 2.0, color: Colors.white54)
         ]));
   }
-
 }
 
 class NewSearch extends StatefulWidget {
+  final String searchedProductName;
+  List<Product> productList;
+
+  NewSearch({this.productList, this.searchedProductName});
+
   @override
   _NewSearchState createState() => _NewSearchState();
 }
 
 class _NewSearchState extends State<NewSearch> {
-  List<Product> productList;
-  Product product;
   String query = "";
   TextEditingController searchController = TextEditingController();
   FirebaseRepository _repo = FirebaseRepository();
 
-  @override
-  void initState() {
-    super.initState();
-    _repo.getCurrentUser().then((FirebaseUser user) {
-      _repo.fetchAllProducts(product).then((List<Product> productList) {
-        // gonna cause null pointer error
-        setState(() {
-          this.productList = productList;
-        });
-      });
-    });
-  }
-
   buildSuggestions(String query) {
     final List<Product> productSuggestionList = query.isEmpty
         ? []
-        : productList != null
-            ? productList.where((Product product) {
+        : widget.productList != null
+            ? widget.productList.where((Product product) {
                 String _getProductName = product.productName.toLowerCase();
                 String _query = query.toLowerCase();
                 bool matchesProductname = _getProductName.contains(_query);
@@ -186,9 +182,13 @@ class _NewSearchState extends State<NewSearch> {
         itemCount: productSuggestionList.length,
         itemBuilder: ((context, index) {
           Product searchedProduct = Product(
-              productId: productSuggestionList[index].productId,
-              productName: productSuggestionList[index].productName,
-              sellerUsername: productSuggestionList[index].sellerUsername);
+            productId: productSuggestionList[index].productId,
+            productName: productSuggestionList[index].productName,
+            sellerUsername: productSuggestionList[index].sellerUsername,
+            mediaUrl: productSuggestionList[index].mediaUrl,
+            price: productSuggestionList[index].price,
+            description: productSuggestionList[index].description,
+          );
           return CustomTile(
             mini: false,
             onTap: () {
@@ -200,15 +200,14 @@ class _NewSearchState extends State<NewSearch> {
                           )));
             },
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(searchedProduct.mediaUrl),
-              backgroundColor: Colors.grey,
-            ),
+                 child: cachedNetworkImage(searchedProduct.mediaUrl),
+                ),
             title: Text(
               searchedProduct.productName,
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
             ),
             subtitle: Text(
-              searchedProduct.productName,
+              searchedProduct.price,
               style: TextStyle(color: Colors.green),
             ),
           );
@@ -218,40 +217,44 @@ class _NewSearchState extends State<NewSearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-    );
+        backgroundColor: marketColor,
+        appBar: searchAppBar(context),
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: buildSuggestions(query),
+        ));
   }
 
-  AppBar productSearch(BuildContext context) {
-      return AppBar(
-      backgroundColor: Colors.blue,
-      Container(
-      margin: EdgeInsets.all(kDefaultPadding),
-      padding: EdgeInsets.symmetric(
-        horizontal: kDefaultPadding,
-        vertical: kDefaultPadding / 4, // 5 top and bottom
+  searchAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: marketColor,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: Colors.red),
+        onPressed: () => Navigator.pop(context),
       ),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.4),
-        borderRadius: BorderRadius.circular(12),
+      elevation: 0,
+      bottom: PreferredSize(
+        child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: kDefaultPadding,
+              vertical: kDefaultPadding / 4,
+            ),
+            child: TextFormField(
+              style: TextStyle(color: Colors.red),
+              decoration: InputDecoration(
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                hintText: 'Search',
+                hintStyle: TextStyle(color: Colors.white),
+              ),
+              controller: searchController,
+              onChanged: (val) {
+                setState(() {
+                  query = val;
+                });
+              },
+            )),
       ),
-      child: Stack(children: <Widget> [
-        TextFormField(
-        style: TextStyle(color: Colors.red),
-        decoration: InputDecoration(
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          icon: Icon(Icons.search),
-          hintText: 'Search',
-     
-          hintStyle: TextStyle(color: Colors.white),
-        ),
-        
-      ),
-      ]
-      ),
-      
-      )
-      );
+    );
   }
 }

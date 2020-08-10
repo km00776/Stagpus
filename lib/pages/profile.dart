@@ -251,7 +251,7 @@ class _ProfileState extends State<Profile> {
                       radius: 40.0,
                       backgroundColor: Colors.grey,
 
-                      //CachedNetworkImageProvider(user.photoUrl),
+                    //  CachedNetworkImageProvider(user.photoUrl),
                     ),
                     Expanded(
                       flex: 1,
