@@ -16,6 +16,7 @@ import 'package:stagpus/pages/timeline.dart';
 import 'package:stagpus/widgets/eventCard.dart';
 import 'Chat/ChatView/ChatScreen.dart';
 import 'Events/EventsView/EventsMain.dart';
+import 'Events/EventsView/add_events.dart';
 import 'Events/EventsView/single_event_widget.dart';
 import 'Marketplace/ViewMarket/Details_Screen.dart';
 import 'Marketplace/ViewMarket/products_screen.dart';
@@ -45,6 +46,6 @@ class MyApp extends StatelessWidget {
         routes: {
           '/search_screen': (context) => SearchScreen(),
         },
-        home: Home());
+        home: EventForm());
   }
 }

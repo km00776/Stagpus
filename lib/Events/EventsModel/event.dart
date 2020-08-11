@@ -21,9 +21,9 @@ class Event {
   
 
 var events = [
-  Event(eventType: "RnB Night", eventDJ: "DJ Khalid",eventDate:'20 July at : 2:00PM - 4:00PM',eventImage: 'https://futaa.com/images/crops/desktops/20200131B19GNSS0704.JPG', eventLocation: "Rubix", eventName: "Rnb Night With Karhti", eventVenue:  "Rubix", eventOffer: "50%"),
-  Event(eventType: "RnB Night", eventDJ: "DJ Khalid",eventDate:'20 July at : 2:00PM - 4:00PM',eventImage: 'https://futaa.com/images/crops/desktops/20200131B19GNSS0704.JPG', eventLocation: "Rubix", eventName: "Rnb Night With Karhti", eventVenue:  "Rubix", eventOffer: "50%"),
-  Event(eventType: "RnB Night", eventDJ: "DJ Khalid",eventDate:'20 July at : 2:00PM - 4:00PM',eventImage: 'https://futaa.com/images/crops/desktops/20200131B19GNSS0704.JPG', eventLocation: "Rubix", eventName: "Rnb Night With Karhti", eventVenue:  "Rubix", eventOffer: "50"),
+  Event(eventType: "RnB Night", eventDJ: "DJ Khalid",eventDate:'20 July at : 2:00PM - 4:00PM', eventImage: 'https://futaa.com/images/crops/desktops/20200131B19GNSS0704.JPG', eventLocation: "Rubix", eventName: "Rnb Night With Karhti", eventVenue:  "Rubix", eventOffer: "50%"),
+  Event(eventType: "RnB Night", eventDJ: "DJ Khalid",eventDate:'20 July at : 2:00PM - 4:00PM', eventImage: 'https://futaa.com/images/crops/desktops/20200131B19GNSS0704.JPG', eventLocation: "Rubix", eventName: "Rnb Night With Karhti", eventVenue:  "Rubix", eventOffer: "50%"),
+  Event(eventType: "RnB Night", eventDJ: "DJ Khalid",eventDate:'20 July at : 2:00PM - 4:00PM', eventImage: 'https://futaa.com/images/crops/desktops/20200131B19GNSS0704.JPG', eventLocation: "Rubix", eventName: "Rnb Night With Karhti", eventVenue:  "Rubix", eventOffer: "50"),
 ];
 
 // note to my myself populate the data from firebase
