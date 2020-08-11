@@ -218,27 +218,62 @@ class _NewSearchState extends State<NewSearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      backgroundColor: Colors.lightBlue,
+      appBar: searchAppBar(context),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: buildSuggestions(query),
+      )
     );
   }
 
-  AppBar productSearch(BuildContext context) {
-      return AppBar(
-      backgroundColor: Colors.blue,
-      Container(
-      margin: EdgeInsets.all(kDefaultPadding),
-      padding: EdgeInsets.symmetric(
+  // AppBar productSearch(BuildContext context) {
+  //     return AppBar(
+  //     backgroundColor: Colors.blue,
+  //     Container(
+  //     margin: EdgeInsets.all(kDefaultPadding),
+  //     padding: EdgeInsets.symmetric(
+  //       horizontal: kDefaultPadding,
+  //       vertical: kDefaultPadding / 4, // 5 top and bottom
+  //     ),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white.withOpacity(0.4),
+  //       borderRadius: BorderRadius.circular(12),
+  //     ),
+  //     child: Stack(children: <Widget> [
+  //       TextFormField(
+  //       style: TextStyle(color: Colors.red),
+  //       decoration: InputDecoration(
+  //         enabledBorder: InputBorder.none,
+  //         focusedBorder: InputBorder.none,
+  //         icon: Icon(Icons.search),
+  //         hintText: 'Search',
+     
+  //         hintStyle: TextStyle(color: Colors.white),
+  //       ),
+        
+  //     ),
+  //     ]
+  //     ),
+      
+  //     )
+  //     );
+  // }
+
+  AppBar searchAppBar(BuildContext context) {
+    return AppBar(leading: IconButton(
+      icon: Icon(Icons.arrow_back, color: Colors.white),
+      onPressed: () => Navigator.pop(context),
+      ),
+      bottom: PreferredSize(
+        child: Padding(padding: EdgeInsets.symmetric(
         horizontal: kDefaultPadding,
-        vertical: kDefaultPadding / 4, // 5 top and bottom
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.4),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Stack(children: <Widget> [
-        TextFormField(
-        style: TextStyle(color: Colors.red),
-        decoration: InputDecoration(
+        vertical: kDefaultPadding / 4,
+        
+        ),
+        child: TextFormField(
+          style: TextStyle(color: Colors.red),
+          decoration: InputDecoration(
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           icon: Icon(Icons.search),
@@ -246,12 +281,18 @@ class _NewSearchState extends State<NewSearch> {
      
           hintStyle: TextStyle(color: Colors.white),
         ),
-        
-      ),
-      ]
+          controller: searchController,
+          onChanged: (val) {
+            setState(() {
+              query = val;
+            });
+          },
+          
+        )
+        ),
       ),
       
-      )
-      )
+    );
+      
   }
 }
