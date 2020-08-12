@@ -29,6 +29,8 @@ class _EventFormState extends State<EventForm>
   TextEditingController eventOfferController = new TextEditingController();
   TextEditingController eventDJController = new TextEditingController();
   TextEditingController eventLocationController = new TextEditingController();
+  TextEditingController eventType = new TextEditingController();
+  TextEditingController eventDate = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -102,9 +104,18 @@ class _EventFormState extends State<EventForm>
             title: Container(
                 width: 250.0,
                 child: TextField(
-                    controller: eventDJController,
+                    controller: eventLocationController,
                     decoration: InputDecoration(
                         hintText: "Event Location:",
+                        border: InputBorder.none)))),
+        ListTile(
+            leading: Icon(Icons.category, color: Colors.greenAccent),
+            title: Container(
+                width: 250.0,
+                child: TextField(
+                    controller: eventType,
+                    decoration: InputDecoration(
+                        hintText: "Event Type:",
                         border: InputBorder.none))))
       ],
     ));
