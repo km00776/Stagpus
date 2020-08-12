@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:stagpus/Chat/ChatView/ChatScreen.dart';
 import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
+import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 
 class ChatAndAddToCart extends StatelessWidget {
   final Product product;
+  final User user;
   const ChatAndAddToCart({
     Key key,
     this.product,
+    this.user
   }) : super(key: key);
 
   @override
@@ -32,7 +35,7 @@ class ChatAndAddToCart extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      ChatScreen(product: product.sellerUsername),
+                      ChatScreen(receiver: user),
                 ),
               );
             },
