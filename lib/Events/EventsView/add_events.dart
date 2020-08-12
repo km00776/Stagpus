@@ -29,8 +29,9 @@ class _EventFormState extends State<EventForm>
   TextEditingController eventOfferController = new TextEditingController();
   TextEditingController eventDJController = new TextEditingController();
   TextEditingController eventLocationController = new TextEditingController();
-  TextEditingController eventType = new TextEditingController();
-  TextEditingController eventDate = new TextEditingController();
+  TextEditingController eventTypeController = new TextEditingController();
+  TextEditingController eventDateController = new TextEditingController();
+  String eventId = Uuid().v4();
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +41,42 @@ class _EventFormState extends State<EventForm>
 
   createEventInFirestore(
       {String eventName,
+      String eventCreator,
       String eventVenue,
       String eventOffer,
       String eventDJ,
-      String loction}) async {
+      String location,
+      String eventType,
+      String eventDescription}) async {
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    DocumentSnapshot doc = await usersRef.document(user.uid).get();
+    currentUser = User.fromDocument(doc);
+    eventCollectionRef
+        .document("users")
+        .collection("AllEvents")
+        .document(eventId)
+        .setData({
+      "eventCreator": currentUser.displayName,
+      "eventName": eventName,
+      "eventVenue": eventVenue,
+      "eventOffer": eventOffer,
+      "eventDJ": eventDJ,
+      "eventLocation": location,
+      "eventType": eventType,
+      "eventDescription": eventDescription
+    });
   }
 
   handleSubmit() async {
-    createEventInFirestore();
+    createEventInFirestore(
+        eventName: eventNameController.text,
+        eventVenue: eventVenueController.text,
+        eventOffer: eventOfferController.text,
+        eventDJ: eventDJController.text,
+        location: eventLocationController.text,
+        eventType: eventTypeController.text);
+
+    Navigator.pop(context);
   }
 
   Scaffold buildEventForm() {
@@ -58,6 +86,12 @@ class _EventFormState extends State<EventForm>
         Padding(
           padding: EdgeInsets.only(top: 10.0),
         ),
+        ListTile(
+            leading:
+                Icon(Icons.verified_user, size: 35.0, color: Colors.blueGrey),
+            title:
+                Container(width: 250.0, child: Text(currentUser.displayName))),
+        Divider(),
         ListTile(
           leading: Icon(Icons.pageview, size: 35.0, color: Colors.purpleAccent),
           title: Container(
@@ -108,15 +142,32 @@ class _EventFormState extends State<EventForm>
                     decoration: InputDecoration(
                         hintText: "Event Location:",
                         border: InputBorder.none)))),
+        Divider(),
         ListTile(
             leading: Icon(Icons.category, color: Colors.greenAccent),
             title: Container(
                 width: 250.0,
                 child: TextField(
-                    controller: eventType,
+                    controller: eventTypeController,
                     decoration: InputDecoration(
-                        hintText: "Event Type:",
-                        border: InputBorder.none))))
+                        hintText: "Event Type:", border: InputBorder.none)))),
+        Divider(),
+        Padding(
+          padding: EdgeInsets.only(top: 20.0, left: 25.0, right: 25.0),
+          child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              child: Text(
+                "Add Event",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22.0,
+                ),
+              ),
+              color: Colors.blueAccent,
+              onPressed: () => handleSubmit()),
+        ),
       ],
     ));
   }

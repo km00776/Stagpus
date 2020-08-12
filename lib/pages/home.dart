@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:stagpus/Chat/ChatView/ChatBackground.dart';
 import 'package:stagpus/Events/EventsView/EventsMain.dart';
+import 'package:stagpus/Events/EventsView/add_events.dart';
 import 'package:stagpus/Map/Map.dart';
 import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
 import 'package:stagpus/Marketplace/ViewMarket/sell_screen_form.dart';
@@ -116,7 +117,9 @@ class _HomeState extends State<Home> {
       body: PageView(
         children: <Widget>[
           Timeline(currentUser: currentUser),
-          ActivityFeed(),
+          EventForm(
+            currentUser: currentUser,
+          ),
           Upload(currentUser: currentUser),
           SurreyMap(),
           Search(),

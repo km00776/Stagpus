@@ -210,6 +210,7 @@ class _SellScreenState extends State<SellScreen>
                 fontWeight: FontWeight.bold,
                 fontSize: 20.0,
               ),
+      
             ),
           ),
         ],

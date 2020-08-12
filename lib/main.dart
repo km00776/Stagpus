@@ -46,6 +46,6 @@ class MyApp extends StatelessWidget {
         routes: {
           '/search_screen': (context) => SearchScreen(),
         },
-        home: EventForm());
+        home: Home());
   }
 }
