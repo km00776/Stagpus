@@ -1,17 +1,24 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:stagpus/Events/EventsView/Styles.dart';
 
-class SingleEvent extends StatelessWidget {
+class SingleEvent extends StatefulWidget {
   final String eventType;
-  final String eventDate;
-  final String eventImage;
   final String eventName;
   final String eventVenue;
   final String eventOffer;
   final String eventDJ;
   final String eventLocation;
 
-  const SingleEvent({Key key, this.eventType, this.eventDate, this.eventImage, this.eventName, this.eventVenue, this.eventOffer, this.eventDJ, this.eventLocation}) : super(key: key);
+  SingleEvent({Key key, this.eventType, this.eventName, this.eventVenue, this.eventOffer, this.eventDJ, this.eventLocation}) : super(key: key);
+
+  @override
+  SingleEventState createState() => SingleEventState();
+  }
+  
+  class SingleEventState extends State<SingleEvent> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +58,7 @@ class SingleEvent extends StatelessWidget {
                   ),
                   child: Center(
                       child: Text(
-                    "eventType",
+                    widget.eventType,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -60,7 +67,7 @@ class SingleEvent extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Text(
-                  "eventDate",
+                  'eventDate',
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
@@ -102,7 +109,7 @@ class SingleEvent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      eventName,
+                      widget.eventName,
                       style: TextStyle(
                         color: searchBarColor,
                         fontSize: 18,

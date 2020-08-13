@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/Events/EventsModel/event.dart';
+import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/single_event_widget.dart';
 
 
@@ -11,6 +13,7 @@ class Listings extends StatefulWidget {
 }
 
 class _ListingsState extends State<Listings> {
+  List<Event> eventsList = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,18 +26,24 @@ class _ListingsState extends State<Listings> {
         ]));
   }
 
+  getEvents() async {
+    QuerySnapshot snapshot = await eventCollectionRef.document("users").collection("AllEvents").getDocuments();
+    List<Event> events = snapshot.documents.map((doc) => Event.fromDocument(doc)).toList();
+    setState(() {
+      this.eventsList = events;
+    });
+  }
+
   Widget eventSlider() {
     return Expanded(
         child: ListView.builder(
-            itemCount: events.length,
+            itemCount: eventsList.length,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              var event = events[index];
+              var event = eventsList[index];
               return SingleEvent(
-                  eventDate: event.eventDate,
                   eventType: event.eventType,
-                  eventImage: event.eventImage,
                   eventName: event.eventName,
                   eventVenue: event.eventVenue,
                   eventOffer: event.eventOffer,
