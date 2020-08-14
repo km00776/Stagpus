@@ -61,7 +61,7 @@ class UpcomingEventsCard extends StatefulWidget {
                       ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'DJ Khalid',
+                          text: widget.event.eventLocation,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,

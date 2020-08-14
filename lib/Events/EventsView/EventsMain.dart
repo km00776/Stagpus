@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/Events/EventsController/Interested_events.dart';
 import 'package:stagpus/Events/EventsController/upcoming_events_controller.dart';
+import 'package:stagpus/Events/EventsModel/event.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
+import 'package:stagpus/widgets/progress.dart';
 import 'colors.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 
@@ -14,7 +17,10 @@ class EventsHomePage extends StatefulWidget {
   _EventsHomePageState createState() => _EventsHomePageState();
 }
 
+
+
 class _EventsHomePageState extends State<EventsHomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,12 +49,31 @@ class _EventsHomePageState extends State<EventsHomePage> {
                   children: <Widget>[
                     _notificationCard(),
                    _nextAppointmentText(),
-                    UpcomingEventsCard(),
-                    _areaSpecialistsText(),
+                   StreamBuilder(
+                   stream: eventCollectionRef.document("users").collection("AllEvents").snapshots(),
+                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                     if(snapshot.data == null) {
+                       return circularProgress();
+                     }
+                    List<Event> events = snapshot.data.documents.map((doc) => Event.fromDocument(doc)).toList();
+                    return Container(
+                      child: ListView.builder(
+                        itemCount: events.length,
+                        itemBuilder: (context, index) => UpcomingEventsCard(
+                          event: events[index]
+                        ),
+                      
+                      ),
+                    ); 
+                   }
+                   ),
                    InterestedEventCard()
+                
+               
+                
                     
 
-                    //_specialistsCardInfo(),
+                   
                   ],
                 ),
               ),
@@ -58,6 +83,12 @@ class _EventsHomePageState extends State<EventsHomePage> {
       ),
     );
   }
+
+  getEvents() async {
+    
+  }
+
+  
 
   Container _backBgCover() {
     return Container(
