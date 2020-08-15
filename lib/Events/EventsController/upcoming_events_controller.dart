@@ -2,17 +2,27 @@
 import 'package:flutter/material.dart';
 import 'package:stagpus/Events/EventsModel/event.dart';
 import 'package:stagpus/Events/EventsView/colors.dart';
+import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
+import 'package:stagpus/models/user.dart';
 
 class UpcomingEventsCard extends StatefulWidget {
   final Event event;
+  final User currentUser;
 
-  const UpcomingEventsCard({this.event});
+  const UpcomingEventsCard({Key key, this.event, this.currentUser, Product product}) : super(key: key);
 
   _UpcomingEventCardState createState() => _UpcomingEventCardState();
     
   }
   
   class _UpcomingEventCardState extends State<UpcomingEventsCard> {
+
+ @override
+ void initState() { 
+   super.initState();
+   
+ }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,7 +71,7 @@ class UpcomingEventsCard extends StatefulWidget {
                       ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: widget.event.eventLocation,
+                          text: 'widget.event.eventLocation,',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
@@ -69,7 +79,7 @@ class UpcomingEventsCard extends StatefulWidget {
                           ),
                         ),
                         TextSpan(
-                          text: '\nFriday',
+                          text: 'widget.event.eventDate,',
                           style: TextStyle(
                             color: Colors.black45,
                             fontWeight: FontWeight.w400,
@@ -77,7 +87,7 @@ class UpcomingEventsCard extends StatefulWidget {
                           ),
                         ),
                         TextSpan(
-                          text: '\nRnB \nGuildford | 23:00',
+                          text: 'widget.event.eventOffer,',
                           style: TextStyle(
                             color: Colors.black38,
                             fontWeight: FontWeight.w400,

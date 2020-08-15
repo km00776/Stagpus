@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:stagpus/Events/EventsView/EventsMain.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:uuid/uuid.dart';
 import 'package:stagpus/widgets/progress.dart';
@@ -76,7 +77,7 @@ class _EventFormState extends State<EventForm>
         location: eventLocationController.text,
         eventType: eventTypeController.text);
 
-    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => EventsHomePage(currentUser: currentUser)));
   }
 
   Scaffold buildEventForm() {

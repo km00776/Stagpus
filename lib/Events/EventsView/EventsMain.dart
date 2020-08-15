@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stagpus/Events/EventsController/Interested_events.dart';
 import 'package:stagpus/Events/EventsController/upcoming_events_controller.dart';
 import 'package:stagpus/Events/EventsModel/event.dart';
+import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/progress.dart';
@@ -10,16 +11,44 @@ import 'colors.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 
 class EventsHomePage extends StatefulWidget {
-  final User currentUser;
 
-  const EventsHomePage({Key key, this.currentUser}) : super(key: key);
+   final User currentUser;
+   EventsHomePage({this.currentUser});
 
   _EventsHomePageState createState() => _EventsHomePageState();
 }
 
-
-
 class _EventsHomePageState extends State<EventsHomePage> {
+  List<Event> eventList;
+
+  upcomingEventsWork() {
+    return Column(
+     children: <Widget> [
+       StreamBuilder(
+        stream: eventCollectionRef
+            .document("users")
+            .collection("AllEvents")
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.data == null) {
+            return circularProgress();
+          }
+          List<Event> events = snapshot.data.documents
+              .map((doc) => Event.fromDocument(doc))
+              .toList();
+
+          return Container(
+              child: Expanded(
+                  child: ListView.builder(
+                      itemCount: events.length,
+                      itemBuilder: (context, index) => UpcomingEventsCard(
+                            currentUser: currentUser,
+                            event: events[index],
+                          ))));
+        })
+     ]
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,37 +76,20 @@ class _EventsHomePageState extends State<EventsHomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    _notificationCard(),
-                   _nextAppointmentText(),
-                   StreamBuilder(
-                   stream: eventCollectionRef.document("users").collection("AllEvents").snapshots(),
-                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                     if(snapshot.data == null) {
-                       return circularProgress();
-                     }
-                    List<Event> events = snapshot.data.documents.map((doc) => Event.fromDocument(doc)).toList();
-                    return Container(
-                      child: ListView.builder(
-                        itemCount: events.length,
-                        itemBuilder: (context, index) => UpcomingEventsCard(
-                          event: events[index]
+        
+                            upcomingEventsWork()
+                        ],
                         ),
-                      
-                      ),
-                    ); 
-                   }
-                   ),
-                   InterestedEventCard()
-                
-               
-                
-                    
-
-                   
-                  ],
+                      )
+          
+                 
+                 
+                 
+                 
+                  
                 ),
-              ),
-            ),
+              
+            
           ],
         ),
       ),
@@ -85,10 +97,16 @@ class _EventsHomePageState extends State<EventsHomePage> {
   }
 
   getEvents() async {
-    
+    QuerySnapshot snapshot = await eventCollectionRef
+        .document("users")
+        .collection('AllEvents')
+        .getDocuments();
+    List<Event> events =
+        snapshot.documents.map((doc) => Event.fromDocument(doc)).toList();
+    setState(() {
+      this.eventList = events;
+    });
   }
-
-  
 
   Container _backBgCover() {
     return Container(
@@ -130,17 +148,15 @@ class _EventsHomePageState extends State<EventsHomePage> {
         ));
   }
 
-
-
   // note this is the text
-  Widget _areaSpecialistsText() {
+  Widget upcomingEvents() {
     return Container(
       margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            'Specialist In Your Area',
+            'Events In Your Area',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -205,16 +221,14 @@ class _EventsHomePageState extends State<EventsHomePage> {
     );
   }
 
- 
-
-  Widget _nextAppointmentText() {
+  Widget interestedEvents() {
     return Container(
       margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            'Your Next Appointment',
+            'Your Next Event',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,

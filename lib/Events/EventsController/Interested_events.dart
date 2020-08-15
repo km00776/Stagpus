@@ -5,10 +5,13 @@ import 'package:stagpus/Events/EventsView/colors.dart';
 import 'package:stagpus/models/user.dart';
 
 class InterestedEventCard extends StatefulWidget {
-  final User currentUser;
-  final Event event;
+final User currentUser;
+final Event event;
 
   const InterestedEventCard({Key key, this.currentUser, this.event}) : super(key: key);
+
+
+  
 
   _InterestedEventCardState createState() => _InterestedEventCardState();
   

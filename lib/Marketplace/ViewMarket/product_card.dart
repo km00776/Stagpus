@@ -29,7 +29,7 @@ class ProductCard extends StatefulWidget {
 }
 
 class ProductCardState extends State<ProductCard> {
-  List<Product> p = [];
+ 
 
   @override
   void initState() {
