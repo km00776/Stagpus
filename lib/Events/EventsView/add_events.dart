@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:stagpus/Events/EventsView/EventsMain.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:uuid/uuid.dart';
 import 'package:stagpus/widgets/progress.dart';
@@ -53,7 +54,7 @@ class _EventFormState extends State<EventForm>
     currentUser = User.fromDocument(doc);
     eventCollectionRef
         .document("users")
-        .collection("AllEvents")
+        .collection("allEvents")
         .document(eventId)
         .setData({
       "eventCreator": currentUser.displayName,
@@ -63,7 +64,23 @@ class _EventFormState extends State<EventForm>
       "eventDJ": eventDJ,
       "eventLocation": location,
       "eventType": eventType,
-      "eventDescription": eventDescription
+      "eventDescription": eventDescription,
+      "eventId": eventId
+    });
+    eventCollectionRef
+        .document(currentUser.uid)
+        .collection("personalEvents")
+        .document(eventId)
+        .setData({
+      "eventCreator": currentUser.displayName,
+      "eventName": eventName,
+      "eventVenue": eventVenue,
+      "eventOffer": eventOffer,
+      "eventDJ": eventDJ,
+      "eventLocation": location,
+      "eventType": eventType,
+      "eventDescription": eventDescription,
+      "eventId": eventId
     });
   }
 
@@ -76,7 +93,10 @@ class _EventFormState extends State<EventForm>
         location: eventLocationController.text,
         eventType: eventTypeController.text);
 
-    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => EventsHomePage(currentUser: currentUser)));
   }
 
   Scaffold buildEventForm() {

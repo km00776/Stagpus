@@ -1,18 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:stagpus/Events/EventsController/Interested_events.dart';
+import 'package:stagpus/Events/EventsController/upcoming_events_controller.dart';
+import 'package:stagpus/Events/EventsModel/event.dart';
+import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
+import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
+import 'package:stagpus/Marketplace/ViewMarket/product_card.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
+import 'package:stagpus/widgets/progress.dart';
 import 'colors.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 
 class EventsHomePage extends StatefulWidget {
   final User currentUser;
-
-  const EventsHomePage({Key key, this.currentUser}) : super(key: key);
+  EventsHomePage({this.currentUser});
 
   _EventsHomePageState createState() => _EventsHomePageState();
 }
 
 class _EventsHomePageState extends State<EventsHomePage> {
+  List<Event> eventList;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,29 +47,159 @@ class _EventsHomePageState extends State<EventsHomePage> {
               height: 50.0,
             ),
             SingleChildScrollView(
-              scrollDirection: Axis.vertical,
               child: Padding(
                 padding: EdgeInsets.all(20),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    _notificationCard(),
-                    _nextAppointmentText(),
-                    _appoinmentCard(),
-                    _areaSpecialistsText(),
-                    _specialistsCardInfo(),
-                    _specialistsCardInfo(),
-                    _specialistsCardInfo(),
-
-                    //_specialistsCardInfo(),
-                  ],
-                ),
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      _notificationCard(),
+                      interestedEvents(),
+                      InterestedEventCard(),
+                      upcomingEvents(),
+                      StreamBuilder(
+                          stream: eventCollectionRef
+                              .document("users")
+                              .collection("allEvents")
+                              .snapshots(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.data == null) {
+                              return circularProgress();
+                            }
+                            List<Event> events = snapshot.data.documents
+                                .map((doc) => Event.fromDocument(doc))
+                                .toList();
+                            return Container(
+                                child: SizedBox(
+                                    height: 300.0,
+                                    child: new ListView.builder(
+                                        itemCount: events.length,
+                                        itemBuilder: (context, index) =>
+                                            new UpcomingEventsCard(
+                                                event: events[index]))));
+                          })
+                    ]),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  testWork() {
+    return Expanded(
+        child: SizedBox(
+      height: 200.0,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 18.0),
+        margin: EdgeInsets.only(
+          bottom: 20.0,
+        ),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1.0,
+                blurRadius: 6.0,
+              ),
+            ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundColor: Color(0xFFD9D9D9),
+                  backgroundImage: NetworkImage(USER_IMAGE),
+                  radius: 36.0,
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    RichText(
+                      text: TextSpan(
+                        text: 'Event\n',
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          height: 1.3,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'widget.event.eventLocation,',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'widget.event.eventDate,',
+                            style: TextStyle(
+                              color: Colors.black45,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'widget.event.eventOffer,',
+                            style: TextStyle(
+                              color: Colors.black38,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 6.0,
+                    ),
+                    RaisedButton(
+                      onPressed: () {},
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(80.0)),
+                      padding: const EdgeInsets.all(0.0),
+                      child: Ink(
+                        decoration: const BoxDecoration(
+                          gradient: purpleGradient,
+                          borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                        ),
+                        child: Container(
+                          constraints: const BoxConstraints(
+                              minWidth: 88.0,
+                              minHeight:
+                                  36.0), // min sizes for Material buttons
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'Interested',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 13,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ));
   }
 
   Container _backBgCover() {
@@ -98,148 +242,15 @@ class _EventsHomePageState extends State<EventsHomePage> {
         ));
   }
 
-  Column _iconBuilder(icon, title) {
-    return Column(children: <Widget>[
-      IconButton(
-          icon: Icon(icon),
-          padding: EdgeInsets.all(20),
-          hoverColor: Colors.green,
-          iconSize: 28,
-          onPressed: () {},
-          color: Colors.black),
-      SizedBox(
-        height: 8.0,
-      ),
-      Text(
-        title,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w300,
-          color: Colors.black,
-        ),
-      )
-    ]);
-  }
-
-  Widget _specialistsCardInfo() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 18.0),
-      margin: EdgeInsets.only(
-        bottom: 20.0,
-      ),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 1.0,
-              blurRadius: 6.0,
-            ),
-          ]),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              CircleAvatar(
-                backgroundColor: Color(0xFFD9D9D9),
-                backgroundImage: NetworkImage(USER_IMAGE),
-                radius: 36.0,
-              ),
-              SizedBox(
-                width: 10.0,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                      text: 'Event\n',
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        height: 1.3,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'DJ Khalid',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        TextSpan(
-                          text: '\nFriday',
-                          style: TextStyle(
-                            color: Colors.black45,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                          ),
-                        ),
-                        TextSpan(
-                          text: '\nRnB \nGuildford | 23:00',
-                          style: TextStyle(
-                            color: Colors.black38,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 6.0,
-                  ),
-                  RaisedButton(
-                    onPressed: () {},
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(80.0)),
-                    padding: const EdgeInsets.all(0.0),
-                    child: Ink(
-                      decoration: const BoxDecoration(
-                        gradient: purpleGradient,
-                        borderRadius: BorderRadius.all(Radius.circular(80.0)),
-                      ),
-                      child: Container(
-                        constraints: const BoxConstraints(
-                            minWidth: 88.0,
-                            minHeight: 36.0), // min sizes for Material buttons
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'Interested',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 13,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   // note this is the text
-  Widget _areaSpecialistsText() {
+  Widget upcomingEvents() {
     return Container(
       margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            'Specialist In Your Area',
+            'Events In Your Area',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -304,94 +315,14 @@ class _EventsHomePageState extends State<EventsHomePage> {
     );
   }
 
-  Container _appoinmentCard() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 18.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              CircleAvatar(
-                backgroundColor: Color(0xFFD9D9D9),
-                backgroundImage: NetworkImage(USER_IMAGE),
-                radius: 36.0,
-              ),
-              RichText(
-                text: TextSpan(
-                  text: 'Dr Dan MlayahFX',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    height: 1.5,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: '\nSunday,May 5th at 8:00 PM',
-                      style: TextStyle(
-                        color: Colors.black45,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15,
-                      ),
-                    ),
-                    TextSpan(
-                      text: '\n570 Kyemmer Stores \nNairobi Kenya C -54 Drive',
-                      style: TextStyle(
-                        color: Colors.black38,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.grey[400],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Divider(
-            color: Colors.grey[200],
-            height: 3,
-            thickness: 1,
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _iconBuilder(LineAwesomeIcons.info_circle, 'Details'),
-              _iconBuilder(LineAwesomeIcons.times_circle, 'Cancel'),
-              _iconBuilder(LineAwesomeIcons.calendar_times_o, 'Calender'),
-              _iconBuilder(LineAwesomeIcons.compass, 'Directions'),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _nextAppointmentText() {
+  Widget interestedEvents() {
     return Container(
       margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            'Your Next Appointment',
+            'Your Next Event',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,

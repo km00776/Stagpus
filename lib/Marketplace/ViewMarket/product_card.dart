@@ -1,11 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
-import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
 import 'package:stagpus/models/user.dart';
-import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/custom_image.dart';
 
 class ProductCard extends StatefulWidget {
@@ -29,7 +26,7 @@ class ProductCard extends StatefulWidget {
 }
 
 class ProductCardState extends State<ProductCard> {
-  List<Product> p = [];
+ 
 
   @override
   void initState() {

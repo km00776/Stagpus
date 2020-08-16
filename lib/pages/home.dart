@@ -124,7 +124,7 @@ class _HomeState extends State<Home> {
           SurreyMap(),
           Search(),
           MessageScreen(currentUser: currentUser),
-          EventsHomePage(),
+          EventsHomePage(currentUser: currentUser),
           ProductScreen(currentUser: currentUser),
           Profile(profileId: currentUser?.uid),
         ],

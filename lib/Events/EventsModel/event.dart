@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Event {
   String eventType;
   String eventDate;
@@ -7,6 +9,7 @@ class Event {
   String eventOffer;
   String eventDJ;
   String eventLocation;
+  String eventId;
 
   Event(
       {this.eventType,
@@ -16,14 +19,43 @@ class Event {
       this.eventName,
       this.eventVenue,
       this.eventDJ,
-      this.eventLocation});
-}
-  
+      this.eventLocation,
+      this.eventId});
 
-var events = [
-  Event(eventType: "RnB Night", eventDJ: "DJ Khalid",eventDate:'20 July at : 2:00PM - 4:00PM', eventImage: 'https://futaa.com/images/crops/desktops/20200131B19GNSS0704.JPG', eventLocation: "Rubix", eventName: "Rnb Night With Karhti", eventVenue:  "Rubix", eventOffer: "50%"),
-  Event(eventType: "RnB Night", eventDJ: "DJ Khalid",eventDate:'20 July at : 2:00PM - 4:00PM', eventImage: 'https://futaa.com/images/crops/desktops/20200131B19GNSS0704.JPG', eventLocation: "Rubix", eventName: "Rnb Night With Karhti", eventVenue:  "Rubix", eventOffer: "50%"),
-  Event(eventType: "RnB Night", eventDJ: "DJ Khalid",eventDate:'20 July at : 2:00PM - 4:00PM', eventImage: 'https://futaa.com/images/crops/desktops/20200131B19GNSS0704.JPG', eventLocation: "Rubix", eventName: "Rnb Night With Karhti", eventVenue:  "Rubix", eventOffer: "50"),
-];
+  factory Event.fromDocument(DocumentSnapshot doc) {
+    return Event(
+        eventType: doc['eventType'],
+        eventDate: doc['eventDate'],
+        eventName: doc['eventName'],
+        eventVenue: doc['eventVenue'],
+        eventOffer: doc['eventOffer'],
+        eventDJ: doc['eventDJ'],
+        eventLocation: doc['eventLocation'],
+        eventId: doc['eventId']);
+  }
+
+  Event.fromMap(Map<String, dynamic> map) {
+    this.eventType = map['eventType'];
+    this.eventDate = map['eventDate'];
+    this.eventName = map['eventName'];
+    this.eventVenue = map['eventVenue'];
+    this.eventOffer = map['eventOffer'];
+    this.eventDJ = map['eventDJ'];
+    this.eventLocation = map['eventDJ'];
+  }
+
+  Map toMap() {
+    var map = Map<String, dynamic>();
+    map['eventType'] = this.eventType;
+    map['eventDate'] = this.eventDate;
+    map['eventName'] = this.eventName;
+    map['eventVenue'] = this.eventVenue;
+    map['eventOffer'] = this.eventOffer;
+    map['eventDJ'] = this.eventDJ;
+    map['eventLocation'] = this.eventLocation;
+
+    return map;
+  }
+}
 
 // note to my myself populate the data from firebase
