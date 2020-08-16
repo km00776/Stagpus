@@ -54,7 +54,28 @@ class _EventsHomePageState extends State<EventsHomePage> {
                     children: <Widget>[
                       _notificationCard(),
                       interestedEvents(),
-                      InterestedEventCard(),
+                      StreamBuilder(
+                          stream: eventCollectionRef
+                              .document(currentUser.uid)
+                              .collection("interestedEvents")
+                              .snapshots(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.data == null) {
+                              return circularProgress();
+                            }
+                            List<Event> events = snapshot.data.documents
+                                .map((doc) => Event.fromDocument(doc))
+                                .toList();
+                            return Container(
+                                child: SizedBox(
+                                    height: 300.0,
+                                    child: new ListView.builder(
+                                        itemCount: events.length,
+                                        itemBuilder: (context, index) =>
+                                            new InterestedEventCard(
+                                                event: events[index]))));
+                          }),
                       upcomingEvents(),
                       StreamBuilder(
                           stream: eventCollectionRef
@@ -71,7 +92,7 @@ class _EventsHomePageState extends State<EventsHomePage> {
                                 .toList();
                             return Container(
                                 child: SizedBox(
-                                    height: 300.0,
+                                    height: 200.0,
                                     child: new ListView.builder(
                                         itemCount: events.length,
                                         itemBuilder: (context, index) =>

@@ -33,7 +33,7 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
     // It  will provide us total height and width of our screen
 
     return Container(
-      height: 200.0,
+      
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 18.0),
         margin: EdgeInsets.only(
@@ -163,8 +163,8 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
       "eventName": eventName
     });
     eventCollectionRef
-        .document(currentUser.uid)
-        .collection("personalEvents")
+        .document('users')
+        .collection("allEvents")
         .document(widget.event.eventId)
         .delete();
   }

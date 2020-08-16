@@ -23,6 +23,7 @@ final Event event;
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 18.0),
+      margin:EdgeInsets.only(bottom: 20.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
