@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stagpus/Posting/PostingModel/post.dart';
@@ -5,6 +6,7 @@ import 'package:stagpus/Posting/PostingView/post_tile.dart';
 import 'package:stagpus/Screens/edit_profile.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
+import 'package:stagpus/widgets/custom_image.dart';
 import 'package:stagpus/widgets/header.dart';
 import 'package:stagpus/widgets/progress.dart';
 
@@ -250,6 +252,17 @@ class _ProfileState extends State<Profile> {
                     CircleAvatar(
                       radius: 40.0,
                       backgroundColor: Colors.grey,
+                     child: Container(
+                       width: 200,
+                       height: 200,
+                       decoration: BoxDecoration(
+                         shape: BoxShape.circle,
+                         image: DecorationImage(
+                           image: NetworkImage(currentUser.photoUrl),
+                           fit: BoxFit.fill
+                           ),
+                       ),
+                      )
 
                     //  CachedNetworkImageProvider(user.photoUrl),
                     ),

@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/header.dart';
+import 'package:uuid/uuid.dart';
 
 
 class CreateAccount extends StatefulWidget {
@@ -14,10 +19,18 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-     String username;
+  String username;
+  bool isUploading = false;
+  File file;
+  String photoId = Uuid().v4();
      
+  
 
   
+
+  
+
+ 
 
   submit()  {
    final form =  _formKey.currentState;
@@ -39,10 +52,11 @@ class _CreateAccountState extends State<CreateAccount> {
       appBar: header(context, titleText: "Set up up your profile"),
       body: ListView(children: <Widget>[
         Container(child: Column(children: <Widget>[
+         
           Padding(padding: EdgeInsets.only(top: 25.0),
-          child: Center(
-            child: Text("Create a username", style: 
-            TextStyle(fontSize: 25.0),),
+          child: Center( 
+            child: Text("Create a username", 
+            style:  TextStyle(fontSize: 25.0),),
             ),
           ),
           Padding(
@@ -95,7 +109,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
 
       );
-  
+
   }
 
 }

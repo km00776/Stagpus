@@ -78,7 +78,7 @@ class Body extends StatelessWidget {
                     child: Hero(
                       tag: 'id',
                       child:
-                          ProductPoster(size: size, mediaUrl: product.mediaUrl),
+                          ProductPoster(size: size, mediaUrl: product.mediaUrl,),
                     ),
                   ),
                   ListOfColors(),

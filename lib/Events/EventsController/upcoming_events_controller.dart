@@ -21,7 +21,7 @@ class UpcomingEventsCard extends StatefulWidget {
 class UpcomingEventsCardState extends State<UpcomingEventsCard> {
   TextSpan evenTypeText;
   TextSpan eventNameText;
-  TextSpan eventLocationText;
+  TextSpan eventOfferText;
   String eventId = Uuid().v4();
   bool pressAttention = false;
 
@@ -80,8 +80,8 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
                           height: 1.3,
                         ),
                         children: <TextSpan>[
-                          eventLocationText = TextSpan(
-                            text: widget.event.eventLocation + "\n",
+                          eventOfferText = TextSpan(
+                            text: widget.event.eventOffer + "\n",
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 16,
@@ -152,7 +152,7 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
   }
 
   addToInterestedEvent(
-      {String eventLocation, String eventType, String eventName}) async {
+      {String eventLocation, String eventType, String eventName, String eventLongtitude, String eventLatitude, String eventOffer, String description}) async {
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
     DocumentSnapshot doc = await usersRef.document(user.uid).get();
     currentUser = User.fromDocument(doc);
@@ -161,9 +161,14 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
         .collection("interestedEvents")
         .document(eventId)
         .setData({
-      "eventLocation": eventLocation,
+      "eventCreator": currentUser.displayName,
+      "eventName": eventName,
+      "eventLongtitude" : eventLongtitude,
+      "eventLatitude" : eventLatitude, 
+      "eventOffer": eventOffer,
       "eventType": eventType,
-      "eventName": eventName
+      "eventDescription": description,
+      "eventId": eventId
     });
     eventCollectionRef
         .document('users')
@@ -174,7 +179,7 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
 
   handleInterestButton() {
     addToInterestedEvent(
-        eventLocation: eventLocationText.toPlainText(),
+        eventOffer: eventOfferText.toPlainText(),
         eventType: evenTypeText.toPlainText(),
         eventName: eventNameText.toPlainText());
   }

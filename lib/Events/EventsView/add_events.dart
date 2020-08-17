@@ -22,6 +22,7 @@ class EventForm extends StatefulWidget {
 
 class _EventFormState extends State<EventForm>
     with AutomaticKeepAliveClientMixin {
+  String eventLocationId = Uuid().v4();
   User currentUser;
   _EventFormState(this.currentUser);
 
@@ -32,6 +33,11 @@ class _EventFormState extends State<EventForm>
   TextEditingController eventLocationController = new TextEditingController();
   TextEditingController eventTypeController = new TextEditingController();
   TextEditingController eventDateController = new TextEditingController();
+  TextEditingController eventLocationLatitudeController =
+      new TextEditingController();
+  TextEditingController eventLocationLongtitudeController =
+      new TextEditingController();
+
   String eventId = Uuid().v4();
 
   @override
@@ -43,11 +49,10 @@ class _EventFormState extends State<EventForm>
   createEventInFirestore(
       {String eventName,
       String eventCreator,
-      String eventVenue,
       String eventOffer,
-      String eventDJ,
-      String location,
       String eventType,
+      String eventLongtitude,
+      String eventLatitude,
       String eventDescription}) async {
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
     DocumentSnapshot doc = await usersRef.document(user.uid).get();
@@ -59,10 +64,9 @@ class _EventFormState extends State<EventForm>
         .setData({
       "eventCreator": currentUser.displayName,
       "eventName": eventName,
-      "eventVenue": eventVenue,
+      "eventLocation":
+          GeoPoint(double.parse(eventLatitude), double.parse(eventLongtitude)),
       "eventOffer": eventOffer,
-      "eventDJ": eventDJ,
-      "eventLocation": location,
       "eventType": eventType,
       "eventDescription": eventDescription,
       "eventId": eventId
@@ -74,35 +78,41 @@ class _EventFormState extends State<EventForm>
         .setData({
       "eventCreator": currentUser.displayName,
       "eventName": eventName,
-      "eventVenue": eventVenue,
+      "eventLocation":
+          GeoPoint(double.parse(eventLatitude), double.parse(eventLongtitude)),
       "eventOffer": eventOffer,
-      "eventDJ": eventDJ,
-      "eventLocation": location,
       "eventType": eventType,
       "eventDescription": eventDescription,
       "eventId": eventId
+    });
+    eventLocationCollectionRef
+        .document(eventId)
+        .collection('locationOfEvent')
+        .document(eventLocationId)
+        .setData({
+      "eventId": eventId,
+      "eventLocation": GeoPoint(
+        double.parse(eventLatitude),
+        (double.parse(eventLongtitude) - (double.parse(eventLongtitude) * 2)),
+      )
     });
   }
 
   handleSubmit() async {
     createEventInFirestore(
         eventName: eventNameController.text,
-        eventVenue: eventVenueController.text,
         eventOffer: eventOfferController.text,
-        eventDJ: eventDJController.text,
-        location: eventLocationController.text,
+        eventLongtitude: eventLocationLongtitudeController.text,
+        eventLatitude: eventLocationLatitudeController.text,
         eventType: eventTypeController.text);
-
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => EventsHomePage(currentUser: currentUser)));
   }
 
   Scaffold buildEventForm() {
     return Scaffold(
         body: ListView(
       children: <Widget>[
+        Text(
+            "Dear SuperUser, enter longtitude and latitude so we can add event to maps"),
         Padding(
           padding: EdgeInsets.only(top: 10.0),
         ),
@@ -111,6 +121,15 @@ class _EventFormState extends State<EventForm>
                 Icon(Icons.verified_user, size: 35.0, color: Colors.blueGrey),
             title:
                 Container(width: 250.0, child: Text(currentUser.displayName))),
+        Divider(),
+        ListTile(
+            leading: Icon(Icons.category, color: Colors.greenAccent),
+            title: Container(
+                width: 250.0,
+                child: TextField(
+                    controller: eventTypeController,
+                    decoration: InputDecoration(
+                        hintText: "Event Type:", border: InputBorder.none)))),
         Divider(),
         ListTile(
           leading: Icon(Icons.pageview, size: 35.0, color: Colors.purpleAccent),
@@ -136,41 +155,25 @@ class _EventFormState extends State<EventForm>
                         hintText: "Event Offer:", border: InputBorder.none)))),
         Divider(),
         ListTile(
-            leading: Icon(Icons.account_balance, color: Colors.brown),
+            leading: Icon(Icons.location_on, color: Colors.red),
             title: Container(
                 width: 250.0,
                 child: TextField(
-                    controller: eventVenueController,
+                    controller: eventLocationLongtitudeController,
                     decoration: InputDecoration(
-                        hintText: "Event Venue:", border: InputBorder.none)))),
-        Divider(),
-        ListTile(
-            leading: Icon(Icons.disc_full, color: Colors.orange),
-            title: Container(
-                width: 250.0,
-                child: TextField(
-                    controller: eventDJController,
-                    decoration: InputDecoration(
-                        hintText: "Event DJ:", border: InputBorder.none)))),
-        Divider(),
-        ListTile(
-            leading: Icon(Icons.location_on, color: Colors.blue),
-            title: Container(
-                width: 250.0,
-                child: TextField(
-                    controller: eventLocationController,
-                    decoration: InputDecoration(
-                        hintText: "Event Location:",
+                        hintText: "Event Lontitude:",
                         border: InputBorder.none)))),
         Divider(),
         ListTile(
-            leading: Icon(Icons.category, color: Colors.greenAccent),
+            leading: Icon(Icons.location_on, color: Colors.green),
             title: Container(
                 width: 250.0,
                 child: TextField(
-                    controller: eventTypeController,
+                    controller: eventLocationLatitudeController,
                     decoration: InputDecoration(
-                        hintText: "Event Type:", border: InputBorder.none)))),
+                        hintText: "Event Latitude:",
+                        border: InputBorder.none)))),
+        Divider(),
         Divider(),
         Padding(
           padding: EdgeInsets.only(top: 20.0, left: 25.0, right: 25.0),

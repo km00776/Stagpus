@@ -137,7 +137,17 @@ class UserResult extends StatelessWidget {
             onTap: () => showProfile(context, profileId: user.uid),
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: Colors.grey,
+               child: Container(
+                       width: 200,
+                       height: 200,
+                       decoration: BoxDecoration(
+                         shape: BoxShape.circle,
+                         image: DecorationImage(
+                           image: NetworkImage(user.photoUrl),
+                           fit: BoxFit.fill
+                           ),
+                       ),
+                      )
               ),
               title: Text(
                 user.displayName,

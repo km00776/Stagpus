@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -52,6 +53,13 @@ class SurreyMapState extends State<SurreyMap> {
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 
+
+void getCurrentLocation()async{
+    Position pos= await Geolocator().getCurrentPosition();
+            print("CurrentLat__${pos.latitude}");
+      print("CurrentLng__${pos.longitude}");
+
+ }
 _getLocationPermission() {
   Location location = new Location();
   try {
@@ -64,7 +72,7 @@ _getLocationPermission() {
 
 @override
 void initState() {
-  super.initState();;
+  super.initState();
    _getLocationPermission();
 }
 }

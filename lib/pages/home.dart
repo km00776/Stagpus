@@ -18,6 +18,7 @@ import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/activity_feed.dart';
 import 'package:stagpus/pages/create_account.dart';
 import 'package:stagpus/pages/profile.dart';
+import 'package:stagpus/pages/profile_image.dart';
 import 'package:stagpus/pages/search.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stagpus/pages/timeline.dart';
@@ -35,6 +36,7 @@ final followingRef = Firestore.instance.collection('following');
 final timelineRef = Firestore.instance.collection('timeline');
 final productCollectionRef = Firestore.instance.collection("products");
 final eventCollectionRef = Firestore.instance.collection("events");
+final eventLocationCollectionRef = Firestore.instance.collection("eventsLocations");
 
 const blueg = LinearGradient(
   colors: <Color>[Colors.cyan, Colors.cyanAccent],
@@ -84,10 +86,11 @@ class _HomeState extends State<Home> {
     if (!doc.exists) {
       final username = await Navigator.push(
           context, MaterialPageRoute(builder: (context) => CreateAccount()));
+      final photo = await Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileImage()));
       usersRef.document(user.uid).setData({
         "uid": user.uid,
         "username": username,
-        "photoUrl": user.photoUrl,
+        "photoUrl": photo,
         "email": user.email,
         "displayName": username,
         "bio": "",
@@ -328,34 +331,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  List<Widget> buildInput() {
-    List<Widget> textFields = [];
-
-    textFields.add(
-      TextFormField(
-        style: TextStyle(fontSize: 22.0),
-        decoration: buildSignUpInputDecoration("Email"),
-        onSaved: (value) => _email = value.trim(),
-      ),
-    );
-    textFields.add(SizedBox(
-      height: 20,
-    ));
-    textFields.add(TextFormField(
-      style: TextStyle(fontSize: 22.0),
-      decoration: buildSignUpInputDecoration("Password"),
-      onSaved: (value) => _password = value,
-    ));
-    textFields.add(SizedBox(
-      height: 20,
-    ));
-    textFields.add(TextFormField(
-      style: TextStyle(fontSize: 22.0),
-      decoration: buildSignUpInputDecoration("Confirm Password"),
-      onSaved: (value) => _confirmPassword = value,
-    ));
-    return textFields;
-  }
+  
 
   InputDecoration buildSignUpInputDecoration(String hint) {
     return InputDecoration(

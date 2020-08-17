@@ -3,23 +3,23 @@ import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:stagpus/Events/EventsModel/event.dart';
 import 'package:stagpus/Events/EventsView/colors.dart';
 import 'package:stagpus/models/user.dart';
+import 'package:stagpus/pages/home.dart';
 
 class InterestedEventCard extends StatefulWidget {
-final User currentUser;
-final Event event;
+  final User currentUser;
+  final Event event;
 
-  const InterestedEventCard({Key key, this.currentUser, this.event}) : super(key: key);
+  const InterestedEventCard({Key key, this.currentUser, this.event})
+      : super(key: key);
   _InterestedEventCardState createState() => _InterestedEventCardState();
-  
-    
-  }
-  
-  class _InterestedEventCardState extends State<InterestedEventCard> {
+}
+
+class _InterestedEventCardState extends State<InterestedEventCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 18.0),
-      margin:EdgeInsets.only(bottom: 20.0),
+      margin: EdgeInsets.only(bottom: 20.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
@@ -36,7 +36,7 @@ final Event event;
               ),
               RichText(
                 text: TextSpan(
-                  text: 'Dr Dan MlayahFX',
+                  text: widget.event.eventOffer,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -45,15 +45,16 @@ final Event event;
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                      text: '\nSunday,May 5th at 8:00 PM',
+                      text: widget.event.eventName + '\n',
                       style: TextStyle(
                         color: Colors.black45,
                         fontWeight: FontWeight.w400,
                         fontSize: 15,
+                        height: 1.5,
                       ),
                     ),
                     TextSpan(
-                      text: '\n570 Kyemmer Stores \nNairobi Kenya C -54 Drive',
+                      text: widget.event.eventType,
                       style: TextStyle(
                         color: Colors.black38,
                         fontWeight: FontWeight.w400,
@@ -86,10 +87,9 @@ final Event event;
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              _iconBuilder(LineAwesomeIcons.info_circle, 'Details'),
-              _iconBuilder(LineAwesomeIcons.times_circle, 'Cancel'),
-              _iconBuilder(LineAwesomeIcons.calendar_times_o, 'Calender'),
-              _iconBuilder(LineAwesomeIcons.compass, 'Directions'),
+              _iconInformation(),
+              _iconCancel(),
+              _iconEventLocation()
             ],
           )
         ],
@@ -97,11 +97,10 @@ final Event event;
     );
   }
 
-
-  Column _iconBuilder(icon, title) {
+  Column _iconInformation() {
     return Column(children: <Widget>[
       IconButton(
-          icon: Icon(icon),
+          icon: Icon(LineAwesomeIcons.info_circle),
           padding: EdgeInsets.all(20),
           hoverColor: Colors.green,
           iconSize: 28,
@@ -111,7 +110,7 @@ final Event event;
         height: 8.0,
       ),
       Text(
-        title,
+        "Details",
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w300,
@@ -119,5 +118,76 @@ final Event event;
         ),
       )
     ]);
+  }
+
+  Column _iconCancel() {
+    return Column(children: <Widget>[
+      IconButton(
+          icon: Icon(LineAwesomeIcons.times_circle),
+          padding: EdgeInsets.all(20),
+          hoverColor: Colors.green,
+          iconSize: 28,
+          onPressed: () {
+            eventCollectionRef
+                .document(currentUser.uid)
+                .collection("interestedEvents")
+                .document(widget.event.eventId)
+                .delete();
+            addBackToAllEvents();
+          },
+          color: Colors.black),
+      SizedBox(
+        height: 8.0,
+      ),
+      Text(
+        "Cancel",
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w300,
+          color: Colors.black,
+        ),
+      )
+    ]);
+  }
+
+  Column _iconEventLocation() {
+    return Column(children: <Widget>[
+      IconButton(
+          icon: Icon(LineAwesomeIcons.compass),
+          padding: EdgeInsets.all(20),
+          hoverColor: Colors.green,
+          iconSize: 28,
+          onPressed: () {},
+          color: Colors.black),
+      SizedBox(
+        height: 8.0,
+      ),
+      Text(
+        "Directions",
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w300,
+          color: Colors.black,
+        ),
+      )
+    ]);
+  }
+
+  addBackToAllEvents(
+      {String eventLongtitude,
+      String eventLatitude,
+      String eventName,
+      String eventOffer}) {
+    eventCollectionRef
+        .document('users')
+        .collection('allEvents')
+        .document(widget.event.eventId)
+        .setData({
+      "eventName": widget.event.eventName,
+      "eventType": widget.event.eventType,
+      "eventLocation": widget.event.eventLocation,
+      "eventOffer": widget.event.eventOffer,
+      "eventId": widget.event.eventId
+    });
   }
 }
