@@ -18,6 +18,7 @@ import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/activity_feed.dart';
 import 'package:stagpus/pages/create_account.dart';
 import 'package:stagpus/pages/profile.dart';
+import 'package:stagpus/pages/profile_image.dart';
 import 'package:stagpus/pages/search.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stagpus/pages/timeline.dart';
@@ -85,10 +86,11 @@ class _HomeState extends State<Home> {
     if (!doc.exists) {
       final username = await Navigator.push(
           context, MaterialPageRoute(builder: (context) => CreateAccount()));
+      final photo = await Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileImage()));
       usersRef.document(user.uid).setData({
         "uid": user.uid,
         "username": username,
-        "photoUrl": user.photoUrl,
+        "photoUrl": photo,
         "email": user.email,
         "displayName": username,
         "bio": "",

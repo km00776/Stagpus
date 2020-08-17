@@ -252,7 +252,17 @@ class _ProfileState extends State<Profile> {
                     CircleAvatar(
                       radius: 40.0,
                       backgroundColor: Colors.grey,
-                     //CachedNetworkImage(imageUrl: user.photoUrl),
+                     child: Container(
+                       width: 200,
+                       height: 200,
+                       decoration: BoxDecoration(
+                         shape: BoxShape.circle,
+                         image: DecorationImage(
+                           image: NetworkImage(currentUser.photoUrl),
+                           fit: BoxFit.fill
+                           ),
+                       ),
+                      )
 
                     //  CachedNetworkImageProvider(user.photoUrl),
                     ),
