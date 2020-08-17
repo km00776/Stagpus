@@ -9,10 +9,6 @@ final User currentUser;
 final Event event;
 
   const InterestedEventCard({Key key, this.currentUser, this.event}) : super(key: key);
-
-
-  
-
   _InterestedEventCardState createState() => _InterestedEventCardState();
   
     

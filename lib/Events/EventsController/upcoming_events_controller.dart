@@ -23,6 +23,8 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
   TextSpan eventNameText;
   TextSpan eventLocationText;
   String eventId = Uuid().v4();
+  bool pressAttention = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +35,6 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
     // It  will provide us total height and width of our screen
 
     return Container(
-      
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 18.0),
         margin: EdgeInsets.only(
@@ -109,14 +110,19 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
                     SizedBox(
                       height: 6.0,
                     ),
-                    RaisedButton(
-                      onPressed: () {},
+                    new RaisedButton(
+                      onPressed: () 
+                      {
+
+                      },
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(80.0)),
                       padding: const EdgeInsets.all(0.0),
                       child: Ink(
-                        decoration: const BoxDecoration(
-                          gradient: purpleGradient,
+                        decoration: BoxDecoration(
+                          color: pressAttention == false
+                              ? Colors.red
+                              : Colors.green,
                           borderRadius: BorderRadius.all(Radius.circular(80.0)),
                         ),
                         child: Container(
@@ -125,15 +131,12 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
                               minHeight:
                                   36.0), // min sizes for Material buttons
                           alignment: Alignment.center,
-                          child: FlatButton(
-                            child: Text(
-                              'Interested',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 13,
-                                  color: Colors.white),
-                            ),
-                            onPressed: () => handleInterestButton(),
+                          child: Text(
+                            'Interested',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 13,
+                                color: Colors.white),
                           ),
                         ),
                       ),
