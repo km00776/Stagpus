@@ -39,10 +39,15 @@ class _CreateAccountState extends State<CreateAccount> {
       appBar: header(context, titleText: "Set up up your profile"),
       body: ListView(children: <Widget>[
         Container(child: Column(children: <Widget>[
+          CircleAvatar(
+            backgroundColor: Colors.red,
+          ),
           Padding(padding: EdgeInsets.only(top: 25.0),
+         
           child: Center(
-            child: Text("Create a username", style: 
-            TextStyle(fontSize: 25.0),),
+            
+            child: Text("Create a username", 
+            style:  TextStyle(fontSize: 25.0),),
             ),
           ),
           Padding(

@@ -35,6 +35,7 @@ final followingRef = Firestore.instance.collection('following');
 final timelineRef = Firestore.instance.collection('timeline');
 final productCollectionRef = Firestore.instance.collection("products");
 final eventCollectionRef = Firestore.instance.collection("events");
+final eventLocationCollectionRef = Firestore.instance.collection("eventsLocations");
 
 const blueg = LinearGradient(
   colors: <Color>[Colors.cyan, Colors.cyanAccent],
@@ -328,34 +329,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  List<Widget> buildInput() {
-    List<Widget> textFields = [];
-
-    textFields.add(
-      TextFormField(
-        style: TextStyle(fontSize: 22.0),
-        decoration: buildSignUpInputDecoration("Email"),
-        onSaved: (value) => _email = value.trim(),
-      ),
-    );
-    textFields.add(SizedBox(
-      height: 20,
-    ));
-    textFields.add(TextFormField(
-      style: TextStyle(fontSize: 22.0),
-      decoration: buildSignUpInputDecoration("Password"),
-      onSaved: (value) => _password = value,
-    ));
-    textFields.add(SizedBox(
-      height: 20,
-    ));
-    textFields.add(TextFormField(
-      style: TextStyle(fontSize: 22.0),
-      decoration: buildSignUpInputDecoration("Confirm Password"),
-      onSaved: (value) => _confirmPassword = value,
-    ));
-    return textFields;
-  }
+  
 
   InputDecoration buildSignUpInputDecoration(String hint) {
     return InputDecoration(
