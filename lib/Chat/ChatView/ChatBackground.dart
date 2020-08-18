@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stagpus/Chat/ChatModel/Contact.dart';
 import 'package:stagpus/Chat/ChatView/SearchScreen.dart';
+import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/Provider/user_provider.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
@@ -24,7 +25,7 @@ class MessageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue,
+      backgroundColor: kBackgroundColor,
       appBar: customAppBar(context),
       floatingActionButton: NewChatButton(),
       body: ChatListContainer(),

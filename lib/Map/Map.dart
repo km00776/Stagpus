@@ -1,4 +1,5 @@
-import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,47 +11,73 @@ class SurreyMap extends StatefulWidget {
 }
 
 class SurreyMapState extends State<SurreyMap> {
-  Completer<GoogleMapController> _controller = Completer();
+  var clients = [];
+  GoogleMapController mapController;
+  String searchAddress;
+  bool mapToggle = false;
+  var currentLocation;
+  Position pos;
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  @override
+  void initState() {
+    super.initState();
+    Geolocator().getCurrentPosition().then((currloc) {
+      setState(() {
+        this.currentLocation = currloc;
+        mapToggle = true;
+        populateClients();
+      });
+    });
+    
+  }
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414
-  );
+  populateClients() {
+      clients  = [];
+      Firestore.instance.collection('markers').getDocuments();
+  }
+
+  initMarker(client) {
+    
+
+    }
+  
+   
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        title: Text('Map'),
+        title: Text("Surrey Maps"),
       ),
-      body: Stack(children: <Widget>[
-        GoogleMap(
-        initialCameraPosition: CameraPosition(
-        target: LatLng(51.215485, -0.631027),
-        zoom: 12,
+      body: Column(children: <Widget>[
+        Stack(
+          children: <Widget>[
+            Container(
+                height: 526,
+                width: double.infinity,
+                child: mapToggle
+                    ? GoogleMap(
+                      onMapCreated: onMapCreated,
+                      initialCameraPosition: CameraPosition(target: LatLng(this.currentLocation.latitude, this.currentLocation.longitude),
+                      zoom:10.0,
+                      ),
+                    )
+                    : Center(
+                        child: Text('Loading... Please wait...',
+                            style: TextStyle(fontSize: 20.0)))),
+          ],
         ),
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
-      ),
-      Container(alignment: Alignment.bottomCenter,
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 32),
-      child: Text("StagPus Maps")
-      )
-      ],),
+      ]),
     );
   }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  void onMapCreated(controller) {
+    setState(() {
+      mapController = controller;
+    });
   }
+
+ 
 
 _getLocationPermission() {
   Location location = new Location();
@@ -61,10 +88,4 @@ _getLocationPermission() {
   }
 }
 
-
-@override
-void initState() {
-  super.initState();;
-   _getLocationPermission();
-}
 }
