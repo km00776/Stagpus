@@ -36,7 +36,7 @@ final followingRef = Firestore.instance.collection('following');
 final timelineRef = Firestore.instance.collection('timeline');
 final productCollectionRef = Firestore.instance.collection("products");
 final eventCollectionRef = Firestore.instance.collection("events");
-final eventLocationCollectionRef = Firestore.instance.collection("markers");
+
 
 const blueg = LinearGradient(
   colors: <Color>[Colors.cyan, Colors.cyanAccent],
