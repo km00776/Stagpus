@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stagpus/Events/EventsModel/event.dart';
 import 'package:stagpus/Events/EventsView/colors.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
@@ -111,8 +112,7 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
                       height: 6.0,
                     ),
                     new RaisedButton(
-                      onPressed: () 
-                      {
+                      onPressed: () {
                         handleInterestButton();
                       },
                       shape: RoundedRectangleBorder(
@@ -152,7 +152,13 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
   }
 
   addToInterestedEvent(
-      {String eventLocation, String eventType, String eventName, String eventLongtitude, String eventLatitude, String eventOffer, String description}) async {
+      {String eventLocation,
+      String eventType,
+      String eventName,
+      String eventLongtitude,
+      String eventLatitude,
+      String eventOffer,
+      String description}) async {
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
     DocumentSnapshot doc = await usersRef.document(user.uid).get();
     currentUser = User.fromDocument(doc);
@@ -163,8 +169,9 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
         .setData({
       "eventCreator": currentUser.displayName,
       "eventName": eventName,
-      "eventLongtitude" : eventLongtitude,
-      "eventLatitude" : eventLatitude, 
+      "eventLocation": eventLocation,
+      "eventCoordinates":
+          GeoPoint(double.parse(eventLatitude), double.parse(eventLongtitude)),
       "eventOffer": eventOffer,
       "eventType": eventType,
       "eventDescription": description,
@@ -179,9 +186,12 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
 
   handleInterestButton() {
     addToInterestedEvent(
-        eventOffer: eventOfferText.toPlainText(),
-        eventType: evenTypeText.toPlainText(),
-        eventName: eventNameText.toPlainText());
+      eventOffer: eventOfferText.toPlainText(),
+      eventType: evenTypeText.toPlainText(),
+      eventName: eventNameText.toPlainText(),
+      eventLatitude: widget.event.eventCoordinates.latitude.toString(),
+      eventLongtitude: widget.event.eventCoordinates.longitude.toString(),
+    );
   }
 }
 

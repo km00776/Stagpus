@@ -124,8 +124,10 @@ class _HomeState extends State<Home> {
           EventForm(
             currentUser: currentUser,
           ),
-          Upload(currentUser: currentUser,),
-         SurreyMap(),
+          Upload(
+            currentUser: currentUser,
+          ),
+          SurreyMap(),
           Search(),
           MessageScreen(currentUser: currentUser),
           EventsHomePage(currentUser: currentUser),

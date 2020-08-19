@@ -67,25 +67,13 @@ class _EventFormState extends State<EventForm>
         .setData({
       "eventCreator": currentUser.displayName,
       "eventName": eventName,
-      "eventLocation":
+      "eventCoordinates":
           GeoPoint(double.parse(eventLatitude), double.parse(eventLongtitude)),
+      "eventLocation": eventLocation,
       "eventOffer": eventOffer,
       "eventType": eventType,
       "eventDescription": eventDescription,
       "eventId": eventId
-    });
-
-    eventLocationCollectionRef
-        .document(eventId)
-        .collection("location")
-        .document(eventLocationId)
-        .setData({
-      "eventId": eventId,
-      "eventLocation":
-          GeoPoint(double.parse(eventLatitude), double.parse(eventLongtitude)),
-      "eventDescription": eventDescription,
-      "eventName": eventName,
-      "eventOffer": eventOffer
     });
   }
 
@@ -94,11 +82,13 @@ class _EventFormState extends State<EventForm>
         eventName: eventNameController.text,
         eventOffer: eventOfferController.text,
         eventType: eventTypeController.text,
+        eventLocation: eventLocationController.text,
         eventLongtitude: eventLocationLongtitudeController.text,
         eventLatitude: eventLocationLatitudeController.text);
     eventNameController.clear();
     eventOfferController.clear();
     eventTypeController.clear();
+    eventLocationController.clear();
     setState(() {
       eventId = Uuid().v4();
       eventLocationId = Uuid().v4();
@@ -153,23 +143,35 @@ class _EventFormState extends State<EventForm>
                         hintText: "Event Offer:", border: InputBorder.none)))),
         Divider(),
         ListTile(
-            leading: Icon(Icons.location_on, color: Colors.red),
+            leading: Icon(Icons.location_on, color: Colors.yellowAccent),
             title: Container(
                 width: 250.0,
                 child: TextField(
-                    controller: eventLocationLongtitudeController,
+                    controller: eventLocationController,
                     decoration: InputDecoration(
-                        hintText: "Event Lontitude:",
+                        hintText: "Event Location:",
                         border: InputBorder.none)))),
         Divider(),
         ListTile(
-            leading: Icon(Icons.location_on, color: Colors.green),
+            leading:
+                Icon(Icons.rotate_90_degrees_ccw_rounded, color: Colors.indigo),
             title: Container(
                 width: 250.0,
                 child: TextField(
                     controller: eventLocationLatitudeController,
                     decoration: InputDecoration(
                         hintText: "Event Latitude:",
+                        border: InputBorder.none)))),
+        Divider(),
+        ListTile(
+            leading:
+                Icon(Icons.rotate_90_degrees_ccw_outlined, color: Colors.brown),
+            title: Container(
+                width: 250.0,
+                child: TextField(
+                    controller: eventLocationLongtitudeController,
+                    decoration: InputDecoration(
+                        hintText: "Event Longtitude:",
                         border: InputBorder.none)))),
         Divider(),
         Divider(),

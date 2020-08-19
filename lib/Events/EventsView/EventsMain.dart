@@ -108,7 +108,7 @@ class _EventsHomePageState extends State<EventsHomePage> {
     );
   }
 
-  
+
 
   Container _backBgCover() {
     return Container(
@@ -200,7 +200,6 @@ class _EventsHomePageState extends State<EventsHomePage> {
             fontWeight: FontWeight.w500,
           ),
         ),
-       
       ),
     );
   }

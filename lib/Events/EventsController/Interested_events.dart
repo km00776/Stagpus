@@ -159,7 +159,10 @@ class _InterestedEventCardState extends State<InterestedEventCard> {
           hoverColor: Colors.green,
           iconSize: 28,
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => SurreyMap(eventId: widget.event.eventId)));
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => SurreyMap(event: widget.event)));
           },
           color: Colors.black),
       SizedBox(

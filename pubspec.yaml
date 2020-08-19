@@ -50,7 +50,8 @@ dependencies:
   table_calendar: ^2.2.3
   gradient_app_bar: ^0.0.1
   provider: 
-  
+  geocoder:
+  flutter_map:  
   
 
 dev_dependencies:
