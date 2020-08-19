@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:stagpus/Chat/ChatModel/Message.dart';
 import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/models/user.dart';
@@ -62,12 +63,18 @@ class _ChatScreenState extends State<ChatScreen> {
           .collection("messages")
           .document(_currentUserId)
           .collection(widget.receiver.uid)
-          .orderBy("timestamp", descending: true)
+          .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.data == null) {
           return Center(child: CircularProgressIndicator());
         }
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          _listScrollController.animateTo(
+              _listScrollController.position.minScrollExtent,
+              duration: Duration(milliseconds: 250),
+              curve: Curves.easeInOut);
+        });
         return ListView.builder(
           padding: EdgeInsets.all(10),
           controller: _listScrollController,

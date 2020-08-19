@@ -10,7 +10,7 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:stagpus/Chat/ChatView/ChatBackground.dart';
 import 'package:stagpus/Events/EventsView/EventsMain.dart';
 import 'package:stagpus/Events/EventsView/add_events.dart';
-import 'package:stagpus/Map/Map.dart';
+import 'package:stagpus/Map/MapView/MapMain.dart';
 import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
 import 'package:stagpus/Marketplace/ViewMarket/sell_screen_form.dart';
 import 'package:stagpus/Screens/Reminder.dart';
@@ -36,7 +36,7 @@ final followingRef = Firestore.instance.collection('following');
 final timelineRef = Firestore.instance.collection('timeline');
 final productCollectionRef = Firestore.instance.collection("products");
 final eventCollectionRef = Firestore.instance.collection("events");
-final eventLocationCollectionRef = Firestore.instance.collection("eventsLocations");
+final eventLocationCollectionRef = Firestore.instance.collection("markers");
 
 const blueg = LinearGradient(
   colors: <Color>[Colors.cyan, Colors.cyanAccent],
@@ -86,7 +86,8 @@ class _HomeState extends State<Home> {
     if (!doc.exists) {
       final username = await Navigator.push(
           context, MaterialPageRoute(builder: (context) => CreateAccount()));
-      final photo = await Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileImage()));
+      final photo = await Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ProfileImage()));
       usersRef.document(user.uid).setData({
         "uid": user.uid,
         "username": username,
@@ -123,8 +124,8 @@ class _HomeState extends State<Home> {
           EventForm(
             currentUser: currentUser,
           ),
-          SellScreen(currentUser: currentUser),
-          SurreyMap(),
+          Upload(currentUser: currentUser,),
+         SurreyMap(),
           Search(),
           MessageScreen(currentUser: currentUser),
           EventsHomePage(currentUser: currentUser),
@@ -330,8 +331,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-  
 
   InputDecoration buildSignUpInputDecoration(String hint) {
     return InputDecoration(

@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:stagpus/Events/EventsModel/event.dart';
 import 'package:stagpus/Events/EventsView/colors.dart';
+import 'package:stagpus/Map/MapView/MapMain.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 
 class InterestedEventCard extends StatefulWidget {
-final User currentUser;
-final Event event;
+  final User currentUser;
+  final Event event;
 
-  const InterestedEventCard({Key key, this.currentUser, this.event}) : super(key: key);
-
+  const InterestedEventCard({Key key, this.currentUser, this.event})
+      : super(key: key);
   _InterestedEventCardState createState() => _InterestedEventCardState();
-  
-    
-  }
-  
-  class _InterestedEventCardState extends State<InterestedEventCard> {
+}
+
+class _InterestedEventCardState extends State<InterestedEventCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -92,14 +91,12 @@ final Event event;
               _iconInformation(),
               _iconCancel(),
               _iconEventLocation()
-      
             ],
           )
         ],
       ),
     );
   }
-
 
   Column _iconInformation() {
     return Column(children: <Widget>[
@@ -124,15 +121,19 @@ final Event event;
     ]);
   }
 
-Column _iconCancel() {
-   return Column(children: <Widget>[
+  Column _iconCancel() {
+    return Column(children: <Widget>[
       IconButton(
           icon: Icon(LineAwesomeIcons.times_circle),
           padding: EdgeInsets.all(20),
           hoverColor: Colors.green,
           iconSize: 28,
           onPressed: () {
-            eventCollectionRef.document(currentUser.uid).collection("interestedEvents").document(widget.event.eventId).delete();
+            eventCollectionRef
+                .document(currentUser.uid)
+                .collection("interestedEvents")
+                .document(widget.event.eventId)
+                .delete();
             addBackToAllEvents();
           },
           color: Colors.black),
@@ -148,15 +149,18 @@ Column _iconCancel() {
         ),
       )
     ]);
-}
-Column _iconEventLocation() {
-   return Column(children: <Widget>[
+  }
+
+  Column _iconEventLocation() {
+    return Column(children: <Widget>[
       IconButton(
           icon: Icon(LineAwesomeIcons.compass),
           padding: EdgeInsets.all(20),
           hoverColor: Colors.green,
           iconSize: 28,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SurreyMap(eventId: widget.event.eventId)));
+          },
           color: Colors.black),
       SizedBox(
         height: 8.0,
@@ -170,20 +174,23 @@ Column _iconEventLocation() {
         ),
       )
     ]);
-}
+  }
 
-addBackToAllEvents({ String eventLongtitude, String eventLatitude, String eventName, String eventOffer}) {
-  eventCollectionRef.document('users').collection('allEvents').document(widget.event.eventId).setData({
-      "eventName" : widget.event.eventName,
-      "eventType" : widget.event.eventType,
-      "eventLongtitude" : widget.event.eventLongtitude,
-      "eventLatitude" : widget.event.eventLatitude,
-      "eventOffer" : widget.event.eventOffer,
-      "eventId" : widget.event.eventId
-  
-   });
-
-}
-
-
+  addBackToAllEvents(
+      {String eventLongtitude,
+      String eventLatitude,
+      String eventName,
+      String eventOffer}) {
+    eventCollectionRef
+        .document('users')
+        .collection('allEvents')
+        .document(widget.event.eventId)
+        .setData({
+      "eventName": widget.event.eventName,
+      "eventType": widget.event.eventType,
+      "eventLocation": widget.event.eventLocation,
+      "eventOffer": widget.event.eventOffer,
+      "eventId": widget.event.eventId
+    });
+  }
 }

@@ -8,8 +8,7 @@ class Event {
   String eventVenue;
   String eventOffer;
   String eventDJ;
-  String eventLongtitude;
-  String eventLatitude;
+  String eventLocation;
   String eventId;
   String eventCreator;
 
@@ -18,8 +17,7 @@ class Event {
       this.eventOffer,
       this.eventCreator,
       this.eventName,
-      this.eventLongtitude,
-      this.eventLatitude,
+      this.eventLocation,
       this.eventId});
 
   factory Event.fromDocument(DocumentSnapshot doc) {
@@ -27,8 +25,7 @@ class Event {
         eventType: doc['eventType'],
         eventCreator: doc['eventCreator'],
         eventName: doc['eventName'],
-        eventLongtitude: doc['eventLongtitude'],
-        eventLatitude: doc['eventLatitude'],
+        eventLocation: doc['evenLocation'],
         eventOffer: doc['eventOffer'],
         eventId: doc['eventId']);
   }
@@ -40,7 +37,6 @@ class Event {
     this.eventVenue = map['eventVenue'];
     this.eventOffer = map['eventOffer'];
     this.eventDJ = map['eventDJ'];
-    
   }
 
   Map toMap() {
@@ -51,7 +47,6 @@ class Event {
     map['eventVenue'] = this.eventVenue;
     map['eventOffer'] = this.eventOffer;
     map['eventDJ'] = this.eventDJ;
-   
 
     return map;
   }
