@@ -108,13 +108,11 @@ class _EventsHomePageState extends State<EventsHomePage> {
     );
   }
 
-
-
   Container _backBgCover() {
     return Container(
       height: 260.0,
       decoration: BoxDecoration(
-        gradient: purpleGradient,
+        color: marketColor,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(40),
           bottomRight: Radius.circular(40),
@@ -182,7 +180,7 @@ class _EventsHomePageState extends State<EventsHomePage> {
     return Container(
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.redAccent,
+        color: marketColor,
         // gradient: redGradient,
         borderRadius: BorderRadius.circular(10),
       ),

@@ -36,7 +36,6 @@ final followingRef = Firestore.instance.collection('following');
 final timelineRef = Firestore.instance.collection('timeline');
 final productCollectionRef = Firestore.instance.collection("products");
 final eventCollectionRef = Firestore.instance.collection("events");
-final eventLocationCollectionRef = Firestore.instance.collection("markers");
 
 const blueg = LinearGradient(
   colors: <Color>[Colors.cyan, Colors.cyanAccent],
@@ -120,15 +119,15 @@ class _HomeState extends State<Home> {
       resizeToAvoidBottomPadding: false,
       body: PageView(
         children: <Widget>[
-          Timeline(currentUser: currentUser),
-          EventForm(
-            currentUser: currentUser,
-          ),
+          // Timeline(currentUser: currentUser),
+          //SellScreen(),
           Upload(
             currentUser: currentUser,
           ),
-          SurreyMap(),
-          Search(),
+          //  SurreyMap(),
+          EventForm(
+            currentUser: currentUser,
+          ),
           MessageScreen(currentUser: currentUser),
           EventsHomePage(currentUser: currentUser),
           ProductScreen(currentUser: currentUser),
@@ -370,7 +369,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Scaffold buildUnAuthScreen() {
+  Scaffold buildLoginScreen() {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
@@ -462,7 +461,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return userAuth ? dashBoard() : buildUnAuthScreen();
+    return userAuth ? dashBoard() : buildLoginScreen();
   }
 }
 

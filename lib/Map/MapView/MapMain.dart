@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as gm;
+
 
 import 'package:latlong/latlong.dart';
 
@@ -26,7 +26,7 @@ class _SurreyMapState extends State<SurreyMap> {
   bool mapToggle = false;
   bool geraiToggle = false;
   var currentLocation;
-  gm.GoogleMapController mapController;
+
   String searchAddress;
 
   List<Marker> allMarkers = [];
@@ -52,11 +52,11 @@ class _SurreyMapState extends State<SurreyMap> {
                     snapshot.data.documents[i]['eventCoordinates'].longitude),
                 builder: (context) => new Container(
                     child: IconButton(
-                        icon: Icon(LineAwesomeIcons.battery_3),
-                        color: Colors.red,
-                        iconSize: 20.0,
+                        icon: Icon(Icons.file_download),
+                        color: Colors.deepOrangeAccent,
+                        iconSize: 22.0,
                         onPressed: () {
-                          print(snapshot.data.documents[i]['eventName']);
+                          print(snapshot.data.documents[i]['eventCreator']);
                         }))));
           }
           return FlutterMap(

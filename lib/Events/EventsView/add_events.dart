@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stagpus/Events/EventsModel/event.dart';
 import 'package:stagpus/Events/EventsView/EventsMain.dart';
 import 'package:stagpus/models/user.dart';
@@ -48,6 +49,7 @@ class _EventFormState extends State<EventForm>
     return buildEventForm();
   }
 
+  
   createEventInFirestore(
       {String eventName,
       String eventCreator,
@@ -56,6 +58,7 @@ class _EventFormState extends State<EventForm>
       String eventLongtitude,
       String eventLatitude,
       String eventLocation,
+      String eventCoordinates,
       String eventDescription}) async {
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
     DocumentSnapshot doc = await usersRef.document(user.uid).get();
@@ -67,28 +70,34 @@ class _EventFormState extends State<EventForm>
         .setData({
       "eventCreator": currentUser.displayName,
       "eventName": eventName,
-      "eventCoordinates":
-          GeoPoint(double.parse(eventLatitude), double.parse(eventLongtitude)),
       "eventLocation": eventLocation,
       "eventOffer": eventOffer,
       "eventType": eventType,
-      "eventDescription": eventDescription,
-      "eventId": eventId
+      "eventLongitude" : eventLongtitude,
+      "eventLatitude" : eventLatitude,
+      "eventCoordinates" : GeoPoint(double.parse(eventLatitude), (double.parse(eventLongtitude) - (double.parse(eventLongtitude) * 2))),
+      
+
+      // "eventDescription": eventDescription,
+      // "eventId": eventId
     });
   }
 
   handleSubmit() async {
     await createEventInFirestore(
         eventName: eventNameController.text,
+        eventLocation: eventLocationController.text,
+        eventLatitude: eventLocationLatitudeController.text,
+        eventLongtitude: eventLocationLongtitudeController.text,
         eventOffer: eventOfferController.text,
         eventType: eventTypeController.text,
-        eventLocation: eventLocationController.text,
-        eventLongtitude: eventLocationLongtitudeController.text,
-        eventLatitude: eventLocationLatitudeController.text);
+
+        );
     eventNameController.clear();
     eventOfferController.clear();
     eventTypeController.clear();
     eventLocationController.clear();
+    
     setState(() {
       eventId = Uuid().v4();
       eventLocationId = Uuid().v4();
@@ -154,7 +163,7 @@ class _EventFormState extends State<EventForm>
         Divider(),
         ListTile(
             leading:
-                Icon(Icons.rotate_90_degrees_ccw_rounded, color: Colors.indigo),
+                Icon(Icons.rotate_90_degrees_ccw, color: Colors.indigo),
             title: Container(
                 width: 250.0,
                 child: TextField(
@@ -165,7 +174,7 @@ class _EventFormState extends State<EventForm>
         Divider(),
         ListTile(
             leading:
-                Icon(Icons.rotate_90_degrees_ccw_outlined, color: Colors.brown),
+                Icon(Icons.rotate_right, color: Colors.brown),
             title: Container(
                 width: 250.0,
                 child: TextField(
@@ -173,7 +182,6 @@ class _EventFormState extends State<EventForm>
                     decoration: InputDecoration(
                         hintText: "Event Longtitude:",
                         border: InputBorder.none)))),
-        Divider(),
         Divider(),
         Padding(
           padding: EdgeInsets.only(top: 20.0, left: 25.0, right: 25.0),
@@ -189,7 +197,8 @@ class _EventFormState extends State<EventForm>
                 ),
               ),
               color: Colors.blueAccent,
-              onPressed: () => handleSubmit()),
+              onPressed: () => handleSubmit(),
+        ),
         ),
       ],
     ));

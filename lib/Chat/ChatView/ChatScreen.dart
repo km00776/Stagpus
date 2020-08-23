@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 import 'package:stagpus/Chat/ChatModel/Message.dart';
-import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/resources/FirebaseRepo.dart';
 import 'package:stagpus/widgets/appBar.dart';
 import 'package:stagpus/widgets/chatMethods.dart';
 import 'package:stagpus/widgets/customTile.dart';
+import 'package:encrypt/encrypt.dart' as e;
 
 class ChatScreen extends StatefulWidget {
   final User receiver;
@@ -19,6 +20,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final cryptor = new PlatformStringCryptor();
+
   TextEditingController textFieldController = TextEditingController();
   FirebaseRepository _repository = FirebaseRepository();
   bool isWriting = false;
@@ -36,10 +39,10 @@ class _ChatScreenState extends State<ChatScreen> {
       _currentUserId = user.uid;
       setState(() {
         sender = User(
-          uid: user.uid,
-          displayName: user.displayName,
-          email: user.email,
-        );
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            photoUrl: user.photoUrl);
       });
     });
   }
@@ -125,6 +128,10 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   getMessage(Message message) {
+    // final key = e.Key.fromLength(32);
+    // final iv = e.IV.fromLength(16);
+    // final encrypted = encrypter.encrypt(message.message, iv: iv);
+    // final decrypted = encrypter.decrypt(encrypted, iv: iv);
     return Text(
       message.message,
       style: TextStyle(
@@ -195,45 +202,20 @@ class _ChatScreenState extends State<ChatScreen> {
                     ],
                   ),
                 ),
-                Flexible(
-                  child: ListView(
-                    children: <Widget>[
-                      ModalTile(
-                        title: "Media",
-                        subtitle: "Share Photos and Video",
-                        icon: Icons.image,
-                      ),
-                      ModalTile(
-                          title: "File",
-                          subtitle: "Share files",
-                          icon: Icons.tab),
-                      ModalTile(
-                          title: "Contact",
-                          subtitle: "Share contacts",
-                          icon: Icons.contacts),
-                      ModalTile(
-                          title: "Location",
-                          subtitle: "Share a location",
-                          icon: Icons.add_location),
-                      ModalTile(
-                          title: "Schedule Call",
-                          subtitle: "Arrange a skype call and get reminders",
-                          icon: Icons.schedule),
-                      ModalTile(
-                          title: "Create Poll",
-                          subtitle: "Share polls",
-                          icon: Icons.poll)
-                    ],
-                  ),
-                ),
               ],
             );
           });
     }
 
+    encryptMessage(text) async {
+      final String salt = await cryptor.generateSalt();
+      final String key = await cryptor.generateRandomKey();
+      final String encrypted = await cryptor.encrypt(text, key);
+    }
+
     sendMessage() {
       var text = textFieldController.text;
-
+      var newtext = encryptMessage(text);
       Message _message = Message(
         receiverId: widget.receiver.uid,
         senderId: sender.uid,

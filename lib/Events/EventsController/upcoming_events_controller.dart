@@ -121,7 +121,7 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
                       child: Ink(
                         decoration: BoxDecoration(
                           color: pressAttention == false
-                              ? Colors.red
+                              ? marketColor
                               : Colors.green,
                           borderRadius: BorderRadius.all(Radius.circular(80.0)),
                         ),
