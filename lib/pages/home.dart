@@ -66,6 +66,7 @@ class _HomeState extends State<Home> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String username;
   GeoFirePoint location;
+  bool superUser;
   var email = "@surrey.ac.uk";
 
   onPageChanged(int pageIndex) {
@@ -97,6 +98,8 @@ class _HomeState extends State<Home> {
         "bio": "",
         "timestamp": timestamp,
         "location": location,
+        "SuperUser" : false
+        
       });
       await followersRef
           .document(user.uid)
@@ -124,9 +127,7 @@ class _HomeState extends State<Home> {
           EventForm(
             currentUser: currentUser,
           ),
-          Upload(
-            currentUser: currentUser,
-          ),
+          SellScreen(currentUser: currentUser,),
           SurreyMap(),
           Search(),
           MessageScreen(currentUser: currentUser),

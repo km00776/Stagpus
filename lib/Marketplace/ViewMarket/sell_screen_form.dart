@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as Im;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -13,7 +14,6 @@ import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/progress.dart';
 import 'package:uuid/uuid.dart';
-
 
 class SellScreen extends StatefulWidget {
   final User currentUser;
@@ -210,7 +210,6 @@ class _SellScreenState extends State<SellScreen>
                 fontWeight: FontWeight.bold,
                 fontSize: 20.0,
               ),
-      
             ),
           ),
         ],
@@ -239,8 +238,7 @@ class _SellScreenState extends State<SellScreen>
             padding: EdgeInsets.only(top: 10.0),
           ),
           ListTile(
-            leading:
-                Icon(Icons.pageview, size: 35.0, color: Colors.green),
+            leading: Icon(Icons.pageview, size: 35.0, color: Colors.green),
             title: Container(
               width: 250.0,
               child: TextField(
@@ -278,6 +276,18 @@ class _SellScreenState extends State<SellScreen>
                         hintText: "Details of the product:",
                         border: InputBorder.none,
                       )))),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.arrow_downward,
+            color: Colors.blueGrey,
+            size: 35.0,
+            ),
+            title: Container(
+              child: CategoryWidget(
+                
+              )
+            )
+          ),
           Divider(),
           ListTile(
             leading: Icon(
@@ -341,5 +351,39 @@ class _SellScreenState extends State<SellScreen>
     super.build(context);
 
     return file == null ? buildSplashScreen() : buildUploadForm();
+  }
+}
+
+class CategoryWidget extends StatefulWidget {
+  
+  CategoryWidget({Key key}) : super(key: key);
+
+  @override
+  _CategoryWidgetState createState() => _CategoryWidgetState();
+}
+
+class _CategoryWidgetState extends State<CategoryWidget> {
+  String dropdownValue = 'All';
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+        value: dropdownValue,
+      
+        iconSize: 24,
+        style: TextStyle(color: Colors.blue),
+        underline: Container(
+          height: 2,
+          color: Colors.lightBlue,
+        ),
+        onChanged: (String newValue) {
+          setState(() {
+            dropdownValue = newValue;
+          });
+        },
+        items: <String>['All', 'Books', 'Furniture', 'Technology']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(value: value, child: Text(value));
+        }).toList());
   }
 }

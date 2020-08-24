@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stagpus/Events/EventsController/Interested_events.dart';
 import 'package:stagpus/Events/EventsController/upcoming_events_controller.dart';
 import 'package:stagpus/Events/EventsModel/event.dart';
+import 'package:stagpus/Events/EventsView/add_events.dart';
 import 'package:stagpus/Marketplace/ModelMarket/Product.dart';
 import 'package:stagpus/Marketplace/ViewMarket/MarketColours.dart';
 import 'package:stagpus/Marketplace/ViewMarket/product_card.dart';
@@ -27,9 +28,27 @@ class _EventsHomePageState extends State<EventsHomePage> {
     super.initState();
   }
 
+ AppBar buildAppBar() {
+    return AppBar(
+        elevation: 0,
+        centerTitle: false,
+        title: Text("Surrey Events"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.plus_one),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EventForm(currentUser: currentUser)));
+            },
+            color: Colors.amber[300],
+          )
+        ]);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: buildAppBar(),
       backgroundColor: mainBgColor,
       body: SingleChildScrollView(
         child: Column(

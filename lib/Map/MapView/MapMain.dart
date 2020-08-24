@@ -2,10 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoder/geocoder.dart';
-
-
 import 'package:latlong/latlong.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -48,6 +48,7 @@ class ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: buildAppBar(),
         backgroundColor: marketColor,
         body: SafeArea(
           bottom: false,
@@ -115,11 +116,13 @@ class ProductScreenState extends State<ProductScreen> {
     return AppBar(
         elevation: 0,
         centerTitle: false,
-        title: Text("tests"),
+        title: Text("Surrey Market"),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {},
+            icon: Icon(Icons.plus_one),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SellScreen(currentUser: currentUser)));
+            },
             color: Colors.amber[300],
           )
         ]);

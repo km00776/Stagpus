@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>410317776954-hkqpqlo4jmi2fe3n36m4b7jer1arj68u.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.410317776954-hkqpqlo4jmi2fe3n36m4b7jer1arj68u</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBlWVoFqUZv9Okgv2L3ZR1ygCvyy2Yqz4A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>410317776954</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.karthikan.stagpus</string>
+	<key>PROJECT_ID</key>
+	<string>stagpus</string>
+	<key>STORAGE_BUCKET</key>
+	<string>stagpus.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:410317776954:ios:3a2db7d80075e3f1cc2d03</string>
+	<key>DATABASE_URL</key>
+	<string>https://stagpus.firebaseio.com</string>
+</dict>
+</plist>
