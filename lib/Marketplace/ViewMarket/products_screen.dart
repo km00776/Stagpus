@@ -115,7 +115,8 @@ class ProductScreenState extends State<ProductScreen> {
   AppBar buildAppBar() {
     return AppBar(
         elevation: 0,
-        centerTitle: false,
+        centerTitle: true,
+        backgroundColor: marketColor,
         title: Text("Surrey Market"),
         actions: <Widget>[
           IconButton(

@@ -31,8 +31,9 @@ class _EventsHomePageState extends State<EventsHomePage> {
  AppBar buildAppBar() {
     return AppBar(
         elevation: 0,
-        centerTitle: false,
+        centerTitle: true,
         title: Text("Surrey Events"),
+        backgroundColor: marketColor,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.plus_one),
@@ -58,8 +59,8 @@ class _EventsHomePageState extends State<EventsHomePage> {
               alignment: AlignmentDirectional.topCenter,
               overflow: Overflow.visible,
               children: <Widget>[
-                _backBgCover(),
-                _greetings(),
+                bgCover(),
+                greet(),
               ],
             ),
             SizedBox(
@@ -127,13 +128,11 @@ class _EventsHomePageState extends State<EventsHomePage> {
     );
   }
 
-
-
-  Container _backBgCover() {
+  Container bgCover() {
     return Container(
       height: 260.0,
       decoration: BoxDecoration(
-        gradient: purpleGradient,
+        color: marketColor,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(40),
           bottomRight: Radius.circular(40),
@@ -142,7 +141,7 @@ class _EventsHomePageState extends State<EventsHomePage> {
     );
   }
 
-  Positioned _greetings() {
+  Positioned greet() {
     return Positioned(
         left: 20,
         bottom: 90,
@@ -201,7 +200,7 @@ class _EventsHomePageState extends State<EventsHomePage> {
     return Container(
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.redAccent,
+        color: marketColor,
         // gradient: redGradient,
         borderRadius: BorderRadius.circular(10),
       ),

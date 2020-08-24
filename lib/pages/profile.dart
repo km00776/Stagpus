@@ -18,7 +18,7 @@ class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
 }
-
+// The profile of the user
 class _ProfileState extends State<Profile> {
   final String currentUserId = currentUser?.uid;
   String postOrientation = "grid";

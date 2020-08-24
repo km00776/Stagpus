@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stagpus/Events/EventsView/colors.dart';
 import 'package:stagpus/Societies/SocietyView/colors.dart';
 
-class CategoryCard extends StatelessWidget {
-  final String svgSrc;
+class SocietyCategoryCard extends StatelessWidget {
+ 
   final String title;
   final Function press;
-  const CategoryCard({
+  final String mediaURL;
+
+  const SocietyCategoryCard({
     Key key,
-    this.svgSrc,
+    this.mediaURL,
     this.title,
-    this.press,
+    this.press, 
   }) : super(key: key);
 
   @override
@@ -40,7 +43,11 @@ class CategoryCard extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Spacer(),
-                  SvgPicture.asset(svgSrc),
+                  CircleAvatar(
+                  backgroundColor: Color(0xFFD9D9D9),
+                  backgroundImage: NetworkImage(mediaURL),
+                  radius: 36.0,
+                ),
                   Spacer(),
                   Text(
                     title,

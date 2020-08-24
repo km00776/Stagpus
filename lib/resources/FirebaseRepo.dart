@@ -18,3 +18,4 @@ class FirebaseRepository {
   Future<List<Product>> fetchAllProducts(Product product) =>
       _method.fetchAllProducts();
 }
+// returns the respective methods from firebasemethods 

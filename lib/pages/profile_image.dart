@@ -23,7 +23,7 @@ class ProfileImage extends StatefulWidget {
 
 
     
-
+  //This builds the profile image of the user. 
   @override
   Widget build(BuildContext context) {
    return file == null ? buildProfilePicture() : buildUploadForm();

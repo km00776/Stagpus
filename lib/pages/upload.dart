@@ -17,7 +17,7 @@ import 'package:stagpus/pages/home.dart';
 import 'package:uuid/uuid.dart';
 
  
-
+// The upload screen that allows users to upload images.
 class Upload extends StatefulWidget {
    final User currentUser;
   

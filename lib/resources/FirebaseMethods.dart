@@ -18,7 +18,7 @@ class FirebaseMethods {
   final CollectionReference _productCollectionRef = _firestore.collection("products");
       final productCollectionRef = Firestore.instance.collection("products");
 
-  
+  // This was intended to be used as the main firebase method screen.
 
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;

@@ -14,6 +14,9 @@ import 'package:stagpus/Map/MapView/MapMain.dart';
 import 'package:stagpus/Marketplace/ViewMarket/products_screen.dart';
 import 'package:stagpus/Marketplace/ViewMarket/sell_screen_form.dart';
 import 'package:stagpus/Screens/Reminder.dart';
+import 'package:stagpus/Screens/privacy.dart';
+import 'package:stagpus/Societies/SocietyModel/Society.dart';
+import 'package:stagpus/Societies/SocietyView/society_main.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/activity_feed.dart';
 import 'package:stagpus/pages/create_account.dart';
@@ -37,7 +40,6 @@ final timelineRef = Firestore.instance.collection('timeline');
 final productCollectionRef = Firestore.instance.collection("products");
 final eventCollectionRef = Firestore.instance.collection("events");
 
-
 const blueg = LinearGradient(
   colors: <Color>[Colors.cyan, Colors.cyanAccent],
   stops: [0.0, 1.0],
@@ -46,7 +48,7 @@ const blueg = LinearGradient(
 );
 
 User currentUser;
-
+// This class will provide the login and register screen for the user
 class Home extends StatefulWidget {
   User currentUser;
   @override
@@ -59,7 +61,7 @@ class _HomeState extends State<Home> {
   String _email;
   String _password;
   String _confirmPassword;
-  bool _agreePrivacy = false;
+  bool agreePrivacy = true;
   PageController page = PageController();
   int pageIndex = 0;
   bool userAuth = false;
@@ -75,7 +77,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-  onTap(int pageIndex) {
+    onTap(int pageIndex) {
     page.animateToPage(pageIndex,
         duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
@@ -123,16 +125,15 @@ class _HomeState extends State<Home> {
       resizeToAvoidBottomPadding: false,
       body: PageView(
         children: <Widget>[
-          Timeline(currentUser: currentUser),
-          EventForm(
-            currentUser: currentUser,
-          ),
-          SellScreen(currentUser: currentUser,),
+          Timeline(currentUser: currentUser,),
+          ActivityFeed(),
+          Upload(currentUser: currentUser,),
           SurreyMap(),
           Search(),
           MessageScreen(currentUser: currentUser),
-          EventsHomePage(currentUser: currentUser),
+          SocietyScreen(currentUser: currentUser),
           ProductScreen(currentUser: currentUser),
+          EventsHomePage(),
           Profile(profileId: currentUser?.uid),
         ],
         controller: page,
@@ -143,23 +144,15 @@ class _HomeState extends State<Home> {
         onTap: onTap,
         backgroundColor: Colors.blueAccent,
         items: <Widget>[
-          Icon(
-            Icons.whatshot,
-            size: 35.0,
-          ),
+          Icon( Icons.whatshot,size: 35.0,),
           Icon(Icons.notifications_active, size: 35.0),
-          Icon(
-            Icons.photo_camera,
-            size: 35.0,
-          ),
-          Icon(
-            Icons.map,
-            size: 35.0,
-          ),
+          Icon(Icons.photo_camera, size: 35.0,),
+          Icon(Icons.map,size: 35.0 ),
           Icon(Icons.search, size: 35.0),
           Icon(Icons.message, size: 35.0),
           Icon(Icons.extension, size: 35.0),
           Icon(Icons.shopping_basket, size: 35.0),
+          Icon(Icons.event, size: 35.0),
           Icon(Icons.account_circle, size: 35.0),
         ],
       ),
@@ -175,7 +168,7 @@ class _HomeState extends State<Home> {
 
   void _setAgreed(bool newValue) {
     setState(() {
-      _agreePrivacy = newValue;
+      agreePrivacy = newValue;
     });
   }
 
@@ -302,11 +295,11 @@ class _HomeState extends State<Home> {
                 Padding(padding: const EdgeInsets.symmetric(vertical: 5.0)),
                 SizedBox(height: 10, width: 10),
                 Checkbox(
-                  value: _agreePrivacy,
+                  value: agreePrivacy,
                   onChanged: _setAgreed,
                 ),
                 GestureDetector(
-                  onTap: () => _setAgreed(!_agreePrivacy),
+                  onTap: () => _setAgreed(agreePrivacy),
                   child: RichText(
                       text: TextSpan(children: <TextSpan>[
                     TextSpan(text: "By clicking register, you agree to our "),
@@ -315,7 +308,7 @@ class _HomeState extends State<Home> {
                         style: TextStyle(color: Colors.yellowAccent),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            print('Terms of Services');
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Privacy()));
                           }),
                     TextSpan(text: 'and you have read our '),
                     TextSpan(
@@ -371,7 +364,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Scaffold buildUnAuthScreen() {
+  Scaffold buildLoginScreen() {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
@@ -463,7 +456,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return userAuth ? dashBoard() : buildUnAuthScreen();
+    return userAuth ? dashBoard() : buildLoginScreen();
   }
 }
 

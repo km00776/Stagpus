@@ -32,7 +32,7 @@ class _InterestedEventCardState extends State<InterestedEventCard> {
             children: <Widget>[
               CircleAvatar(
                 backgroundColor: Color(0xFFD9D9D9),
-                backgroundImage: NetworkImage(USER_IMAGE),
+                backgroundImage: NetworkImage(DUMMY_IMAGE),
                 radius: 36.0,
               ),
               RichText(

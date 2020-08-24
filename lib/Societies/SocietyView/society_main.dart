@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:stagpus/Events/EventsView/colors.dart';
 import 'package:stagpus/Societies/SocietyView/Category.dart';
+import 'package:stagpus/Societies/SocietyView/society_description.dart';
 import 'package:stagpus/Societies/SocietyView/society_search.dart';
+import 'package:stagpus/models/user.dart';
+import 'package:stagpus/pages/home.dart';
 
 
 class SocietyScreen extends StatelessWidget {
+  User currentUser;
+  SocietyScreen({this.currentUser});
    @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context)
-        .size; //this gonna give us total height and with of our device
+        .size; //helps us retrieve the size of the device. 
     return Scaffold(  
       body: Stack(
         children: <Widget>[
           Container(
-            // Here the height of the container is 45% of our total height
+            //resizing the dimensions, 
             height: size.height * .45,
             decoration: BoxDecoration(
               color: Color(0xFF035AA6),
@@ -37,21 +43,22 @@ class SocietyScreen extends StatelessWidget {
                       height: 52,
                       width: 52,
                       decoration: BoxDecoration(
-                        color: Color(0xFFF2BEA1),
+                        color: Color(0xFF035AA6),
                         shape: BoxShape.circle,
                       ),
                       child: SvgPicture.asset("assets/icons/menu.svg"),
                     ),
                   ),
                   Text(
-                    "Good Mornign \nShishir",
+                    "Good Mornign " + currentUser.displayName,
                     style: Theme.of(context)
                         .textTheme
                         // ignore: deprecated_member_use
                         .display1
                         .copyWith(fontWeight: FontWeight.w900),
                   ),
-                  SearchSociety(),
+                 
+
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: 2,
@@ -59,32 +66,54 @@ class SocietyScreen extends StatelessWidget {
                       crossAxisSpacing: 20,
                       mainAxisSpacing: 20,
                       children: <Widget>[
-                        CategoryCard(
-                          title: "Diet Recommendation",
-                          svgSrc: "assets/icons/Hamburger.svg",
-                          press: () {},
-                        ),
-                        CategoryCard(
-                          title: "Kegel Exercises",
-                          svgSrc: "assets/icons/Excrecises.svg",
-                          press: () {},
-                        ),
-                        CategoryCard(
-                          title: "Meditation",
-                          svgSrc: "assets/icons/Meditation.svg",
+                        SocietyCategoryCard(
+                          title: "WeightLifting",
+                          mediaURL: 'https://cdn1.iconfinder.com/data/icons/SummerOlympics/128/weightlifting_px.png',
                           press: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) {
-                                //return DetailsScreen();
+                                return SocietyDetailsScreen(
+                                  myText: "Pick up weights with us!",
+                                );
                               }),
                             );
                           },
                         ),
-                        CategoryCard(
+                        SocietyCategoryCard(
+                          title: "Computer Science ",
+                          mediaURL: 'https://cdn4.iconfinder.com/data/icons/creative-process-16/512/Responsive_Design-512.png',
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return SocietyDetailsScreen(
+                                  myText: "Welcome to the computer science society",
+                                );
+                              }),
+                            );
+                          },
+                        ),
+                        SocietyCategoryCard(
+                          title: "boxing",
+                           mediaURL: 'https://cdn1.iconfinder.com/data/icons/IconsLandVistaPeopleIconsDemo/256/Boxer_Male_Light.png',
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return SocietyDetailsScreen(
+                                  myText: "Join boxing to learn how to defend yourself",
+                                );
+                              }),
+                            );
+                          },
+                        ),
+                        SocietyCategoryCard(
                           title: "Yoga",
-                          svgSrc: "assets/icons/yoga.svg",
-                          press: () {},
+                          mediaURL: 'https://cdn2.iconfinder.com/data/icons/exercise-3/185/exercise-03-512.png',
+                          press: () {
+                            
+                          },
                         ),
                       ],
                     ),

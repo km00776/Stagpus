@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:stagpus/Screens/privacy.dart';
 import 'package:stagpus/models/user.dart';
 import 'package:stagpus/pages/home.dart';
 import 'package:stagpus/widgets/progress.dart';
@@ -140,6 +141,19 @@ updateProfile() {
                        label: Text(
                          "Logout",
                          style: TextStyle(color: Colors.red, fontSize: 20.0),
+                       ),
+                    ),
+                  ),
+                   Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: FlatButton.icon(
+                      onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Privacy()));
+                      },
+                       icon: Icon(Icons.accessibility_new, color: Colors.black), 
+                       label: Text(
+                         "Privacy and policy",
+                         style: TextStyle(color: Colors.black, fontSize: 20.0),
                        ),
                     ),
                   ),

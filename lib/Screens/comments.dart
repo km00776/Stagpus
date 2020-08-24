@@ -9,6 +9,8 @@ import 'package:stagpus/widgets/header.dart';
 import 'package:stagpus/widgets/progress.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+// A collection called comment will be created when a post has comments
+
 class Comments extends StatefulWidget {
   final String postId;
   final String postOwnerId;

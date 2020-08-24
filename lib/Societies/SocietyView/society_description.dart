@@ -7,12 +7,15 @@ import 'package:stagpus/Societies/SocietyView/society_main.dart';
 
 
 class SocietyDetailsScreen extends StatelessWidget {
+  final String myText;
+
+  const SocietyDetailsScreen({this.myText});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kActiveIconColor,
       //appBar: detailsAppBar(),
-      body: SocietyBody(),
+      body: SocietyBody(myText: myText),
       
       );
   }
@@ -20,13 +23,16 @@ class SocietyDetailsScreen extends StatelessWidget {
 }
 
 class SocietyBody extends StatelessWidget {
+  final String myText;
+
+  const SocietyBody({this.myText});
   @override
   Widget build(BuildContext context) {
    return Column(
      children: <Widget> [
      //  ItemImage(imgSrc: ""),
      Expanded(
-       child: SocietyInfo()
+       child: SocietyInfo(myText: myText,)
        )
      ],
    );
@@ -35,8 +41,9 @@ class SocietyBody extends StatelessWidget {
 }
 
 class SocietyInfo extends StatelessWidget {
+  final String myText;
 
-  const SocietyInfo({Key key, }): super(key: key);
+  const SocietyInfo({Key key, this.myText}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +59,13 @@ class SocietyInfo extends StatelessWidget {
       child: Column(children: <Widget> [
         societyName(name: "Test"),
         
-        Text("Tesint the society page",
+        Text(myText,
           style: TextStyle(
             height: 1.5,
           )
         ),
         SizedBox(height: size.height * 0.1),
-        //OrderButton(size: size, press: (){})
+        
       ],)
     );
     

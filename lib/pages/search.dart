@@ -12,6 +12,8 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
+// This page allows the user to search the desired user
+
 class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;

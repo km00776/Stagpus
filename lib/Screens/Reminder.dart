@@ -1,6 +1,8 @@
  import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+//Reminds the user to verify their email address
+
 Widget remind(BuildContext context) {
     return Scaffold(
        resizeToAvoidBottomPadding: false,

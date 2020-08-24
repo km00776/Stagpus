@@ -61,7 +61,7 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
               children: <Widget>[
                 CircleAvatar(
                   backgroundColor: Color(0xFFD9D9D9),
-                  backgroundImage: NetworkImage(USER_IMAGE),
+                  backgroundImage: NetworkImage(DUMMY_IMAGE),
                   radius: 36.0,
                 ),
                 SizedBox(
@@ -121,7 +121,7 @@ class UpcomingEventsCardState extends State<UpcomingEventsCard> {
                       child: Ink(
                         decoration: BoxDecoration(
                           color: pressAttention == false
-                              ? Colors.red
+                              ? marketColor
                               : Colors.green,
                           borderRadius: BorderRadius.all(Radius.circular(80.0)),
                         ),
